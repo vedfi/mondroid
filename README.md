@@ -1,16 +1,13 @@
 # mondroid
 
-An open source mongodb client.
+Mongodb Client w/ Flutter
 
-## Getting Started
+## Goals Of This Project
 
-This project is a starting point for a Flutter application.
+- Main goal is providing a mongodb client for mobile devices. (Like offical desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
+- Providing fast and secure experience.
+- Supporting crud operations based on id.
+- Supporting basic queries.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Side Notes
+I won't be able to develop full time; as this is a hobby project.
