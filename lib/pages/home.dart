@@ -1,9 +1,13 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mondroid/models/connection.dart';
+import 'package:mondroid/widgets/confirmdialog.dart';
+import 'package:mondroid/widgets/loadable.dart';
+import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/widgets/connectiontile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/selectable.dart';
@@ -17,6 +21,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  bool isLoading = false;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
@@ -27,11 +32,21 @@ class HomeState extends State<Home> {
     });
   }
 
-  void delete() {
-    setState(() {
-      connections.removeWhere((element) => element.isSelected);
+  Future<void> delete() async {
+    bool? delete = await showDialog(context: context, builder: (ctx){
+      return ConfirmDialog().Build(context);
     });
-    saveConnections();
+    if(delete == true){
+      setState(() {
+        connections.removeWhere((element) => element.isSelected);
+      });
+      saveConnections();
+    }
+    else{
+      setState(() {
+        connections.forEach((element) {element.isSelected = false;});
+      });
+    }
   }
 
   Future<void> addDialog() async {
@@ -46,18 +61,18 @@ class HomeState extends State<Home> {
               children: [
                 TextField(
                   controller: _nameController,
-                  decoration: InputDecoration(hintText: "Name"),
+                  decoration: InputDecoration(hintText: "Database Name"),
                 ),
                 SizedBox(width: 10, height: 10),
                 TextField(
                   controller: _uriController,
-                  decoration: InputDecoration(hintText: "Uri"),
+                  decoration: InputDecoration(hintText: "Uri", helperText: 'Uri without database name.'),
                 ),
               ],
             ),
             actions: [
               TextButton(
-                  onPressed: (){
+                  onPressed: () {
                     add(_nameController.value.text, _uriController.value.text);
                     Navigator.pop(context);
                     _uriController.clear();
@@ -70,7 +85,7 @@ class HomeState extends State<Home> {
   }
 
   void add(String name, String uri) {
-    if(name.isNotEmpty && uri.isNotEmpty){
+    if (name.isNotEmpty && uri.isNotEmpty) {
       setState(() {
         connections.add(new Selectable(new Connection(name, uri)));
       });
@@ -85,12 +100,33 @@ class HomeState extends State<Home> {
           connections[index].select();
         });
       } else {
-        //TODO:navigation
+        connectAndNavigate(index);
       }
     } else {
       setState(() {
         connections[index].select();
       });
+    }
+  }
+
+  Future<void> connectAndNavigate(int index) async {
+    if(isLoading){
+      //already connecting..
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    bool connected = await MongoService().connect(connections[index].item.getConnectionString());
+    setState(() {
+      isLoading = false;
+    });
+    if (connected) {
+      Navigator.of(context)
+          .pushNamed('/collections', arguments: connections[index].item.name);
+    }
+    else{
+     // Fluttertoast.showToast(msg: 'Connection Error');
     }
   }
 
@@ -130,59 +166,22 @@ class HomeState extends State<Home> {
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                 separatorBuilder: (context, index) => SizedBox(height: 10),
                 itemCount: connections.length,
-                itemBuilder: (context, index) => DbConnectionTile(
+                itemBuilder: (context, index) => ConnectionTile(
                     index,
                     connections[index],
                     connections.any((q) => q.isSelected),
-                    (i, t) => select(i, t))),
-        floatingActionButton: connections.any((element) => element.isSelected)
+                    (i, t) => select(i, t))
+            ),
+        floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
             ? FloatingActionButton(
-                backgroundColor: Colors.red,
-                onPressed: delete,
-                tooltip: 'Delete selected connection(s).',
-                child: const Icon(Icons.delete_forever))
+            backgroundColor: Colors.red,
+            onPressed: delete,
+            tooltip: 'Delete selected connection(s).',
+            child: const Icon(Icons.delete_forever))
             : FloatingActionButton(
-                onPressed: addDialog,
-                tooltip: 'Add new connection.',
-                child: const Icon(Icons.add)));
-  }
-}
-
-class DbConnectionTile extends StatelessWidget {
-  final onClick;
-  final int index;
-  final bool has_any_selected;
-  final Selectable<Connection> selectable;
-  DbConnectionTile(
-      this.index, this.selectable, this.has_any_selected, this.onClick);
-
-  void _clickHandler() {
-    onClick(index, SelectType.Tap);
-  }
-
-  void _longPressHandler() {
-    onClick(index, SelectType.LongPress);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return ListTile(
-      selected: this.selectable.isSelected,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15))),
-      tileColor: Colors.white,
-      selectedTileColor: Colors.red.shade50,
-      selectedColor: Colors.red,
-      onTap: () => _clickHandler(),
-      onLongPress: () => _longPressHandler(),
-      title: Text(this.selectable.item.name),
-      subtitle: Text(this.selectable.item.uri),
-      trailing: this.selectable.isSelected
-          ? Icon(Icons.check_box)
-          : (has_any_selected
-              ? Icon(Icons.check_box_outline_blank)
-              : Icon(Icons.keyboard_arrow_right)),
+            onPressed: addDialog,
+            tooltip: 'Add new connection.',
+            child: const Icon(Icons.add)), isLoading)
     );
   }
 }
