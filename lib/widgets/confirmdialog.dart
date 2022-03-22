@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class ConfirmDialog{
 
-  Widget Build(BuildContext context){
+  Widget Build(BuildContext context, String title, String subtitle, String cancelText, String okText){
     return AlertDialog(
-      title: Text('Delete Connection(s)'),
+      title: Text(title),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
-        children: [Text('This action cannot be undone. Are you sure you want to continue?')],
+        children: [Text(subtitle)],
       ),
       actions: [
         TextButton(

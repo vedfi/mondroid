@@ -32,9 +32,9 @@ class HomeState extends State<Home> {
     });
   }
 
-  Future<void> delete() async {
+  Future<void> deleteDialog() async {
     bool? delete = await showDialog(context: context, builder: (ctx){
-      return ConfirmDialog().Build(context);
+      return ConfirmDialog().Build(context, 'Delete Collection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
     });
     if(delete == true){
       setState(() {
@@ -44,7 +44,7 @@ class HomeState extends State<Home> {
     }
     else{
       setState(() {
-        connections.forEach((element) {element.isSelected = false;});
+        for (var element in connections) {element.isSelected = false;}
       });
     }
   }
@@ -175,7 +175,7 @@ class HomeState extends State<Home> {
         floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
             ? FloatingActionButton(
             backgroundColor: Colors.red,
-            onPressed: delete,
+            onPressed: deleteDialog,
             tooltip: 'Delete selected connection(s).',
             child: const Icon(Icons.delete_forever))
             : FloatingActionButton(

@@ -36,7 +36,7 @@ class MongoService{
     try{
       if(_database!.isConnected){
         var list = (await _database!.getCollectionNames()).where((element) => element != null).map((e) => e as String).toList();
-        list.sort();
+        list.sort((a,b) => a.toLowerCase().compareTo(b.toLowerCase()));
         return list;
       }
       else{
@@ -61,4 +61,30 @@ class MongoService{
     }
   }
 
+  Future<void> createCollection(String name) async{
+    try{
+      if(_database!.isConnected){
+        var result = await _database!.createCollection(name);
+        if(result.keys.any((element) => element == 'errmsg')){
+          throw result['errmsg'].toString();
+        }
+      }
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  Future<bool> deleteCollection(String name) async{
+    try{
+      if(_database!.isConnected){
+        return await _database!.dropCollection(name);
+      }
+      return false;
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+  }
 }
