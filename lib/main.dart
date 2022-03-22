@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mondroid/pages/collections.dart';
 import 'package:mondroid/pages/home.dart';
+import 'package:mondroid/pages/records.dart';
 
 void main() {
   runApp(const MondroidApp());
@@ -27,6 +28,11 @@ class MondroidApp extends StatelessWidget {
               String arg = settings.arguments as String;
               return MaterialPageRoute(
                   builder: (_) => Collections(title: arg));
+            }
+            case '/records':{
+              String arg = settings.arguments as String;
+              return MaterialPageRoute(
+                builder: (_) => Records(collectionName: arg));
             }
           }
         },

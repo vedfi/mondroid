@@ -87,4 +87,23 @@ class MongoService{
       return false;
     }
   }
+
+  Future<List<Map<String, dynamic>>> find(String collection, int page, int page_size) async{
+    try{
+      if(page < 0){
+        page = 0;
+      }
+      if(page_size <= 0){
+        page_size = 1;
+      }
+      if(_database!.isConnected){
+        return await _database!.collection(collection).find().skip(page).take(page_size).toList();
+      }
+      return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
+    }
+  }
 }

@@ -49,7 +49,8 @@ class CollectionsState extends State<Collections> {
           collections[index].select();
         });
       } else {
-        //TODO: navigation
+        Navigator.of(context)
+            .pushNamed('/records', arguments: collections[index].item.name);
       }
     } else {
       setState(() {
