@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/collection.dart';
@@ -31,10 +30,13 @@ class CollectionsState extends State<Collections>{
   }
 
   Future<void> getRecordCounts() async{
-    for(int i = 0; i<collections.length; i++){
-      collections[i].item.count = await MongoService().getRecordCount(collections[i].item.name);
-    }
-    setState(() {});
+    Iterable<Future<int>> futures = collections.map((q) => MongoService().getRecordCount(q.item.name));
+    List<int> counts = await Future.wait(futures);
+    setState(() {
+      for(int i = 0; i<counts.length; i++){
+        collections[i].item.count = counts[i];
+      }
+    });
   }
 
   void select(int index, SelectType type) {
@@ -61,19 +63,34 @@ class CollectionsState extends State<Collections>{
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height; // Full screen width and height
+    EdgeInsets padding = MediaQuery.of(context).padding; // Height (without SafeArea)
+    double netHeight = height - padding.top - kToolbarHeight; // Height (without status and toolbar)
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: collections.isEmpty
-            ? Center(child: Text('Add a new collection.'))
-            : CupertinoScrollbar(child: ListView.separated(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-            separatorBuilder: (context, index) => SizedBox(height: 10),
-            itemCount: collections.length,
-            itemBuilder: (context, index) => CollectionTile(index: index, selectable: collections[index], has_any_selected: collections.any((element) => element.isSelected), onClick: select)
-        )),
+        body: RefreshIndicator(
+          onRefresh: getCollections,
+          child: collections.isEmpty
+              ? SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child:  Container(
+              height: netHeight,
+              child: Center(
+                child: Text('No collections.'),
+              ),
+            ),
+          )
+              : CupertinoScrollbar(child: ListView.separated(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+              separatorBuilder: (context, index) => SizedBox(height: 10),
+              itemCount: collections.length,
+              itemBuilder: (context, index) => CollectionTile(index: index, selectable: collections[index], has_any_selected: collections.any((element) => element.isSelected), onClick: select)
+          )),
+        ),
         floatingActionButton: LoadableFloatingActionButton(collections.any((element) => element.isSelected)
             ? FloatingActionButton(
             backgroundColor: Colors.red,
