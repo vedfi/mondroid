@@ -6,6 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/widgets/loadable.dart';
+import 'package:mondroid/widgets/recordtile.dart';
 
 class Records extends StatefulWidget {
   final String collectionName;
@@ -33,6 +34,27 @@ class RecordsState extends State<Records> {
       }
     } catch (error) {
       _pagingController.error = error;
+    }
+  }
+
+  void select(int index, SelectType type) {
+    if(_pagingController.itemList == null || _pagingController.itemList!.isEmpty){
+      return;
+    }
+    if (type == SelectType.Tap) {
+      if (_pagingController.itemList!.any((element) => element.isSelected)) {
+        setState(() {
+          _pagingController.itemList!.elementAt(index).select();
+        });
+      } else {
+        //TODO:navigation.
+        // Navigator.of(context)
+        //     .pushNamed('/records', arguments: collections[index].item.name);
+      }
+    } else {
+      setState(() {
+        _pagingController.itemList!.elementAt(index).select();
+      });
     }
   }
 
@@ -74,26 +96,29 @@ class RecordsState extends State<Records> {
         body: RefreshIndicator(
             onRefresh: () async => {_pagingController.refresh()},
             child: CupertinoScrollbar(
-                child: PagedListView<int, Selectable<Map<String, dynamic>>>(
+                child: PagedListView<int, Selectable<Map<String, dynamic>>>.separated(
                   pagingController: _pagingController,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding:
+                  EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  separatorBuilder: (context, index) => SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
                       Selectable<Map<String, dynamic>>>(
                       firstPageProgressIndicatorBuilder: (context) => Text('Loading..'),
                       noItemsFoundIndicatorBuilder: (context) => Text('Empty'),
-                      itemBuilder: (context, data, index) => ListTile(
-                          title: Text(data.item['_id'].toString()),
-                          subtitle: Text('data'))),
+                      itemBuilder: (context, data, index) => RecordTile(index, data, hasAnySelected(), select)
+                  ),
                 ))),
         floatingActionButton: LoadableFloatingActionButton(
             hasAnySelected()
                 ? FloatingActionButton(
                     backgroundColor: Colors.red,
                     onPressed: null,
-                    tooltip: 'Delete selected connection(s).',
+                    tooltip: 'Delete selected document(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
                     onPressed: null,
-                    tooltip: 'Add new connection.',
+                    tooltip: 'Insert a new document.',
                     child: const Icon(Icons.add)),
             isLoading));
   }
