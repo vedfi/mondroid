@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:mongo_dart/mongo_dart.dart';
@@ -88,7 +89,7 @@ class MongoService{
     }
   }
 
-  Future<List<Map<String, dynamic>>> find(String collection, int page, int page_size) async{
+  Future<List<Map<String, dynamic>>> find(String collection, int page, int page_size, Map<String, dynamic> filter) async{
     try{
       if(page < 0){
         page = 0;
@@ -97,13 +98,27 @@ class MongoService{
         page_size = 1;
       }
       if(_database!.isConnected){
-        return await _database!.collection(collection).find().skip(page).take(page_size).toList();
+        return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
       }
       return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
       return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
+    }
+  }
+  
+  Future<bool> deleteRecord(String collection, dynamic id) async{
+    try{
+      if(_database!.isConnected){
+        var result = await _database!.collection(collection).deleteOne({'_id':id});
+        return result.isSuccess;
+      }
+      return false;
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
     }
   }
 }

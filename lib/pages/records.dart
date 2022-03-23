@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/widgets/recordtile.dart';
 
@@ -17,14 +20,28 @@ class Records extends StatefulWidget {
 }
 
 class RecordsState extends State<Records> {
+  TextEditingController _nameController = TextEditingController();
   bool isLoading = false;
   static const _pageSize = 20;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
 
+  Map<String,dynamic> filter(){
+    try{
+      if(_nameController.value.text.isEmpty){
+        return {};
+      }
+      return jsonDecode(_nameController.value.text);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Json Encoding Failed: Invalid Query');
+      return {};
+    }
+  }
+
   Future<void> getRecords(int page) async {
     try {
-      final newItems = (await MongoService().find(widget.collectionName, page, _pageSize)).map((e) => Selectable(e)).toList();
+      final newItems = (await MongoService().find(widget.collectionName, page, _pageSize, filter())).map((e) => Selectable(e)).toList();
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -65,6 +82,55 @@ class RecordsState extends State<Records> {
     return false;
   }
 
+  Future<void> searchDialog() async {
+    await showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text('Find Query'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _nameController,
+                  maxLines: 10,
+                  decoration: InputDecoration(hintText: 'Basic usage: {\"key\":\"value\"}', helperText: 'All query operators are supported.\nLeave blank if you want to fetch all records.'),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _pagingController.refresh();
+                    Navigator.pop(context);
+                  },
+                  child: Text('Apply')),
+            ],
+          );
+        });
+  }
+
+  Future<void> deleteDialog() async {
+    bool? delete = await showDialog(
+        context: context,
+        builder: (ctx) {
+          return ConfirmDialog().Build(context, 'Delete Record(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
+        });
+    if (delete == true) {
+      Iterable<Future<bool>> futures =  _pagingController.itemList!.where((element) => element.isSelected).map((q) => MongoService().deleteRecord(widget.collectionName,q.item['_id']));
+      await Future.wait(futures);
+      _pagingController.refresh();
+    }
+    else{
+      setState(() {
+        for (var element in _pagingController.itemList!) {
+          element.isSelected = false;
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -92,6 +158,9 @@ class RecordsState extends State<Records> {
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(widget.collectionName),
+          actions: [
+            IconButton(onPressed: searchDialog, icon: Icon(Icons.search, color: Colors.white,))
+          ],
         ),
         body: RefreshIndicator(
             onRefresh: () async => {_pagingController.refresh()},
@@ -113,7 +182,7 @@ class RecordsState extends State<Records> {
             hasAnySelected()
                 ? FloatingActionButton(
                     backgroundColor: Colors.red,
-                    onPressed: null,
+                    onPressed: deleteDialog,
                     tooltip: 'Delete selected document(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
