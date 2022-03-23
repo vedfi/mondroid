@@ -69,15 +69,6 @@ class RecordTile extends StatelessWidget {
   final Selectable<Map<String, dynamic>> selectable;
 
   RecordTile(this.index, this.selectable,this.has_any_selected, this.onClick);
-  // dynamic myEncode(dynamic item) {
-  //   // JsonEncoder.withIndent('   ', myEncode).convert(selectable.item).toString()
-  //   if (item is DateTime) {
-  //     return item.toIso8601String();
-  //   } else if (item is ObjectId) {
-  //     return item.toJson();
-  //   }
-  //   return item;
-  // }
 
   Widget generate(int level, String key, dynamic value){
     var pad = EdgeInsets.only(left: level*10);
@@ -142,14 +133,17 @@ class RecordTile extends StatelessWidget {
         dense: true,
         onTap: () => onClick(index, SelectType.Tap),
         onLongPress: () => onClick(index, SelectType.LongPress),
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Icon(Icons.article, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), Spacer(),
-          this.selectable.isSelected
-              ? Icon(Icons.check_box, color: Colors.red,)
-              : (has_any_selected
-              ? Icon(Icons.check_box_outline_blank)
-              : Icon(Icons.keyboard_arrow_right))],
+        title: Padding(
+          padding: EdgeInsets.only(bottom: 5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Icon(Icons.article, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), Spacer(),
+              this.selectable.isSelected
+                  ? Icon(Icons.check_box, color: Colors.red,)
+                  : (has_any_selected
+                  ? Icon(Icons.check_box_outline_blank, color: Colors.grey.shade600,)
+                  : Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade600,))],
+          ),
         ),
         subtitle: visualize(),
         // trailing: Column(

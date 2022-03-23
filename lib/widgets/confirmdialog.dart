@@ -15,7 +15,7 @@ class ConfirmDialog{
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('Delete')),
+            child: Text(okText)),
         TextButton(
             style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -24,7 +24,7 @@ class ConfirmDialog{
             onPressed: () {
               Navigator.pop(context, false);
             },
-            child: Text('Cancel')),
+            child: Text(cancelText)),
       ],
     );
   }

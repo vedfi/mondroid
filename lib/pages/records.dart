@@ -21,7 +21,7 @@ class Records extends StatefulWidget {
 
 class RecordsState extends State<Records> {
   TextEditingController _nameController = TextEditingController();
-  bool isLoading = false;
+  bool isLoading = true;
   static const _pageSize = 20;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
@@ -64,9 +64,7 @@ class RecordsState extends State<Records> {
           _pagingController.itemList!.elementAt(index).select();
         });
       } else {
-        //TODO:navigation.
-        // Navigator.of(context)
-        //     .pushNamed('/records', arguments: collections[index].item.name);
+        navigate(index);
       }
     } else {
       setState(() {
@@ -118,8 +116,14 @@ class RecordsState extends State<Records> {
           return ConfirmDialog().Build(context, 'Delete Record(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
         });
     if (delete == true) {
+      setState(() {
+        isLoading = true;
+      });
       Iterable<Future<bool>> futures =  _pagingController.itemList!.where((element) => element.isSelected).map((q) => MongoService().deleteRecord(widget.collectionName,q.item['_id']));
       await Future.wait(futures);
+      setState(() {
+        isLoading = false;
+      });
       _pagingController.refresh();
     }
     else{
@@ -130,11 +134,21 @@ class RecordsState extends State<Records> {
       });
     }
   }
+  
+  void navigate(int index){
+    Navigator.of(context)
+        .pushNamed('/edit', arguments: [widget.collectionName, index == -1 ? null : _pagingController.itemList!.elementAt(index).item]);
+  }
 
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       getRecords(pageKey);
+    });
+    _pagingController.addStatusListener((status) {
+      setState(() {
+        isLoading = status == PagingStatus.loadingFirstPage;
+      });
     });
     super.initState();
   }
@@ -173,8 +187,8 @@ class RecordsState extends State<Records> {
                   separatorBuilder: (context, index) => SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
                       Selectable<Map<String, dynamic>>>(
-                      firstPageProgressIndicatorBuilder: (context) => Text('Loading..'),
-                      noItemsFoundIndicatorBuilder: (context) => Text('Empty'),
+                      firstPageProgressIndicatorBuilder: (context) => Center(child:  Text('Loading.'),),
+                      noItemsFoundIndicatorBuilder: (context) => Center(child: Text('No records.'),),
                       itemBuilder: (context, data, index) => RecordTile(index, data, hasAnySelected(), select)
                   ),
                 ))),
@@ -186,7 +200,7 @@ class RecordsState extends State<Records> {
                     tooltip: 'Delete selected document(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
-                    onPressed: null,
+                    onPressed: ()=>{navigate(-1)},
                     tooltip: 'Insert a new document.',
                     child: const Icon(Icons.add)),
             isLoading));

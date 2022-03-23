@@ -24,9 +24,13 @@ class CollectionsState extends State<Collections> {
   List<Selectable<Collection>> collections = <Selectable<Collection>>[];
 
   Future<void> getCollections() async {
+    setState(() {
+      isLoading = true;
+    });
     var names = await MongoService().getCollectionNames();
     setState(() {
       collections = names.map((e) => Selectable(Collection(e))).toList();
+      isLoading = false;
     });
     getRecordCounts();
   }
@@ -89,7 +93,13 @@ class CollectionsState extends State<Collections> {
   }
 
   Future<void> create(String collectionName) async {
+    setState(() {
+      isLoading = true;
+    });
     await MongoService().createCollection(collectionName);
+    setState(() {
+      isLoading = false;
+    });
     getCollections();
   }
 
@@ -100,8 +110,14 @@ class CollectionsState extends State<Collections> {
           return ConfirmDialog().Build(context, 'Delete Collection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
         });
     if (delete == true) {
+      setState(() {
+        isLoading = true;
+      });
       Iterable<Future<bool>> futures =  collections.where((element) => element.isSelected).map((q) => MongoService().deleteCollection(q.item.name));
       await Future.wait(futures);
+      setState(() {
+        isLoading = false;
+      });
       getCollections();
     }
     else{

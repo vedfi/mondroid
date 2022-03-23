@@ -121,4 +121,36 @@ class MongoService{
       return false;
     }
   }
+
+  Future<bool> insertRecord(String collection, dynamic data) async{
+    try{
+      if(_database!.isConnected){
+        var result = await _database!.collection(collection).insert(data);
+        return true;
+      }
+      return false;
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateRecord(String collection, dynamic id, dynamic data) async{
+    try{
+      if(_database!.isConnected){
+        var result = await _database!.collection(collection).replaceOne({'_id':id}, data);
+        if(result.hasWriteErrors){
+          throw result.writeError!.errmsg!.toString();
+        }
+        return true;
+      }
+      return false;
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
+  }
+
 }
