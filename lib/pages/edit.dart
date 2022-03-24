@@ -102,24 +102,28 @@ class EditState extends State<Edit>{
     double netHeight = height -
         padding.top -
         kToolbarHeight; // Height (without status and toolbar)
+    double kBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
         ),
-        body: Container(
-          height: netHeight,
-          child: TextField(
-            expands: true,
-            minLines: null,
-            maxLines: null,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              border: null,
+        body: Padding(
+          padding: EdgeInsets.only(bottom: kBoardHeight),
+          child: Container(
+            height: netHeight,
+            child: TextField(
+              expands: true,
+              minLines: null,
+              maxLines: null,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: null,
+              ),
+              controller: _jsonController,
             ),
-            controller: _jsonController,
           ),
         ),
         floatingActionButton: LoadableFloatingActionButton(
