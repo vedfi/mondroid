@@ -175,7 +175,7 @@ class RecordsState extends State<Records> {
         appBar: AppBar(
           title: Text(widget.collectionName),
           actions: [
-            IconButton(onPressed: searchDialog, icon: Icon(Icons.search, color: Colors.white,))
+            IconButton(onPressed: searchDialog, icon: Icon(Icons.search, color: Colors.white,), tooltip: 'Find',)
           ],
         ),
         body: RefreshIndicator(

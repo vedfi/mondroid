@@ -86,6 +86,17 @@ class EditState extends State<Edit>{
       isLoading = false;
     });
   }
+  
+  void copy(){
+    var json_text = _jsonController.value.text;
+    if(json_text.isNotEmpty){
+      Clipboard.setData(ClipboardData(text: json_text));
+      Fluttertoast.showToast(msg: "Document copied to clipboard.");
+    }
+    else{
+      Fluttertoast.showToast(msg: "Nothing to copy.");
+    }
+  }
 
   @override
   void initState(){
@@ -108,6 +119,7 @@ class EditState extends State<Edit>{
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
+          actions: [IconButton(onPressed: copy, icon: Icon(Icons.copy, color: Colors.white,), tooltip: 'Copy',)],
         ),
         body: Padding(
           padding: EdgeInsets.only(bottom: kBoardHeight),
@@ -117,10 +129,14 @@ class EditState extends State<Edit>{
               expands: true,
               minLines: null,
               maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              scrollPhysics: AlwaysScrollableScrollPhysics(),
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
                 border: null,
+                contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 8)
               ),
               controller: _jsonController,
             ),
