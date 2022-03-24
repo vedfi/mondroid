@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mondroid/models/connection.dart';
@@ -26,10 +27,13 @@ class HomeState extends State<Home> {
   TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
 
-  void changeSelectedIndex(int index) {
+  void reorder(int old_index, int new_index){
     setState(() {
-      connections[index].select();
+      new_index -= old_index < new_index ? 1 : 0;
+      final Selectable<Connection> item = connections.removeAt(old_index);
+      connections.insert(new_index, item);
     });
+    saveConnections();
   }
 
   Future<void> deleteDialog() async {
@@ -162,15 +166,17 @@ class HomeState extends State<Home> {
         ),
         body: connections.isEmpty
             ? Center(child: Text('Add a new connection string.'))
-            : ListView.separated(
+            : ReorderableListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                buildDefaultDragHandles: false,
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                separatorBuilder: (context, index) => SizedBox(height: 10),
+                onReorder: reorder,
                 itemCount: connections.length,
                 itemBuilder: (context, index) => ConnectionTile(
                     index,
                     connections[index],
                     connections.any((q) => q.isSelected),
-                    (i, t) => select(i, t))
+                    (i, t) => select(i, t), key: UniqueKey(),)
             ),
         floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
             ? FloatingActionButton(
