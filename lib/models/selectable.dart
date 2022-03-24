@@ -11,5 +11,6 @@ class Selectable<T>{
 
 enum SelectType{
   Tap,
-  LongPress
+  LongPress,
+  Navigate
 }

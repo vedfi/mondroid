@@ -63,10 +63,12 @@ class RecordsState extends State<Records> {
         setState(() {
           _pagingController.itemList!.elementAt(index).select();
         });
-      } else {
-        navigate(index);
       }
-    } else {
+    }
+    else if(type == SelectType.Navigate) {
+      navigate(index);
+    }
+    else {
       setState(() {
         _pagingController.itemList!.elementAt(index).select();
       });

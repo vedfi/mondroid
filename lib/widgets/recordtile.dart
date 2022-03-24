@@ -142,7 +142,7 @@ class RecordTile extends StatelessWidget {
                   ? Icon(Icons.check_box, color: Colors.red,)
                   : (has_any_selected
                   ? Icon(Icons.check_box_outline_blank, color: Colors.grey.shade600,)
-                  : Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade600,))],
+                  : GestureDetector(child: Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade600,), onTap: ()=> onClick(index, SelectType.Navigate),))],
           ),
         ),
         subtitle: visualize(),

@@ -34,7 +34,7 @@ class HomeState extends State<Home> {
 
   Future<void> deleteDialog() async {
     bool? delete = await showDialog(context: context, builder: (ctx){
-      return ConfirmDialog().Build(context, 'Delete Collection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
+      return ConfirmDialog().Build(context, 'Delete Connection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
     });
     if(delete == true){
       setState(() {
