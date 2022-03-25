@@ -65,12 +65,12 @@ class HomeState extends State<Home> {
               children: [
                 TextField(
                   controller: _nameController,
-                  decoration: InputDecoration(hintText: "Database Name"),
+                  decoration: InputDecoration(hintText: "Name", helperText: 'Will be used as title.'),
                 ),
                 SizedBox(width: 10, height: 10),
                 TextField(
                   controller: _uriController,
-                  decoration: InputDecoration(hintText: "Uri", helperText: 'Uri without database name.'),
+                  decoration: InputDecoration(hintText: "Uri", helperText: 'Uri with database name.'),
                 ),
               ],
             ),

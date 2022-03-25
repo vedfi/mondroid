@@ -29,8 +29,8 @@ class MongoService{
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
+      return false;
     }
-    return false;
   }
 
   Future<List<String>> getCollectionNames() async{

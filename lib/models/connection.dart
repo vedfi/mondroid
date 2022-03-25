@@ -12,7 +12,7 @@ class Connection{
     'uri': uri,
   };
 
-  String getConnectionString() => uri + '/' + name;
+  String getConnectionString() => uri;
 
   @override
   String subtitle() => uri;
