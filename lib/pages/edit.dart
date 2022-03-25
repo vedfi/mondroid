@@ -34,6 +34,7 @@ class Edit extends StatefulWidget{
 class EditState extends State<Edit>{
   bool isLoading = false;
   TextEditingController _jsonController = TextEditingController();
+  ScrollController _scrollController = ScrollController();
 
   Future<void> encoder() async{
     String encoded = widget.item_id == null ?'{\n\n}' : await compute(jsonEncode, widget.item);
@@ -125,20 +126,24 @@ class EditState extends State<Edit>{
           padding: EdgeInsets.only(bottom: kBoardHeight),
           child: Container(
             height: netHeight,
-            child: TextField(
-              expands: true,
-              minLines: null,
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              scrollPhysics: AlwaysScrollableScrollPhysics(),
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                border: null,
-                contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 8)
+            child: CupertinoScrollbar(
+              controller: _scrollController,
+              child: TextField(
+                expands: true,
+                minLines: null,
+                maxLines: null,
+                scrollController: _scrollController,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                scrollPhysics: AlwaysScrollableScrollPhysics(),
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: null,
+                    contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 8)
+                ),
+                controller: _jsonController,
               ),
-              controller: _jsonController,
             ),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -65,11 +66,13 @@ class HomeState extends State<Home> {
               children: [
                 TextField(
                   controller: _nameController,
-                  decoration: InputDecoration(hintText: "Name", helperText: 'Will be used as title.'),
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(hintText: "Name", helperText: 'Will be used as title.', ),
                 ),
                 SizedBox(width: 10, height: 10),
                 TextField(
                   controller: _uriController,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(hintText: "Uri", helperText: 'Uri with database name.'),
                 ),
               ],
@@ -166,18 +169,20 @@ class HomeState extends State<Home> {
         ),
         body: connections.isEmpty
             ? Center(child: Text('Add a new connection string.'))
-            : ReorderableListView.builder(
-                physics: AlwaysScrollableScrollPhysics(),
-                buildDefaultDragHandles: false,
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                onReorder: reorder,
-                itemCount: connections.length,
-                itemBuilder: (context, index) => ConnectionTile(
-                    index,
-                    connections[index],
-                    connections.any((q) => q.isSelected),
+            : CupertinoScrollbar(
+          child: ReorderableListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
+              buildDefaultDragHandles: false,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+              onReorder: reorder,
+              itemCount: connections.length,
+              itemBuilder: (context, index) => ConnectionTile(
+                index,
+                connections[index],
+                connections.any((q) => q.isSelected),
                     (i, t) => select(i, t), key: UniqueKey(),)
-            ),
+          ),
+        ),
         floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
             ? FloatingActionButton(
             backgroundColor: Colors.red,
