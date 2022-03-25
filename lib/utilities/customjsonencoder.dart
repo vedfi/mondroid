@@ -1,23 +1,23 @@
 import 'dart:convert';
-
 import 'package:mongo_dart/mongo_dart.dart';
 
 dynamic helper(dynamic item) {
   if (item is DateTime) {
-    return '_date_'+item.toIso8601String();
+    return '\$date:'+item.toIso8601String();
   }
   else if(item is ObjectId){
-    return '_id_'+item.$oid;
+    return '\$oid:'+item.$oid;
+  }
+  else if(item is UuidValue){
+    return '\$uuid:'+item.uuid;
   }
   return item;
 }
 
 class CustomJsonEncoder{
 
-  static JsonEncoder GetEncoder() => JsonEncoder.withIndent('   ', helper);
-
   static String Encode(dynamic object){
-    return GetEncoder().convert(object).toString();
+    return JsonEncoder.withIndent('   ', helper).convert(object).toString();
   }
 
 }
