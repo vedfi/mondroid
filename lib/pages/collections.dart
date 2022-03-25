@@ -181,11 +181,11 @@ class CollectionsState extends State<Collections> {
                 ? FloatingActionButton(
                     backgroundColor: Colors.red,
                     onPressed: deleteDialog,
-                    tooltip: 'Delete selected connection(s).',
+                    tooltip: 'Delete selected collection(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
                     onPressed: addDialog,
-                    tooltip: 'Add new connection.',
+                    tooltip: 'Create new collection.',
                     child: const Icon(Icons.add)),
             isLoading));
   }

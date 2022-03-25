@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/pages/collections.dart';
 import 'package:mondroid/pages/edit.dart';
@@ -22,23 +23,24 @@ class MondroidApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           switch(settings.name){
             case '/':{
-              return MaterialPageRoute(
+              return CupertinoPageRoute(
                   builder: (_) => const Home(title: 'Mondroid'));
             }
             case '/collections':{
               String arg = settings.arguments as String;
-              return MaterialPageRoute(
-                  builder: (_) => Collections(title: arg));
+              return CupertinoPageRoute(
+                  builder: (_) => Collections(title: arg)
+              );
             }
             case '/records':{
               String arg = settings.arguments as String;
-              return MaterialPageRoute(
+              return CupertinoPageRoute(
                 builder: (_) => Records(collectionName: arg));
             }
             case '/edit':{
               List<dynamic> args = settings.arguments as List<dynamic>;
               dynamic id = args[1] == null ? null : args[1]['_id'];
-              return MaterialPageRoute(
+              return CupertinoPageRoute(
                 builder: (_) => Edit(collectionName: args[0], item_id: id, item: args[1]));
             }
           }
