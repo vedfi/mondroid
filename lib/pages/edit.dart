@@ -117,7 +117,7 @@ class EditState extends State<Edit>{
     double kBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
           actions: [IconButton(onPressed: copy, icon: Icon(Icons.copy, color: Colors.white,), tooltip: 'Copy',)],

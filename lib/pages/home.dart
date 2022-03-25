@@ -163,10 +163,10 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           title: Text(widget.title),
         ),
+        backgroundColor: Theme.of(context).backgroundColor,
         body: connections.isEmpty
             ? Center(child: Text('Add a new connection string.'))
             : CupertinoScrollbar(
