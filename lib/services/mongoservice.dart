@@ -29,20 +29,16 @@ class MongoService{
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
+      _lastConnectedUri = '';
       return false;
     }
   }
 
   Future<List<String>> getCollectionNames() async{
     try{
-      if(_database!.isConnected){
-        var list = (await _database!.getCollectionNames()).where((element) => element != null).map((e) => e as String).toList();
-        list.sort((a,b) => a.toLowerCase().compareTo(b.toLowerCase()));
-        return list;
-      }
-      else{
-        return Future<List<String>>.value(<String>[]);
-      }
+      var list = (await _database!.getCollectionNames()).where((element) => element != null).map((e) => e as String).toList();
+      list.sort((a,b) => a.toLowerCase().compareTo(b.toLowerCase()));
+      return list;
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
@@ -52,10 +48,7 @@ class MongoService{
 
   Future<int> getRecordCount(String collection) async{
     try{
-      if(_database!.isConnected){
-        return await _database!.collection(collection).count();
-      }
-      return 0;
+      return await _database!.collection(collection).count();
     }
     catch(e){
       return -1;
@@ -64,11 +57,9 @@ class MongoService{
 
   Future<void> createCollection(String name) async{
     try{
-      if(_database!.isConnected){
-        var result = await _database!.createCollection(name);
-        if(result.keys.any((element) => element == 'errmsg')){
-          throw result['errmsg'].toString();
-        }
+      var result = await _database!.createCollection(name);
+      if(result.keys.any((element) => element == 'errmsg')){
+        throw result['errmsg'].toString();
       }
     }
     catch(e){
@@ -78,10 +69,7 @@ class MongoService{
 
   Future<bool> deleteCollection(String name) async{
     try{
-      if(_database!.isConnected){
-        return await _database!.dropCollection(name);
-      }
-      return false;
+      return await _database!.dropCollection(name);
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
@@ -97,10 +85,7 @@ class MongoService{
       if(page_size <= 0){
         page_size = 1;
       }
-      if(_database!.isConnected){
-        return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
-      }
-      return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
+      return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
@@ -110,11 +95,8 @@ class MongoService{
   
   Future<bool> deleteRecord(String collection, dynamic id) async{
     try{
-      if(_database!.isConnected){
-        var result = await _database!.collection(collection).deleteOne({'_id':id});
-        return result.isSuccess;
-      }
-      return false;
+      var result = await _database!.collection(collection).deleteOne({'_id':id});
+      return result.isSuccess;
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
@@ -124,11 +106,8 @@ class MongoService{
 
   Future<bool> insertRecord(String collection, dynamic data) async{
     try{
-      if(_database!.isConnected){
-        var result = await _database!.collection(collection).insert(data);
-        return true;
-      }
-      return false;
+      await _database!.collection(collection).insert(data);
+      return true;
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
@@ -138,14 +117,11 @@ class MongoService{
 
   Future<bool> updateRecord(String collection, dynamic id, dynamic data) async{
     try{
-      if(_database!.isConnected){
-        var result = await _database!.collection(collection).replaceOne({'_id':id}, data);
-        if(result.hasWriteErrors){
-          throw result.writeError!.errmsg!.toString();
-        }
-        return true;
+      var result = await _database!.collection(collection).replaceOne({'_id':id}, data);
+      if(result.hasWriteErrors){
+        throw result.writeError!.errmsg!.toString();
       }
-      return false;
+      return true;
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
