@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:rational/rational.dart';
 
 dynamic decodeDate(String val){
   try{
@@ -28,6 +29,15 @@ dynamic decodeUuid(String val){
   }
 }
 
+dynamic decodeDecimal(String val){
+  try{
+    return Rational.parse(val.substring(9));
+  }
+  catch(e){
+    return val;
+  }
+}
+
 dynamic helper(dynamic key, dynamic value) {
   if (value is String){
     String str = value.trim();
@@ -39,6 +49,9 @@ dynamic helper(dynamic key, dynamic value) {
     }
     else if(str.startsWith('\$uuid:')){
       return decodeUuid(str);
+    }
+    else if(str.startsWith('\$decimal:')){
+      return decodeDecimal(str);
     }
   }
   return value;

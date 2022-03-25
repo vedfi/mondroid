@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:rational/rational.dart';
 
 dynamic helper(dynamic item) {
   if (item is DateTime) {
@@ -10,6 +11,9 @@ dynamic helper(dynamic item) {
   }
   else if(item is UuidValue){
     return '\$uuid:'+item.uuid;
+  }
+  else if(item is Rational){
+    return '\$decimal:'+item.toDecimalString();
   }
   return item;
 }

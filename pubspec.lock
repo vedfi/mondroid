@@ -304,7 +304,7 @@ packages:
     source: hosted
     version: "4.2.4"
   rational:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: rational
       url: "https://pub.dartlang.org"
