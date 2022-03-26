@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +8,6 @@ import 'package:mondroid/utilities/customjsondecoder.dart';
 import 'package:mondroid/utilities/customjsonencoder.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
-import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 String jsonEncode(dynamic item){
   return CustomJsonEncoder.Encode(item);

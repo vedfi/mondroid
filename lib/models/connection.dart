@@ -13,10 +13,4 @@ class Connection{
   };
 
   String getConnectionString() => uri;
-
-  @override
-  String subtitle() => uri;
-
-  @override
-  String title() => name;
 }

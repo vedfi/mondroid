@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/selectable.dart';
 
@@ -121,7 +118,7 @@ class RecordTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: selectable.isSelected ? Colors.red.shade50 : Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(15))
         ),
       child: ListTile(
@@ -138,7 +135,7 @@ class RecordTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [Icon(Icons.article, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), Spacer(),
-              this.selectable.isSelected
+              selectable.isSelected
                   ? Icon(Icons.check_box, color: Colors.red,)
                   : (has_any_selected
                   ? Icon(Icons.check_box_outline_blank, color: Colors.grey.shade600,)

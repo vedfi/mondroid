@@ -33,7 +33,7 @@ class CollectionTile extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      selected: this.selectable.isSelected,
+      selected: selectable.isSelected,
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -47,7 +47,7 @@ class CollectionTile extends StatelessWidget{
         children: [Icon(Icons.folder, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 5, height: 1), Text(selectable.item.name)],
       ),
       subtitle: Text(getDocumentText()),
-      trailing: this.selectable.isSelected
+      trailing: selectable.isSelected
           ? Icon(Icons.check_box)
           : (has_any_selected
           ? Icon(Icons.check_box_outline_blank)

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -115,7 +113,7 @@ class RecordsState extends State<Records> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().Build(context, 'Delete Record(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
+          return ConfirmDialog().Build(context, 'Delete Document(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
         });
     if (delete == true) {
       setState(() {
@@ -163,13 +161,6 @@ class RecordsState extends State<Records> {
 
   @override
   Widget build(BuildContext context) {
-    double height =
-        MediaQuery.of(context).size.height; // Full screen width and height
-    EdgeInsets padding =
-        MediaQuery.of(context).padding; // Height (without SafeArea)
-    double netHeight = height -
-        padding.top -
-        kToolbarHeight; // Height (without status and toolbar)
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(

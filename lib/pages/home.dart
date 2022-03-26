@@ -1,10 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mondroid/models/connection.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';

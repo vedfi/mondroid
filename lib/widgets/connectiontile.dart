@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/connection.dart';
 import 'package:mondroid/models/selectable.dart';
@@ -15,7 +14,7 @@ class ConnectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       child: ListTile(
-        selected: this.selectable.isSelected,
+        selected: selectable.isSelected,
         contentPadding: EdgeInsets.fromLTRB(0,10,20,10),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -40,7 +39,7 @@ class ConnectionTile extends StatelessWidget {
         ),
         subtitle: Text(selectable.item.uri.replaceAll("", "\u{200B}"),overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1),
         isThreeLine: false,
-        trailing: this.selectable.isSelected
+        trailing: selectable.isSelected
             ? Icon(Icons.check_box)
             : (has_any_selected
             ? Icon(Icons.check_box_outline_blank)

@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class MongoService{
   static final MongoService _mongoService = MongoService._internal();
-  Db? _database = null;
+  Db? _database;
   String _lastConnectedUri = '';
   factory MongoService() {
     return _mongoService;
