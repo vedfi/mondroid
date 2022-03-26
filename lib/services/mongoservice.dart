@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -34,8 +31,20 @@ class MongoService{
     }
   }
 
+  Future<void> reconnect() async{
+    try{
+      if((_database == null || !(_database!.isConnected)) && _lastConnectedUri.isNotEmpty){
+        await connect(_lastConnectedUri);
+      }
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Reconnect Failed: ${e.toString()}');
+    }
+  }
+
   Future<List<String>> getCollectionNames() async{
     try{
+      await reconnect();
       var list = (await _database!.getCollectionNames()).where((element) => element != null).map((e) => e as String).toList();
       list.sort((a,b) => a.toLowerCase().compareTo(b.toLowerCase()));
       return list;
@@ -48,6 +57,7 @@ class MongoService{
 
   Future<int> getRecordCount(String collection) async{
     try{
+      await reconnect();
       return await _database!.collection(collection).count();
     }
     catch(e){
@@ -57,6 +67,7 @@ class MongoService{
 
   Future<void> createCollection(String name) async{
     try{
+      await reconnect();
       var result = await _database!.createCollection(name);
       if(result.keys.any((element) => element == 'errmsg')){
         throw result['errmsg'].toString();
@@ -69,6 +80,7 @@ class MongoService{
 
   Future<bool> deleteCollection(String name) async{
     try{
+      await reconnect();
       return await _database!.dropCollection(name);
     }
     catch(e){
@@ -85,6 +97,7 @@ class MongoService{
       if(page_size <= 0){
         page_size = 1;
       }
+      await reconnect();
       return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
     }
     catch(e){
@@ -95,6 +108,7 @@ class MongoService{
   
   Future<bool> deleteRecord(String collection, dynamic id) async{
     try{
+      await reconnect();
       var result = await _database!.collection(collection).deleteOne({'_id':id});
       return result.isSuccess;
     }
@@ -106,6 +120,7 @@ class MongoService{
 
   Future<bool> insertRecord(String collection, dynamic data) async{
     try{
+      await reconnect();
       await _database!.collection(collection).insert(data);
       return true;
     }
@@ -117,6 +132,7 @@ class MongoService{
 
   Future<bool> updateRecord(String collection, dynamic id, dynamic data) async{
     try{
+      await reconnect();
       var result = await _database!.collection(collection).replaceOne({'_id':id}, data);
       if(result.hasWriteErrors){
         throw result.writeError!.errmsg!.toString();
