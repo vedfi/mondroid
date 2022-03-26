@@ -41,7 +41,8 @@ The following operators were used to support those types.
 [<img alt="mondroid-ui-1" src="https://user-images.githubusercontent.com/29797832/160253540-c5acd9b4-cb72-4123-a10f-b72acf953ef3.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253540-c5acd9b4-cb72-4123-a10f-b72acf953ef3.jpg")
 [<img alt="mondroid-ui-2" src="https://user-images.githubusercontent.com/29797832/160253541-5028dc41-df8c-41f7-9806-99b597cf85d4.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253541-5028dc41-df8c-41f7-9806-99b597cf85d4.jpg")
 [<img alt="mondroid-ui-3" src="https://user-images.githubusercontent.com/29797832/160253542-d89d49b4-f80a-4f42-b2ac-065cd0635c46.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253542-d89d49b4-f80a-4f42-b2ac-065cd0635c46.jpg")
-[<img alt="mondroid-ui-4" src="https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg")
+
+<!--- [<img alt="mondroid-ui-4" src="https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg") -->
 
 [<img alt="mondroid-ui-5" src="https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg")
 [<img alt="mondroid-ui-6" src="https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg")
