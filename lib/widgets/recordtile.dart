@@ -76,7 +76,7 @@ class RecordTile extends StatelessWidget {
             generate(level+1, '${i}', value.elementAt(i))
         );
       }
-      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: TextStyle(fontWeight: FontWeight.w800))), ExpandableType.Array, pad, fields);
+      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: const TextStyle(fontWeight: FontWeight.w800))), ExpandableType.Array, pad, fields);
     }
     else if(value is Map<String,dynamic>){
       List<Widget> fields = <Widget>[];
@@ -85,13 +85,13 @@ class RecordTile extends StatelessWidget {
             generate(level+1,sub_key, value[sub_key])
         );
       }
-      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: TextStyle(fontWeight: FontWeight.w800)),), ExpandableType.Obj, pad, fields);
+      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: const TextStyle(fontWeight: FontWeight.w800)),), ExpandableType.Obj, pad, fields);
     }
     else{
       return Padding(padding: pad, child: Text.rich(
         TextSpan(
           children: <TextSpan>[
-            TextSpan(text: '${key}: ', style: TextStyle(fontWeight: FontWeight.w800)),
+            TextSpan(text: '${key}: ', style: const TextStyle(fontWeight: FontWeight.w800)),
             TextSpan(text: '${value.toString()}'),
           ],
         ),
@@ -118,27 +118,27 @@ class RecordTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            color: selectable.isSelected ? Colors.red.shade50 : Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(15))
+            color: selectable.isSelected ? Theme.of(context).colorScheme.onErrorContainer : Theme.of(context).colorScheme.onInverseSurface,
+          borderRadius: const BorderRadius.all(Radius.circular(15))
         ),
       child: ListTile(
         selected: selectable.isSelected,
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        shape: RoundedRectangleBorder(
+        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
-        selectedColor: Colors.red,
+        selectedColor: Theme.of(context).colorScheme.onError,
         dense: true,
         onTap: () => onClick(index, SelectType.Tap),
         onLongPress: () => onClick(index, SelectType.LongPress),
         title: Padding(
-          padding: EdgeInsets.only(bottom: 5),
+          padding: const EdgeInsets.only(bottom: 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Icon(Icons.article, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), Spacer(),
+            children: [Icon(Icons.article, color: selectable.isSelected ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.inverseSurface), const SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), const Spacer(),
               selectable.isSelected
-                  ? Icon(Icons.check_box, color: Colors.red,)
+                  ? Icon(Icons.check_box, color: Theme.of(context).colorScheme.onError)
                   : (has_any_selected
-                  ? Icon(Icons.check_box_outline_blank, color: Colors.grey.shade600,)
+                  ? Icon(Icons.check_box_outline_blank, color: Theme.of(context).colorScheme.inverseSurface)
                   : GestureDetector(child: Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade600,), onTap: ()=> onClick(index, SelectType.Navigate),))],
           ),
         ),

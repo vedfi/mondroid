@@ -29,8 +29,8 @@ class Edit extends StatefulWidget{
 
 class EditState extends State<Edit>{
   bool isLoading = false;
-  TextEditingController _jsonController = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  final TextEditingController _jsonController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   Future<void> encoder() async{
     String encoded = widget.item_id == null ?'{\n\n}' : await compute(jsonEncode, widget.item);
@@ -113,14 +113,14 @@ class EditState extends State<Edit>{
     double kBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
-          actions: [IconButton(onPressed: copy, icon: Icon(Icons.copy, color: Colors.white,), tooltip: 'Copy',)],
+          actions: [IconButton(onPressed: copy, icon: const Icon(Icons.copy), tooltip: 'Copy',)],
         ),
         body: Padding(
           padding: EdgeInsets.only(bottom: kBoardHeight),
-          child: Container(
+          child: SizedBox(
             height: netHeight,
             child: CupertinoScrollbar(
               controller: _scrollController,
@@ -131,12 +131,14 @@ class EditState extends State<Edit>{
                 scrollController: _scrollController,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
-                scrollPhysics: AlwaysScrollableScrollPhysics(),
+                scrollPhysics: const AlwaysScrollableScrollPhysics(),
                 decoration: InputDecoration(
-                    fillColor: Colors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     filled: true,
                     border: null,
-                    contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 8)
+                    enabledBorder: const UnderlineInputBorder(),
+                    focusedBorder: const UnderlineInputBorder(),
+                    contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8)
                 ),
                 controller: _jsonController,
               ),
@@ -145,6 +147,7 @@ class EditState extends State<Edit>{
         ),
         floatingActionButton: LoadableFloatingActionButton(
           FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: saveDialog,
             tooltip: 'Save document.',
             child: const Icon(Icons.save)), isLoading)

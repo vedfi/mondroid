@@ -34,23 +34,23 @@ class CollectionTile extends StatelessWidget{
   Widget build(BuildContext context) {
     return ListTile(
       selected: selectable.isSelected,
-      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      shape: RoundedRectangleBorder(
+      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
-      tileColor: Colors.white,
-      selectedTileColor: Colors.red.shade50,
-      selectedColor: Colors.red,
+      tileColor: Theme.of(context).colorScheme.onInverseSurface,
+      selectedTileColor: Theme.of(context).colorScheme.onErrorContainer,
+      selectedColor: Theme.of(context).colorScheme.onError,
       onTap: () => onClick(index, SelectType.Tap),
       onLongPress: () => onClick(index, SelectType.LongPress),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [Icon(Icons.folder, color: selectable.isSelected ? Colors.red : Colors.grey.shade600), SizedBox(width: 5, height: 1), Text(selectable.item.name)],
+        children: [Icon(Icons.folder, color: selectable.isSelected ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.inverseSurface), const SizedBox(width: 5, height: 1), Text(selectable.item.name)],
       ),
       subtitle: Text(getDocumentText()),
       trailing: selectable.isSelected
-          ? Icon(Icons.check_box)
+          ? const Icon(Icons.check_box)
           : (has_any_selected
-          ? Icon(Icons.check_box_outline_blank)
-          : Icon(Icons.keyboard_arrow_right)),
+          ? const Icon(Icons.check_box_outline_blank)
+          : const Icon(Icons.keyboard_arrow_right)),
     );  }
 }

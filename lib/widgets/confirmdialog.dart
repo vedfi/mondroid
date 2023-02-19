@@ -15,11 +15,13 @@ class ConfirmDialog{
             onPressed: () {
               Navigator.pop(context, true);
             },
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onSurface
+            ),
             child: Text(okText)),
         TextButton(
             style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                primary: Colors.white
+                foregroundColor: Theme.of(context).colorScheme.primary
             ),
             onPressed: () {
               Navigator.pop(context, false);

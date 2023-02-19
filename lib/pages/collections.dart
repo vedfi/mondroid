@@ -17,7 +17,7 @@ class Collections extends StatefulWidget {
 }
 
 class CollectionsState extends State<Collections> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool isLoading = false;
   List<Selectable<Collection>> collections = <Selectable<Collection>>[];
 
@@ -66,14 +66,14 @@ class CollectionsState extends State<Collections> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: Text('Create Collection'),
+            title: const Text('Create Collection'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: _nameController,
-                  decoration: InputDecoration(hintText: "Name"),
+                  decoration: const InputDecoration(hintText: "Name"),
                 ),
               ],
             ),
@@ -83,7 +83,7 @@ class CollectionsState extends State<Collections> {
                     create(_nameController.value.text);
                     Navigator.pop(context);
                   },
-                  child: Text('Create')),
+                  child: const Text('Create')),
             ],
           );
         });
@@ -143,7 +143,7 @@ class CollectionsState extends State<Collections> {
         padding.top -
         kToolbarHeight; // Height (without status and toolbar)
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -151,21 +151,21 @@ class CollectionsState extends State<Collections> {
           onRefresh: getCollections,
           child: collections.isEmpty
               ? SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Container(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
                     height: netHeight,
-                    child: Center(
+                    child: const Center(
                       child: Text('No collections.'),
                     ),
                   ),
                 )
               : CupertinoScrollbar(
                   child: ListView.separated(
-                      physics: AlwaysScrollableScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                          const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                       itemCount: collections.length,
                       itemBuilder: (context, index) => CollectionTile(
                           index: index,
@@ -177,11 +177,13 @@ class CollectionsState extends State<Collections> {
         floatingActionButton: LoadableFloatingActionButton(
             collections.any((element) => element.isSelected)
                 ? FloatingActionButton(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
                     onPressed: deleteDialog,
                     tooltip: 'Delete selected collection(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     onPressed: addDialog,
                     tooltip: 'Create new collection.',
                     child: const Icon(Icons.add)),
