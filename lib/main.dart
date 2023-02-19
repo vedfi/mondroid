@@ -9,52 +9,61 @@ void main() {
   runApp(const MondroidApp());
 }
 
+ThemeData getLightTheme() {
+  return ThemeData.from(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.green).copyWith(
+          onInverseSurface: const Color(0xfffcfdf6),
+          background: const Color(0xfff0f1eb),
+          onError: const Color(0xffba1a1a),
+          onErrorContainer: const Color(0xffffdad6)));
+}
+
+ThemeData getDarkTheme() {
+  return ThemeData.from(
+      colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green, brightness: Brightness.dark));
+}
+
 class MondroidApp extends StatelessWidget {
   const MondroidApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Mondroid',
-        initialRoute: '/',
-        onGenerateRoute: (settings) {
-          switch(settings.name){
-            case '/':{
+      title: 'Mondroid',
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            {
               return CupertinoPageRoute(
                   builder: (_) => const Home(title: 'Mondroid'));
             }
-            case '/collections':{
+          case '/collections':
+            {
               String arg = settings.arguments as String;
               return CupertinoPageRoute(
-                  builder: (_) => Collections(title: arg)
-              );
+                  builder: (_) => Collections(title: arg));
             }
-            case '/records':{
+          case '/records':
+            {
               String arg = settings.arguments as String;
               return CupertinoPageRoute(
-                builder: (_) => Records(collectionName: arg));
+                  builder: (_) => Records(collectionName: arg));
             }
-            case '/edit':{
+          case '/edit':
+            {
               List<dynamic> args = settings.arguments as List<dynamic>;
               dynamic id = args[1] == null ? null : args[1]['_id'];
               return CupertinoPageRoute(
-                builder: (_) => Edit(collectionName: args[0], item_id: id, item: args[1]));
+                  builder: (_) => Edit(
+                      collectionName: args[0], item_id: id, item: args[1]));
             }
-          }
-        },
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.green,
-          backgroundColor: Colors.grey.shade100
-        ));
+        }
+      },
+      theme: getLightTheme(),
+      darkTheme: getDarkTheme(),
+      themeMode: ThemeMode.system,
+    );
   }
 }

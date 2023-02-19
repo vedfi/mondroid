@@ -16,7 +16,7 @@ class Loadable extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SpinKitThreeBounce(color: Theme.of(context).primaryColor, size: 25),
-            Text('Please wait..')
+            const Text('Please wait..')
           ],
         )
       );
@@ -32,8 +32,8 @@ class LoadableFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !_isLoading ? _widget :
-        FloatingActionButton(onPressed: null,
-        child: SpinKitThreeBounce(color: Colors.white, size: 10));
+        FloatingActionButton(onPressed: null, backgroundColor: Theme.of(context).colorScheme.primary,
+        child: SpinKitThreeBounce(color: Theme.of(context).colorScheme.background, size: 10));
   }
 
 }

@@ -60,7 +60,7 @@ dynamic helper(dynamic key, dynamic value) {
 class CustomJsonDecoder{
 
   static dynamic Decode(String json){
-    return JsonDecoder(helper).convert(json);
+    return const JsonDecoder(helper).convert(json);
   }
 
 }

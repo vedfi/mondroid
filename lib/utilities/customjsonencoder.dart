@@ -21,7 +21,7 @@ dynamic helper(dynamic item) {
 class CustomJsonEncoder{
 
   static String Encode(dynamic object){
-    return JsonEncoder.withIndent('   ', helper).convert(object).toString();
+    return const JsonEncoder.withIndent('   ', helper).convert(object).toString();
   }
 
 }

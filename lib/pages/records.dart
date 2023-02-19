@@ -18,7 +18,7 @@ class Records extends StatefulWidget {
 }
 
 class RecordsState extends State<Records> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool isLoading = true;
   static const _pageSize = 20;
   final PagingController<int, Selectable<Map<String, dynamic>>>
@@ -85,15 +85,15 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: Text('Find Query'),
+            title: const Text('Find Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: _nameController,
-                  maxLines: 10,
-                  decoration: InputDecoration(hintText: 'Basic usage: {\"key\":\"value\"}', helperText: 'All query operators are supported.\nLeave blank if you want to fetch all records.'),
+                  maxLines: 7,
+                  decoration: const InputDecoration(hintText: 'Basic usage: {\"key\":\"value\"}', helperText: 'All query operators are supported.\nLeave blank if you want to fetch all records.'),
                 ),
               ],
             ),
@@ -103,7 +103,7 @@ class RecordsState extends State<Records> {
                     _pagingController.refresh();
                     Navigator.pop(context);
                   },
-                  child: Text('Apply')),
+                  child: const Text('Apply')),
             ],
           );
         });
@@ -162,11 +162,11 @@ class RecordsState extends State<Records> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.collectionName),
           actions: [
-            IconButton(onPressed: searchDialog, icon: Icon(Icons.search, color: Colors.white,), tooltip: 'Find',)
+            IconButton(onPressed: searchDialog, icon: const Icon(Icons.search) , tooltip: 'Find',)
           ],
         ),
         body: RefreshIndicator(
@@ -174,25 +174,27 @@ class RecordsState extends State<Records> {
             child: CupertinoScrollbar(
                 child: PagedListView<int, Selectable<Map<String, dynamic>>>.separated(
                   pagingController: _pagingController,
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   padding:
-                  EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                  separatorBuilder: (context, index) => SizedBox(height: 10),
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  separatorBuilder: (context, index) => const SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
                       Selectable<Map<String, dynamic>>>(
-                      firstPageProgressIndicatorBuilder: (context) => Center(child:  Text('Loading.'),),
-                      noItemsFoundIndicatorBuilder: (context) => Center(child: Text('No records.'),),
+                      firstPageProgressIndicatorBuilder: (context) => const Center(child:  Text('Loading.'),),
+                      noItemsFoundIndicatorBuilder: (context) => const Center(child: Text('No records.'),),
                       itemBuilder: (context, data, index) => RecordTile(index, data, hasAnySelected(), select)
                   ),
                 ))),
         floatingActionButton: LoadableFloatingActionButton(
             hasAnySelected()
                 ? FloatingActionButton(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
                     onPressed: deleteDialog,
                     tooltip: 'Delete selected document(s).',
                     child: const Icon(Icons.delete_forever))
                 : FloatingActionButton(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     onPressed: ()=>{navigate(-1)},
                     tooltip: 'Insert a new document.',
                     child: const Icon(Icons.add)),

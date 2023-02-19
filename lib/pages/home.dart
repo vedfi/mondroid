@@ -20,8 +20,8 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   bool isLoading = false;
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _uriController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
 
   void reorder(int old_index, int new_index){
@@ -55,7 +55,7 @@ class HomeState extends State<Home> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: Text('Add Connection'),
+            title: const Text('Add Connection'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -63,13 +63,13 @@ class HomeState extends State<Home> {
                 TextField(
                   controller: _nameController,
                   textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(hintText: "Name", helperText: 'Will be used as title.', ),
+                  decoration: const InputDecoration(hintText: "Name", helperText: 'Will be used as title.', ),
                 ),
-                SizedBox(width: 10, height: 10),
+                const SizedBox(width: 10, height: 10),
                 TextField(
                   controller: _uriController,
                   textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(hintText: "Uri", helperText: 'Uri with database name.'),
+                  decoration: const InputDecoration(hintText: "Uri", helperText: 'Uri with database name.'),
                 ),
               ],
             ),
@@ -81,7 +81,7 @@ class HomeState extends State<Home> {
                     _uriController.clear();
                     _nameController.clear();
                   },
-                  child: Text('Add')),
+                  child: const Text('Add')),
             ],
           );
         });
@@ -90,7 +90,7 @@ class HomeState extends State<Home> {
   void add(String name, String uri) {
     if (name.isNotEmpty && uri.isNotEmpty) {
       setState(() {
-        connections.add(new Selectable(new Connection(name, uri)));
+        connections.add(Selectable(Connection(name, uri)));
       });
       saveConnections();
     }
@@ -162,14 +162,14 @@ class HomeState extends State<Home> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: connections.isEmpty
-            ? Center(child: Text('Add a new connection string.'))
+            ? const Center(child: Text('Add a new connection string.'))
             : CupertinoScrollbar(
           child: ReorderableListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               buildDefaultDragHandles: false,
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
               onReorder: reorder,
               itemCount: connections.length,
               itemBuilder: (context, index) => ConnectionTile(
@@ -181,12 +181,14 @@ class HomeState extends State<Home> {
         ),
         floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
             ? FloatingActionButton(
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+            foregroundColor: Theme.of(context).colorScheme.onError,
             onPressed: deleteDialog,
             tooltip: 'Delete selected connection(s).',
             child: const Icon(Icons.delete_forever))
             : FloatingActionButton(
             onPressed: addDialog,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             tooltip: 'Add new connection.',
             child: const Icon(Icons.add)), isLoading)
     );
