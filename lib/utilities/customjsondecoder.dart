@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:decimal/decimal.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:rational/rational.dart';
 
@@ -31,7 +32,16 @@ dynamic decodeUuid(String val){
 
 dynamic decodeDecimal(String val){
   try{
-    return Rational.parse(val.substring(9));
+    return Decimal.fromJson(val.substring(9));
+  }
+  catch(e){
+    return val;
+  }
+}
+
+dynamic decodeRational(String val){
+  try{
+    return Rational.parse(val.substring(10));
   }
   catch(e){
     return val;
@@ -51,6 +61,9 @@ dynamic helper(dynamic key, dynamic value) {
       return decodeUuid(str);
     }
     else if(str.startsWith('\$decimal:')){
+      return decodeDecimal(str);
+    }
+    else if(str.startsWith('\$rational:')){
       return decodeDecimal(str);
     }
   }
