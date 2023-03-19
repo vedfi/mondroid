@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:decimal/decimal.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:rational/rational.dart';
 
@@ -12,9 +13,13 @@ dynamic helper(dynamic item) {
   else if(item is UuidValue){
     return '\$uuid:'+item.uuid;
   }
-  else if(item is Rational){
-    return '\$decimal:'+item.toDecimalString();
+  else if(item is Decimal){
+    return '\$decimal:'+item.toString();
   }
+  else if(item is Rational){
+    return '\$rational:'+item.toString();
+  }
+
   return item;
 }
 
