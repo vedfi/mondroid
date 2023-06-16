@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mondroid/services/mongoservice.dart';
-import 'package:mondroid/utilities/customjsondecoder.dart';
-import 'package:mondroid/utilities/customjsonencoder.dart';
+import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 
 String jsonEncode(dynamic item){
-  return CustomJsonEncoder.Encode(item);
+  return JsonConverter.encode(item);
 }
 
 dynamic jsonDecode(String json){
-  return CustomJsonDecoder.Decode(json);
+  return JsonConverter.decode(json);
 }
 
 class Edit extends StatefulWidget{
