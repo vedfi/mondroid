@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/selectable.dart';
+import 'package:mondroid/utilities/recordtilestringifier.dart';
 
 enum ExpandableType{
   Array,
@@ -91,8 +92,8 @@ class RecordTile extends StatelessWidget {
       return Padding(padding: pad, child: Text.rich(
         TextSpan(
           children: <TextSpan>[
-            TextSpan(text: '${key}: ', style: const TextStyle(fontWeight: FontWeight.w800)),
-            TextSpan(text: '${value.toString()}'),
+            TextSpan(text: '$key: ', style: const TextStyle(fontWeight: FontWeight.w800)),
+            TextSpan(text: RecordTileStringifier.stringify(value)),
           ],
         ),
       ));
@@ -114,6 +115,7 @@ class RecordTile extends StatelessWidget {
         children: fields
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
