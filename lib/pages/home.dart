@@ -12,6 +12,7 @@ import '../models/selectable.dart';
 
 class Home extends StatefulWidget {
   final String title;
+
   const Home({Key? key, required this.title}) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class HomeState extends State<Home> {
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
 
-  void reorder(int old_index, int new_index){
+  void reorder(int old_index, int new_index) {
     setState(() {
       new_index -= old_index < new_index ? 1 : 0;
       final Selectable<Connection> item = connections.removeAt(old_index);
@@ -34,28 +35,51 @@ class HomeState extends State<Home> {
   }
 
   Future<void> deleteDialog() async {
-    bool? delete = await showDialog(context: context, builder: (ctx){
-      return ConfirmDialog().Build(context, 'Delete Connection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
-    });
-    if(delete == true){
+    bool? delete = await showDialog(
+        context: context,
+        builder: (ctx) {
+          return ConfirmDialog().Build(
+              context,
+              'Delete Connection(s)',
+              'This action cannot be undone. Are you sure you want to continue?',
+              'Cancel',
+              'Delete');
+        });
+    if (delete == true) {
       setState(() {
         connections.removeWhere((element) => element.isSelected);
       });
       saveConnections();
-    }
-    else{
+    } else {
       setState(() {
-        for (var element in connections) {element.isSelected = false;}
+        for (var element in connections) {
+          element.isSelected = false;
+        }
       });
     }
   }
 
-  Future<void> addDialog() async {
+  Future<void> addOrEditDialog(bool isAddDialog) async {
+    int index = -1;
+    _nameController.clear();
+    _uriController.clear();
+    if (!isAddDialog) {
+      for (int i = 0; i < connections.length; i++) {
+        if (connections[i].isSelected) {
+          index = i;
+          _nameController.text = connections[i].item.name;
+          _uriController.text = connections[i].item.uri;
+          break;
+        }
+      }
+    }
     await showDialog(
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: const Text('Add Connection'),
+            title: isAddDialog
+                ? const Text('Add Connection')
+                : const Text('Edit Connection'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -63,25 +87,35 @@ class HomeState extends State<Home> {
                 TextField(
                   controller: _nameController,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(hintText: "Name", helperText: 'Will be used as title.', ),
+                  decoration: const InputDecoration(
+                    hintText: "Name",
+                    helperText: 'Will be used as title.',
+                  ),
                 ),
                 const SizedBox(width: 10, height: 10),
                 TextField(
                   controller: _uriController,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(hintText: "Uri", helperText: 'Uri with database name.'),
+                  decoration: const InputDecoration(
+                      hintText: "Uri", helperText: 'Uri with database name.'),
                 ),
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    add(_nameController.value.text, _uriController.value.text);
+                    if (isAddDialog) {
+                      add(_nameController.value.text,
+                          _uriController.value.text);
+                    } else {
+                      update(index, _nameController.value.text,
+                          _uriController.value.text);
+                    }
                     Navigator.pop(context);
                     _uriController.clear();
                     _nameController.clear();
                   },
-                  child: const Text('Add')),
+                  child: isAddDialog ? const Text('Add') : const Text('Edit')),
             ],
           );
         });
@@ -91,6 +125,18 @@ class HomeState extends State<Home> {
     if (name.isNotEmpty && uri.isNotEmpty) {
       setState(() {
         connections.add(Selectable(Connection(name, uri)));
+      });
+      saveConnections();
+    }
+  }
+
+  void update(int index, String name, String uri) {
+    if (index >= 0 &&
+        connections.length > index &&
+        name.isNotEmpty &&
+        uri.isNotEmpty) {
+      setState(() {
+        connections[index] = Selectable(Connection(name, uri));
       });
       saveConnections();
     }
@@ -113,23 +159,23 @@ class HomeState extends State<Home> {
   }
 
   Future<void> connectAndNavigate(int index) async {
-    if(isLoading){
+    if (isLoading) {
       //already connecting..
       return;
     }
     setState(() {
       isLoading = true;
     });
-    bool connected = await MongoService().connect(connections[index].item.getConnectionString());
+    bool connected = await MongoService()
+        .connect(connections[index].item.getConnectionString());
     setState(() {
       isLoading = false;
     });
     if (connected) {
       Navigator.of(context)
           .pushNamed('/collections', arguments: connections[index].item.name);
-    }
-    else{
-     // Fluttertoast.showToast(msg: 'Connection Error');
+    } else {
+      // Fluttertoast.showToast(msg: 'Connection Error');
     }
   }
 
@@ -156,6 +202,48 @@ class HomeState extends State<Home> {
     getSavedConnections();
   }
 
+  Widget getActionButtons(BuildContext context) {
+    List<Widget> buttons = List.empty(growable: true);
+    int selectedCount =
+        connections.where((element) => element.isSelected).length;
+    if (selectedCount == 0) {
+      return LoadableFloatingActionButton(
+          FloatingActionButton(
+              onPressed: () => addOrEditDialog(true),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              tooltip: 'Add new connection.',
+              child: const Icon(Icons.add)),
+          isLoading);
+    }
+
+    if (selectedCount == 1) {
+      buttons.add(LoadableFloatingActionButton(
+          FloatingActionButton(
+              backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+              onPressed: () => addOrEditDialog(false),
+              tooltip: 'Edit selected connection(s).',
+              child: const Icon(Icons.edit)),
+          isLoading));
+      buttons.add(const SizedBox(width: 1, height: 20));
+    }
+
+    buttons.add(LoadableFloatingActionButton(
+        FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+            foregroundColor: Theme.of(context).colorScheme.onError,
+            onPressed: deleteDialog,
+            tooltip: 'Delete selected connection(s).',
+            child: const Icon(Icons.delete_forever)),
+        isLoading));
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: buttons,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,31 +254,21 @@ class HomeState extends State<Home> {
         body: connections.isEmpty
             ? const Center(child: Text('Add a new connection string.'))
             : CupertinoScrollbar(
-          child: ReorderableListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              buildDefaultDragHandles: false,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-              onReorder: reorder,
-              itemCount: connections.length,
-              itemBuilder: (context, index) => ConnectionTile(
-                index,
-                connections[index],
-                connections.any((q) => q.isSelected),
-                    (i, t) => select(i, t), key: UniqueKey(),)
-          ),
-        ),
-        floatingActionButton: LoadableFloatingActionButton(connections.any((element) => element.isSelected)
-            ? FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
-            foregroundColor: Theme.of(context).colorScheme.onError,
-            onPressed: deleteDialog,
-            tooltip: 'Delete selected connection(s).',
-            child: const Icon(Icons.delete_forever))
-            : FloatingActionButton(
-            onPressed: addDialog,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            tooltip: 'Add new connection.',
-            child: const Icon(Icons.add)), isLoading)
-    );
+                child: ReorderableListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    buildDefaultDragHandles: false,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 15),
+                    onReorder: reorder,
+                    itemCount: connections.length,
+                    itemBuilder: (context, index) => ConnectionTile(
+                          index,
+                          connections[index],
+                          connections.any((q) => q.isSelected),
+                          (i, t) => select(i, t),
+                          key: UniqueKey(),
+                        )),
+              ),
+        floatingActionButton: getActionButtons(context));
   }
 }
