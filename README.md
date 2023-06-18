@@ -1,5 +1,7 @@
 [<img alt="mondroid-banner" src="https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg"/>]("https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg")
 
+<a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="75" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="250"/></a> &emsp; &emsp; <a href="https://www.buymeacoffee.com/vedfi" target="_blank"><img alt="Buy Me A Coffee" height="75" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="250"/></a>
+
 ## Goals Of This Project
 
 - Providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
@@ -29,12 +31,20 @@
 Some data types are not supported by default json:convert library.
 The following operators were used to support those types.
 
-| Type     | Operator | Usage                                        |
-|----------|----------|----------------------------------------------|
-| DateTime | $date    | "$date:1998-11-02T01:30:00.000Z"             |
-| ObjectId | $oid     | "$oid:5a97f9c91c807bb9c6eb5fb4"              |
-| Uuid     | $uuid    | "$uuid:ddca6dd7-9887-4f56-8dea-264cbe1c15b1" |
-| Round    | $decimal | "$decimal:2510.41"                           |
+| Type                | Operator                 | Usage                                        |
+|---------------------|--------------------------|----------------------------------------------|
+| ObjectId            | $oid                     | "$oid:5a97f9c91c807bb9c6eb5fb4"              |
+| DateTime            | $date                    | "$date:1998-11-02T01:30:00.000Z"             |
+| Uuid                | $uuid                    | "$uuid:ddca6dd7-9887-4f56-8dea-264cbe1c15b1" |
+| Decimal             | $decimal                 | "$decimal:2510.41"                           |
+| NaN (Double)        | $doubleNaN               | "$doubleNaN"                                 |
+| Infinity (Decimal)  | $decimalInfinity         | "$decimalInfinity"                           |
+| Infinity (Double)   | $doubleInfinity          | "$doubleInfinity"                            |
+| -Infinity (Decimal) | $decimalNegativeInfinity | "$decimalNegativeInfinity"                   |
+| -Infinity (Double)  | $doubleNegativeInfinity  | "$doubleNegativeInfinity"                    |
+
+
+
 
 ## User Interface
 
