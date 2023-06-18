@@ -119,6 +119,11 @@ class HomeState extends State<Home> {
             ],
           );
         });
+      if(index >= 0){
+        setState(() {
+          connections[index].isSelected = false;
+        });
+      }
   }
 
   void add(String name, String uri) {
