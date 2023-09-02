@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mondroid/models/connection.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/widgets/connectiontile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/selectable.dart';
 
@@ -24,6 +26,7 @@ class HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
+  final Uri _url = Uri.parse('https://vedfi.com.tr/mondroid/troubleshoot');
 
   void reorder(int old_index, int new_index) {
     setState(() {
@@ -32,6 +35,12 @@ class HomeState extends State<Home> {
       connections.insert(new_index, item);
     });
     saveConnections();
+  }
+
+  Future<void> openUrl() async {
+    if (!await launchUrl(_url)) {
+      Fluttertoast.showToast(msg: 'Could not launch $_url');
+    }
   }
 
   Future<void> deleteDialog() async {
@@ -77,9 +86,20 @@ class HomeState extends State<Home> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: isAddDialog
-                ? const Text('Add Connection')
-                : const Text('Edit Connection'),
+            contentPadding: const EdgeInsets.fromLTRB(24, 10, 24, 20),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                isAddDialog
+                    ? const Text('Add Connection')
+                    : const Text('Edit Connection'),
+                IconButton(
+                    onPressed: openUrl,
+                    tooltip: 'Help',
+                    icon: const Icon(Icons.help_outline, size: 24, ))
+              ],
+            ),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -119,11 +139,11 @@ class HomeState extends State<Home> {
             ],
           );
         });
-      if(index >= 0){
-        setState(() {
-          connections[index].isSelected = false;
-        });
-      }
+    if (index >= 0) {
+      setState(() {
+        connections[index].isSelected = false;
+      });
+    }
   }
 
   void add(String name, String uri) {
