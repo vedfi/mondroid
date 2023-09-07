@@ -2,6 +2,10 @@
 
 <a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="75" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="250"/></a> &emsp; &emsp; <a href="https://www.buymeacoffee.com/vedfi" target="_blank"><img alt="Buy Me A Coffee" height="75" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="250"/></a>
 
+## About This Project
+- The main goal of this project is providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
+- Mondroid is written in Flutter and utilizes [mongo_dart](https://github.com/mongo-dart/mongo_dart) driver.
+
 ## Goals Of This Project
 
 - Providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
@@ -11,8 +15,7 @@
 
 ### General
 - Both mongodb:// and mongodb+srv:// connections are supported. ([Mongodb Connection Strings](https://www.mongodb.com/docs/manual/reference/connection-string/))
-- Adding, removing and reordering connection strings.
-- Naming connection strings.
+- Adding, removing, editing and reordering connection strings.
 - Auto reconnecting.
 
 ### Collections
@@ -24,7 +27,7 @@
 
 ### Documents
 - CRUD operations are supported.
-- On listing page; documents are represented in master/detail tree format.
+- On listing page; documents are represented in expandable tree format.
 - On editing page; documents are represented in json string format.
 
 ### Custom Json Encoding / Decoding
@@ -57,7 +60,6 @@ The following operators were used to support those types.
 [<img alt="mondroid-ui-5" src="https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg")
 [<img alt="mondroid-ui-6" src="https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg")
 [<img alt="mondroid-ui-7" src="https://user-images.githubusercontent.com/29797832/160253547-3e943891-8d97-4654-bafb-d09fca38be80.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253547-3e943891-8d97-4654-bafb-d09fca38be80.jpg")
-
 
 ## Side Notes
 I won't be able to develop full time; as this is a hobby project.
