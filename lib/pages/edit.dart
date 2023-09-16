@@ -53,6 +53,7 @@ class EditState extends State<Edit>{
   }
 
   Future<void> save() async{
+    final navigator = Navigator.of(context);
     setState(() {
       isLoading = true;
     });
@@ -71,7 +72,7 @@ class EditState extends State<Edit>{
           result = await MongoService().insertRecord(widget.collectionName, obj);
         }
         if(result){
-          Navigator.of(context).pop();
+          navigator.pop(true);
         }
       }
       catch(e){
@@ -87,9 +88,9 @@ class EditState extends State<Edit>{
   }
   
   void copy(){
-    var json_text = _jsonController.value.text;
-    if(json_text.isNotEmpty){
-      Clipboard.setData(ClipboardData(text: json_text));
+    var jsonText = _jsonController.value.text;
+    if(jsonText.isNotEmpty){
+      Clipboard.setData(ClipboardData(text: jsonText));
       Fluttertoast.showToast(msg: "Document copied to clipboard.");
     }
     else{
