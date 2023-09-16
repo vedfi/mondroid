@@ -1,7 +1,6 @@
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 
 class DoubleJsonHelper extends AbstractJsonHelper {
-
   @override
   decode(value) {
     String str = value as String;

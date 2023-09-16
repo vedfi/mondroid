@@ -1,16 +1,12 @@
-class Selectable<T>{
+class Selectable<T> {
   T item;
   bool isSelected = false;
 
   Selectable(this.item);
 
-  void select(){
+  void select() {
     isSelected = !isSelected;
   }
 }
 
-enum SelectType{
-  Tap,
-  LongPress,
-  Navigate
-}
+enum SelectType { tap, longPress, navigate }

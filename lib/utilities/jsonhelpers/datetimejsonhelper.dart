@@ -1,7 +1,6 @@
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 
-class DateTimeJsonHelper extends AbstractJsonHelper{
-  
+class DateTimeJsonHelper extends AbstractJsonHelper {
   @override
   decode(value) {
     return DateTime.parse((value as String).substring(6));
@@ -21,5 +20,4 @@ class DateTimeJsonHelper extends AbstractJsonHelper{
   bool isEncodable(value) {
     return value is DateTime;
   }
-
 }

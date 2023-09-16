@@ -3,7 +3,6 @@ import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class DecimalJsonHelper extends AbstractJsonHelper {
-
   @override
   decode(value) {
     String str = value as String;

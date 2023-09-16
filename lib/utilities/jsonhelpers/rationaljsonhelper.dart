@@ -2,8 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 import 'package:rational/rational.dart';
 
-class RationalJsonHelper extends AbstractJsonHelper{
-
+class RationalJsonHelper extends AbstractJsonHelper {
   @override
   decode(value) {
     return Rational.parse((value as String).substring(10));
@@ -23,5 +22,4 @@ class RationalJsonHelper extends AbstractJsonHelper{
   bool isEncodable(value) {
     return value is! Decimal && value is Rational;
   }
-
 }

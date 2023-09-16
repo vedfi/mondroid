@@ -10,32 +10,30 @@ import 'package:mondroid/utilities/jsonhelpers/uuidjsonhelper.dart';
 
 import 'jsonhelpers/abstractjsonhelper.dart';
 
-encodeHelper(dynamic value){
-  try{
+encodeHelper(dynamic value) {
+  try {
     for (var helper in JsonConverter.helpers) {
-      if(helper.isEncodable(value)){
+      if (helper.isEncodable(value)) {
         return helper.encode(value);
       }
     }
     return value;
-  }
-  catch(e){
+  } catch (e) {
     PopupService.show(e.toString());
     return "undefined";
   }
 }
 
-decodeHelper(dynamic key, dynamic value){
-  try{
+decodeHelper(dynamic key, dynamic value) {
+  try {
     value = value is String ? value.trim() : value;
     for (var helper in JsonConverter.helpers) {
-      if(helper.isDecodable(value)){
+      if (helper.isDecodable(value)) {
         return helper.decode(value);
       }
     }
     return value;
-  }
-  catch(e){
+  } catch (e) {
     PopupService.show(e.toString());
     return "undefined";
   }

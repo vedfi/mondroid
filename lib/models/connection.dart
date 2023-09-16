@@ -1,4 +1,4 @@
-class Connection{
+class Connection {
   String name;
   String uri;
 
@@ -8,9 +8,9 @@ class Connection{
         uri = json['uri'];
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'uri': uri,
-  };
+        'name': name,
+        'uri': uri,
+      };
 
   String getConnectionString() => uri;
 }

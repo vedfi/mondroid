@@ -1,12 +1,13 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/connection.dart';
+import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
-import 'package:mondroid/widgets/loadable.dart';
-import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/widgets/connectiontile.dart';
+import 'package:mondroid/widgets/loadable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,11 +29,11 @@ class HomeState extends State<Home> {
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
   final Uri _url = Uri.parse('https://vedfi.com.tr/mondroid/troubleshoot');
 
-  void reorder(int old_index, int new_index) {
+  void reorder(int oldIndex, int newIndex) {
     setState(() {
-      new_index -= old_index < new_index ? 1 : 0;
-      final Selectable<Connection> item = connections.removeAt(old_index);
-      connections.insert(new_index, item);
+      newIndex -= oldIndex < newIndex ? 1 : 0;
+      final Selectable<Connection> item = connections.removeAt(oldIndex);
+      connections.insert(newIndex, item);
     });
     saveConnections();
   }
@@ -47,7 +48,7 @@ class HomeState extends State<Home> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().Build(
+          return ConfirmDialog().build(
               context,
               'Delete Connection(s)',
               'This action cannot be undone. Are you sure you want to continue?',
@@ -97,7 +98,10 @@ class HomeState extends State<Home> {
                 IconButton(
                     onPressed: openUrl,
                     tooltip: 'Help',
-                    icon: const Icon(Icons.help_outline, size: 24, ))
+                    icon: const Icon(
+                      Icons.help_outline,
+                      size: 24,
+                    ))
               ],
             ),
             content: Column(
@@ -168,7 +172,10 @@ class HomeState extends State<Home> {
   }
 
   void select(int index, SelectType type) {
-    if (type == SelectType.Tap) {
+    if (isLoading) {
+      return;
+    }
+    if (type == SelectType.tap) {
       if (connections.any((element) => element.isSelected)) {
         setState(() {
           connections[index].select();
@@ -184,10 +191,7 @@ class HomeState extends State<Home> {
   }
 
   Future<void> connectAndNavigate(int index) async {
-    if (isLoading) {
-      //already connecting..
-      return;
-    }
+    final navigator = Navigator.of(context);
     setState(() {
       isLoading = true;
     });
@@ -197,19 +201,17 @@ class HomeState extends State<Home> {
       isLoading = false;
     });
     if (connected) {
-      Navigator.of(context)
-          .pushNamed('/collections', arguments: connections[index].item.name);
-    } else {
-      // Fluttertoast.showToast(msg: 'Connection Error');
+      navigator.pushNamed('/collections',
+          arguments: connections[index].item.name);
     }
   }
 
   Future<void> getSavedConnections() async {
     var pref = await SharedPreferences.getInstance();
-    List<String> saved_connections =
+    List<String> savedConnections =
         pref.getStringList('connections') ?? <String>[];
     setState(() {
-      connections = saved_connections
+      connections = savedConnections
           .map((e) => Selectable(Connection.fromJson(jsonDecode(e))))
           .toList();
     });

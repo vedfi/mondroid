@@ -252,18 +252,18 @@ packages:
     dependency: "direct main"
     description:
       name: mongo_dart
-      sha256: "81ceb0db689b4d367bbe24904740ba3cc61354adacf6a5ff51f2141b3e3a6dca"
+      sha256: "8a714b204c871ea5a7335b4ff9930b4a21e9141c7cdce7a44ff2fdd0ece20e0c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.1"
+    version: "0.9.2"
   mongo_dart_query:
     dependency: transitive
     description:
       name: mongo_dart_query
-      sha256: "146150cec2b8baaa8ea7c59fa93b221b774529ec9aac87d49c74a08fae83451f"
+      sha256: "84807c79771ce5bb1a29f98ce4746d7ff9fe54d80638ea99f9acbb5374995bae"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   packages_extensions:
     dependency: transitive
     description:

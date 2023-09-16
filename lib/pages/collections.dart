@@ -45,7 +45,7 @@ class CollectionsState extends State<Collections> {
   }
 
   void select(int index, SelectType type) {
-    if (type == SelectType.Tap) {
+    if (type == SelectType.tap) {
       if (collections.any((element) => element.isSelected)) {
         setState(() {
           collections[index].select();
@@ -105,20 +105,26 @@ class CollectionsState extends State<Collections> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().Build(context, 'Delete Collection(s)', 'This action cannot be undone. Are you sure you want to continue?', 'Cancel', 'Delete');
+          return ConfirmDialog().build(
+              context,
+              'Delete Collection(s)',
+              'This action cannot be undone. Are you sure you want to continue?',
+              'Cancel',
+              'Delete');
         });
     if (delete == true) {
       setState(() {
         isLoading = true;
       });
-      Iterable<Future<bool>> futures =  collections.where((element) => element.isSelected).map((q) => MongoService().deleteCollection(q.item.name));
+      Iterable<Future<bool>> futures = collections
+          .where((element) => element.isSelected)
+          .map((q) => MongoService().deleteCollection(q.item.name));
       await Future.wait(futures);
       setState(() {
         isLoading = false;
       });
       getCollections();
-    }
-    else{
+    } else {
       setState(() {
         for (var element in collections) {
           element.isSelected = false;
@@ -162,22 +168,23 @@ class CollectionsState extends State<Collections> {
               : CupertinoScrollbar(
                   child: ListView.separated(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 15),
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 10),
                       itemCount: collections.length,
                       itemBuilder: (context, index) => CollectionTile(
                           index: index,
                           selectable: collections[index],
-                          has_any_selected:
+                          hasAnySelected:
                               collections.any((element) => element.isSelected),
                           onClick: select))),
         ),
         floatingActionButton: LoadableFloatingActionButton(
             collections.any((element) => element.isSelected)
                 ? FloatingActionButton(
-                    backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.onErrorContainer,
                     foregroundColor: Theme.of(context).colorScheme.onError,
                     onPressed: deleteDialog,
                     tooltip: 'Delete selected collection(s).',

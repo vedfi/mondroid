@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ConfirmDialog{
-
-  Widget Build(BuildContext context, String title, String subtitle, String cancelText, String okText){
+class ConfirmDialog {
+  Widget build(BuildContext context, String title, String subtitle,
+      String cancelText, String okText) {
     return AlertDialog(
       title: Text(title),
       content: Column(
@@ -16,13 +16,11 @@ class ConfirmDialog{
               Navigator.pop(context, true);
             },
             style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onSurface
-            ),
+                foregroundColor: Theme.of(context).colorScheme.onSurface),
             child: Text(okText)),
         TextButton(
             style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.primary
-            ),
+                foregroundColor: Theme.of(context).colorScheme.primary),
             onPressed: () {
               Navigator.pop(context, false);
             },
@@ -30,5 +28,4 @@ class ConfirmDialog{
       ],
     );
   }
-
 }
