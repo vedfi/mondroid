@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mondroid/models/connection.dart';
+import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/services/mongoservice.dart';
@@ -39,7 +39,7 @@ class HomeState extends State<Home> {
 
   Future<void> openUrl() async {
     if (!await launchUrl(_url)) {
-      Fluttertoast.showToast(msg: 'Could not launch $_url');
+      PopupService.show('Could not launch $_url');
     }
   }
 

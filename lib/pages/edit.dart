@@ -8,6 +8,8 @@ import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 
+import '../services/popupservice.dart';
+
 String jsonEncode(dynamic item){
   return JsonConverter.encode(item);
 }
@@ -54,6 +56,7 @@ class EditState extends State<Edit>{
     setState(() {
       isLoading = true;
     });
+    FocusManager.instance.primaryFocus?.unfocus();
     if(_jsonController.value.text.isNotEmpty){
       try{
         dynamic obj = await compute(jsonDecode,_jsonController.value.text);
@@ -72,11 +75,11 @@ class EditState extends State<Edit>{
         }
       }
       catch(e){
-        Fluttertoast.showToast(msg: 'Invalid JSON.');
+        PopupService.show("Invalid JSON. $e");
       }
     }
     else{
-      Fluttertoast.showToast(msg: 'Document is empty.');
+      PopupService.show("Document is empty.");
     }
     setState(() {
       isLoading = false;

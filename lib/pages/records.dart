@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/widgets/recordtile.dart';
+
+import '../services/popupservice.dart';
 
 class Records extends StatefulWidget {
   final String collectionName;
@@ -32,7 +33,7 @@ class RecordsState extends State<Records> {
       return jsonDecode(_nameController.value.text);
     }
     catch(e){
-      Fluttertoast.showToast(msg: 'Json Encoding Failed: Invalid Query');
+      PopupService.show("Invalid Query: $e");
       return {};
     }
   }
