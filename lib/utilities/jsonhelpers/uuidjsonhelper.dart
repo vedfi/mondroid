@@ -1,8 +1,7 @@
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class UUIDJsonHelper extends AbstractJsonHelper{
-  
+class UUIDJsonHelper extends AbstractJsonHelper {
   @override
   decode(value) {
     return UuidValue.fromList(Uuid.parse((value as String).substring(6)));
@@ -22,5 +21,4 @@ class UUIDJsonHelper extends AbstractJsonHelper{
   bool isEncodable(value) {
     return value is UuidValue;
   }
-
 }

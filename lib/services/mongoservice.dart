@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:mondroid/services/popupservice.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class MongoService{
+class MongoService {
   static final MongoService _mongoService = MongoService._internal();
   Db? _database;
   String _lastConnectedUri = '';
@@ -11,10 +12,10 @@ class MongoService{
   }
   MongoService._internal();
 
-  Future<bool> connect(String uri) async{
-    try{
-      if(_database != null && _database!.isConnected){
-        if(_lastConnectedUri == uri){
+  Future<bool> connect(String uri) async {
+    try {
+      if (_database != null && _database!.isConnected) {
+        if (_lastConnectedUri == uri) {
           return true;
         }
         await _database!.close();
@@ -23,126 +24,127 @@ class MongoService{
       await _database!.open();
       _lastConnectedUri = uri;
       return true;
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       _lastConnectedUri = '';
       return false;
     }
   }
 
-  Future<void> reconnect() async{
-    try{
-      if((_database == null || !(_database!.isConnected)) && _lastConnectedUri.isNotEmpty){
+  Future<void> reconnect() async {
+    try {
+      if ((_database == null || !(_database!.isConnected)) &&
+          _lastConnectedUri.isNotEmpty) {
         await connect(_lastConnectedUri);
       }
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show("Reconnect Failed: $e");
     }
   }
 
-  Future<List<String>> getCollectionNames() async{
-    try{
+  Future<List<String>> getCollectionNames() async {
+    try {
       await reconnect();
-      var list = (await _database!.getCollectionNames()).where((element) => element != null).map((e) => e as String).toList();
-      list.sort((a,b) => a.toLowerCase().compareTo(b.toLowerCase()));
+      var list = (await _database!.getCollectionNames())
+          .where((element) => element != null)
+          .map((e) => e as String)
+          .toList();
+      list.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
       return list;
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       return Future<List<String>>.value(<String>[]);
     }
   }
 
-  Future<int> getRecordCount(String collection) async{
-    try{
+  Future<int> getRecordCount(String collection) async {
+    try {
       await reconnect();
       return await _database!.collection(collection).count();
-    }
-    catch(e){
+    } catch (e) {
       return -1;
     }
   }
 
-  Future<void> createCollection(String name) async{
-    try{
+  Future<void> createCollection(String name) async {
+    try {
       await reconnect();
       var result = await _database!.createCollection(name);
-      if(result.keys.any((element) => element == 'errmsg')){
+      if (result.keys.any((element) => element == 'errmsg')) {
         throw result['errmsg'].toString();
       }
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
     }
   }
 
-  Future<bool> deleteCollection(String name) async{
-    try{
+  Future<bool> deleteCollection(String name) async {
+    try {
       await reconnect();
       return await _database!.dropCollection(name);
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       return false;
     }
   }
 
-  Future<List<Map<String, dynamic>>> find(String collection, int page, int page_size, Map<String, dynamic> filter) async{
-    try{
-      if(page < 0){
+  Future<List<Map<String, dynamic>>> find(String collection, int page,
+      int pageSize, Map<String, dynamic> filter) async {
+    try {
+      if (page < 0) {
         page = 0;
       }
-      if(page_size <= 0){
-        page_size = 1;
+      if (pageSize <= 0) {
+        pageSize = 1;
       }
       await reconnect();
-      return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
-    }
-    catch(e){
+      return await _database!
+          .collection(collection)
+          .find(filter)
+          .skip(page)
+          .take(pageSize)
+          .toList();
+    } catch (e) {
       PopupService.show(e.toString());
-      return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
+      return Future<List<Map<String, dynamic>>>.value(<Map<String, dynamic>>[]);
     }
   }
-  
-  Future<bool> deleteRecord(String collection, dynamic id) async{
-    try{
+
+  Future<bool> deleteRecord(String collection, dynamic id) async {
+    try {
       await reconnect();
-      var result = await _database!.collection(collection).deleteOne({'_id':id});
+      var result =
+          await _database!.collection(collection).deleteOne({'_id': id});
       return result.isSuccess;
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       return false;
     }
   }
 
-  Future<bool> insertRecord(String collection, dynamic data) async{
-    try{
+  Future<bool> insertRecord(String collection, dynamic data) async {
+    try {
       await reconnect();
       await _database!.collection(collection).insert(data);
       return true;
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       return false;
     }
   }
 
-  Future<bool> updateRecord(String collection, dynamic id, dynamic data) async{
-    try{
+  Future<bool> updateRecord(String collection, dynamic id, dynamic data) async {
+    try {
       await reconnect();
-      var result = await _database!.collection(collection).replaceOne({'_id':id}, data);
-      if(result.hasWriteErrors){
+      var result =
+          await _database!.collection(collection).replaceOne({'_id': id}, data);
+      if (result.hasWriteErrors) {
         throw result.writeError!.errmsg!.toString();
       }
       return true;
-    }
-    catch(e){
+    } catch (e) {
       PopupService.show(e.toString());
       return false;
     }
   }
-
 }

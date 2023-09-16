@@ -2,49 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/utilities/recordtilestringifier.dart';
 
-enum ExpandableType{
-  Array,
-  Obj
-}
+enum ExpandableType { array, obj }
 
-class ExpandableColumn extends StatefulWidget{
+class ExpandableColumn extends StatefulWidget {
   final List<Widget> values;
   final ExpandableType expandableType;
   final Widget field;
   final EdgeInsets padding;
-  ExpandableColumn(this.field, this.expandableType, this.padding, this.values);
+  const ExpandableColumn(
+      this.field, this.expandableType, this.padding, this.values,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ExpandableColumnState();
 }
 
-class ExpandableColumnState extends State<ExpandableColumn>{
-
+class ExpandableColumnState extends State<ExpandableColumn> {
   bool isExpanded = false;
 
-  void onPressed(){
+  void onPressed() {
     setState(() {
-      this.isExpanded = !isExpanded;
+      isExpanded = !isExpanded;
     });
   }
 
-  List<Widget> childrens(){
+  List<Widget> childrens() {
     List<Widget> result = <Widget>[];
-    result.add(
-      GestureDetector(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.field,
-            Text(widget.expandableType == ExpandableType.Array ? 'Array' : 'Object'),
-            Icon(isExpanded ? Icons.expand_more : Icons.keyboard_arrow_right, size: 18)
-          ],
-        ),
-        onTap: onPressed,
-      )
-    );
-    if(isExpanded){
+    result.add(GestureDetector(
+      onTap: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          widget.field,
+          Text(widget.expandableType == ExpandableType.array
+              ? 'Array'
+              : 'Object'),
+          Icon(isExpanded ? Icons.expand_more : Icons.keyboard_arrow_right,
+              size: 18)
+        ],
+      ),
+    ));
+    if (isExpanded) {
       result.addAll(widget.values);
     }
     return result;
@@ -57,91 +57,118 @@ class ExpandableColumnState extends State<ExpandableColumn>{
       children: childrens(),
     );
   }
-
 }
 
 class RecordTile extends StatelessWidget {
   final Function(int, SelectType) onClick;
   final int index;
-  final bool has_any_selected;
+  final bool hasAnySelected;
   final Selectable<Map<String, dynamic>> selectable;
 
-  RecordTile(this.index, this.selectable,this.has_any_selected, this.onClick);
+  const RecordTile(
+      this.index, this.selectable, this.hasAnySelected, this.onClick,
+      {Key? key})
+      : super(key: key);
 
-  Widget generate(int level, String key, dynamic value){
-    var pad = EdgeInsets.only(left: level*10);
-    if(value is Iterable<dynamic>){
+  Widget generate(int level, String key, dynamic value) {
+    var pad = EdgeInsets.only(left: level * 10);
+    if (value is Iterable<dynamic>) {
       List<Widget> fields = <Widget>[];
-      for(int i=0; i< value.length; i++){
-        fields.add(
-            generate(level+1, '${i}', value.elementAt(i))
-        );
+      for (int i = 0; i < value.length; i++) {
+        fields.add(generate(level + 1, '$i', value.elementAt(i)));
       }
-      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: const TextStyle(fontWeight: FontWeight.w800))), ExpandableType.Array, pad, fields);
-    }
-    else if(value is Map<String,dynamic>){
+      return ExpandableColumn(
+          Padding(
+              padding: pad,
+              child: Text('$key: ',
+                  style: const TextStyle(fontWeight: FontWeight.w800))),
+          ExpandableType.array,
+          pad,
+          fields);
+    } else if (value is Map<String, dynamic>) {
       List<Widget> fields = <Widget>[];
-      for(var sub_key in value.keys){
-        fields.add(
-            generate(level+1,sub_key, value[sub_key])
-        );
+      for (var subKey in value.keys) {
+        fields.add(generate(level + 1, subKey, value[subKey]));
       }
-      return ExpandableColumn(Padding(padding: pad, child: Text('${key}: ',style: const TextStyle(fontWeight: FontWeight.w800)),), ExpandableType.Obj, pad, fields);
-    }
-    else{
-      return Padding(padding: pad, child: Text.rich(
-        TextSpan(
-          children: <TextSpan>[
-            TextSpan(text: '$key: ', style: const TextStyle(fontWeight: FontWeight.w800)),
-            TextSpan(text: RecordTileStringifier.stringify(value)),
-          ],
-        ),
-      ));
+      return ExpandableColumn(
+          Padding(
+            padding: pad,
+            child: Text('$key: ',
+                style: const TextStyle(fontWeight: FontWeight.w800)),
+          ),
+          ExpandableType.obj,
+          pad,
+          fields);
+    } else {
+      return Padding(
+          padding: pad,
+          child: Text.rich(
+            TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                    text: '$key: ',
+                    style: const TextStyle(fontWeight: FontWeight.w800)),
+                TextSpan(text: RecordTileStringifier.stringify(value)),
+              ],
+            ),
+          ));
     }
   }
 
-  Widget visualize(){
+  Widget visualize() {
     List<Widget> fields = <Widget>[];
-    for(var key in selectable.item.keys){
-      if(key != '_id'){
-        fields.add(
-            generate(0, key, selectable.item[key])
-        );
+    for (var key in selectable.item.keys) {
+      if (key != '_id') {
+        fields.add(generate(0, key, selectable.item[key]));
       }
     }
     return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: fields
-    );
+        children: fields);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-            color: selectable.isSelected ? Theme.of(context).colorScheme.onErrorContainer : Theme.of(context).colorScheme.onInverseSurface,
-          borderRadius: const BorderRadius.all(Radius.circular(15))
-        ),
+      decoration: BoxDecoration(
+          color: selectable.isSelected
+              ? Theme.of(context).colorScheme.onErrorContainer
+              : Theme.of(context).colorScheme.onInverseSurface,
+          borderRadius: const BorderRadius.all(Radius.circular(15))),
       child: ListTile(
         selected: selectable.isSelected,
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
         selectedColor: Theme.of(context).colorScheme.onError,
         dense: true,
-        onTap: () => onClick(index, SelectType.Tap),
-        onLongPress: () => onClick(index, SelectType.LongPress),
+        onTap: () => onClick(index, SelectType.tap),
+        onLongPress: () => onClick(index, SelectType.longPress),
         title: Padding(
           padding: const EdgeInsets.only(bottom: 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Icon(Icons.article, color: selectable.isSelected ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.inverseSurface), const SizedBox(width: 3, height: 1), Text(selectable.item['_id'].toString()), const Spacer(),
+            children: [
+              Icon(Icons.article,
+                  color: selectable.isSelected
+                      ? Theme.of(context).colorScheme.onError
+                      : Theme.of(context).colorScheme.inverseSurface),
+              const SizedBox(width: 3, height: 1),
+              Text(selectable.item['_id'].toString()),
+              const Spacer(),
               selectable.isSelected
-                  ? Icon(Icons.check_box, color: Theme.of(context).colorScheme.onError)
-                  : (has_any_selected
-                  ? Icon(Icons.check_box_outline_blank, color: Theme.of(context).colorScheme.inverseSurface)
-                  : GestureDetector(child: Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade600,), onTap: ()=> onClick(index, SelectType.Navigate),))],
+                  ? Icon(Icons.check_box,
+                      color: Theme.of(context).colorScheme.onError)
+                  : (hasAnySelected
+                      ? Icon(Icons.check_box_outline_blank,
+                          color: Theme.of(context).colorScheme.inverseSurface)
+                      : GestureDetector(
+                          child: const Icon(Icons.keyboard_arrow_right),
+                          onTap: () => onClick(index, SelectType.navigate),
+                        ))
+            ],
           ),
         ),
         subtitle: visualize(),
@@ -157,5 +184,3 @@ class RecordTile extends StatelessWidget {
     );
   }
 }
-
-

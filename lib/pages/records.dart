@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -63,13 +64,13 @@ class RecordsState extends State<Records> {
         _pagingController.itemList!.isEmpty) {
       return;
     }
-    if (type == SelectType.Tap) {
+    if (type == SelectType.tap) {
       if (_pagingController.itemList!.any((element) => element.isSelected)) {
         setState(() {
           _pagingController.itemList!.elementAt(index).select();
         });
       }
-    } else if (type == SelectType.Navigate) {
+    } else if (type == SelectType.navigate) {
       navigate(index);
     } else {
       setState(() {
@@ -121,7 +122,7 @@ class RecordsState extends State<Records> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().Build(
+          return ConfirmDialog().build(
               context,
               'Delete Document(s)',
               'This action cannot be undone. Are you sure you want to continue?',
@@ -151,12 +152,13 @@ class RecordsState extends State<Records> {
   }
 
   Future<void> navigate(int index) async {
-    dynamic shouldRefresh = await Navigator.of(context).pushNamed('/edit', arguments: [
+    dynamic shouldRefresh =
+        await Navigator.of(context).pushNamed('/edit', arguments: [
       widget.collectionName,
       index == -1 ? null : _pagingController.itemList!.elementAt(index).item
     ]);
     refreshRequired = shouldRefresh is bool && shouldRefresh;
-    if(refreshRequired){
+    if (refreshRequired) {
       offset = _scrollController.offset;
       _pagingController.refresh();
     }
@@ -170,7 +172,7 @@ class RecordsState extends State<Records> {
     _pagingController.addStatusListener((status) {
       setState(() {
         isLoading = status == PagingStatus.loadingFirstPage;
-        if(refreshRequired && status == PagingStatus.completed){
+        if (refreshRequired && status == PagingStatus.completed) {
           _scrollController.jumpTo(offset);
           refreshRequired = false;
         }
@@ -205,13 +207,15 @@ class RecordsState extends State<Records> {
                 controller: _scrollController,
                 child: PagedListView<int,
                     Selectable<Map<String, dynamic>>>.separated(
-              pagingController: _pagingController,
-              scrollController: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              builderDelegate:
-                  PagedChildBuilderDelegate<Selectable<Map<String, dynamic>>>(
+                  pagingController: _pagingController,
+                  scrollController: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
+                  builderDelegate: PagedChildBuilderDelegate<
+                          Selectable<Map<String, dynamic>>>(
                       firstPageProgressIndicatorBuilder: (context) =>
                           const Center(
                             child: Text('Loading.'),
@@ -221,7 +225,7 @@ class RecordsState extends State<Records> {
                           ),
                       itemBuilder: (context, data, index) =>
                           RecordTile(index, data, hasAnySelected(), select)),
-            ))),
+                ))),
         floatingActionButton: LoadableFloatingActionButton(
             hasAnySelected()
                 ? FloatingActionButton(

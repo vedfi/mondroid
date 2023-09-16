@@ -10,96 +10,97 @@ import 'package:mondroid/widgets/loadable.dart';
 
 import '../services/popupservice.dart';
 
-String jsonEncode(dynamic item){
+String jsonEncode(dynamic item) {
   return JsonConverter.encode(item);
 }
 
-dynamic jsonDecode(String json){
+dynamic jsonDecode(String json) {
   return JsonConverter.decode(json);
 }
 
-class Edit extends StatefulWidget{
+class Edit extends StatefulWidget {
   final String collectionName;
-  final dynamic item_id;
+  final dynamic itemId;
   final dynamic item;
-  const Edit({Key? key, required this.collectionName, this.item_id, this.item}) : super(key: key);
+  const Edit({Key? key, required this.collectionName, this.itemId, this.item})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => EditState();
 }
 
-class EditState extends State<Edit>{
+class EditState extends State<Edit> {
   bool isLoading = false;
   final TextEditingController _jsonController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  Future<void> encoder() async{
-    String encoded = widget.item_id == null ?'{\n\n}' : await compute(jsonEncode, widget.item);
+  Future<void> encoder() async {
+    String encoded = widget.itemId == null
+        ? '{\n\n}'
+        : await compute(jsonEncode, widget.item);
     setState(() {
       _jsonController.text = encoded;
     });
   }
 
-
   Future<void> saveDialog() async {
     bool? ok = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().Build(context, 'Save record', 'Are you sure you want to continue?', 'Cancel', 'Save');
+          return ConfirmDialog().build(context, 'Save record',
+              'Are you sure you want to continue?', 'Cancel', 'Save');
         });
     if (ok == true) {
       await save();
     }
   }
 
-  Future<void> save() async{
+  Future<void> save() async {
     final navigator = Navigator.of(context);
     setState(() {
       isLoading = true;
     });
     FocusManager.instance.primaryFocus?.unfocus();
-    if(_jsonController.value.text.isNotEmpty){
-      try{
-        dynamic obj = await compute(jsonDecode,_jsonController.value.text);
+    if (_jsonController.value.text.isNotEmpty) {
+      try {
+        dynamic obj = await compute(jsonDecode, _jsonController.value.text);
         bool result = false;
-        if(widget.item_id != null){
+        if (widget.itemId != null) {
           //update
           obj.removeWhere((key, value) => key == '_id');
-          result = await MongoService().updateRecord(widget.collectionName, widget.item_id, obj);
-        }
-        else{
+          result = await MongoService()
+              .updateRecord(widget.collectionName, widget.itemId, obj);
+        } else {
           //insert
-          result = await MongoService().insertRecord(widget.collectionName, obj);
+          result =
+              await MongoService().insertRecord(widget.collectionName, obj);
         }
-        if(result){
+        if (result) {
           navigator.pop(true);
         }
-      }
-      catch(e){
+      } catch (e) {
         PopupService.show("Invalid JSON. $e");
       }
-    }
-    else{
+    } else {
       PopupService.show("Document is empty.");
     }
     setState(() {
       isLoading = false;
     });
   }
-  
-  void copy(){
+
+  void copy() {
     var jsonText = _jsonController.value.text;
-    if(jsonText.isNotEmpty){
+    if (jsonText.isNotEmpty) {
       Clipboard.setData(ClipboardData(text: jsonText));
       Fluttertoast.showToast(msg: "Document copied to clipboard.");
-    }
-    else{
+    } else {
       Fluttertoast.showToast(msg: "Nothing to copy.");
     }
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     encoder();
   }
@@ -119,7 +120,13 @@ class EditState extends State<Edit>{
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
-          actions: [IconButton(onPressed: copy, icon: const Icon(Icons.copy), tooltip: 'Copy',)],
+          actions: [
+            IconButton(
+              onPressed: copy,
+              icon: const Icon(Icons.copy),
+              tooltip: 'Copy',
+            )
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.only(bottom: kBoardHeight),
@@ -141,19 +148,18 @@ class EditState extends State<Edit>{
                     border: null,
                     enabledBorder: const UnderlineInputBorder(),
                     focusedBorder: const UnderlineInputBorder(),
-                    contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8)
-                ),
+                    contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8)),
                 controller: _jsonController,
               ),
             ),
           ),
         ),
         floatingActionButton: LoadableFloatingActionButton(
-          FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            onPressed: saveDialog,
-            tooltip: 'Save document.',
-            child: const Icon(Icons.save)), isLoading)
-    );
+            FloatingActionButton(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                onPressed: saveDialog,
+                tooltip: 'Save document.',
+                child: const Icon(Icons.save)),
+            isLoading));
   }
 }

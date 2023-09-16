@@ -1,4 +1,4 @@
-abstract class AbstractJsonHelper{
+abstract class AbstractJsonHelper {
   bool isEncodable(dynamic value);
 
   bool isDecodable(dynamic value);

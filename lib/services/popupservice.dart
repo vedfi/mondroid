@@ -30,7 +30,8 @@ class PopupService {
               controller: ScrollController(),
               physics: const BouncingScrollPhysics(),
               child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 5),
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, top: 15, bottom: 5),
                 child: Text(message,
                     style: TextStyle(color: themeData.colorScheme.onError)),
               )),

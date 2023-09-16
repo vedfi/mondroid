@@ -58,9 +58,11 @@ class MondroidApp extends StatelessWidget {
               List<dynamic> args = settings.arguments as List<dynamic>;
               dynamic id = args[1] == null ? null : args[1]['_id'];
               return CupertinoPageRoute(
-                  builder: (_) => Edit(
-                      collectionName: args[0], item_id: id, item: args[1]));
+                  builder: (_) =>
+                      Edit(collectionName: args[0], itemId: id, item: args[1]));
             }
+          default:
+            return null;
         }
       },
       theme: getLightTheme(),

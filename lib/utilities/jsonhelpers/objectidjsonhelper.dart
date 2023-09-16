@@ -1,8 +1,7 @@
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class ObjectIdJsonHelper extends AbstractJsonHelper{
-
+class ObjectIdJsonHelper extends AbstractJsonHelper {
   @override
   decode(value) {
     return ObjectId.fromHexString((value as String).substring(5));
@@ -22,5 +21,4 @@ class ObjectIdJsonHelper extends AbstractJsonHelper{
   bool isEncodable(value) {
     return value is ObjectId;
   }
-
 }
