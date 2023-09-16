@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/utilities/jsonhelpers/datetimejsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/decimaljsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/doublejsonhelper.dart';
@@ -20,7 +20,7 @@ encodeHelper(dynamic value){
     return value;
   }
   catch(e){
-    Fluttertoast.showToast(msg: e.toString());
+    PopupService.show(e.toString());
     return "undefined";
   }
 }
@@ -36,7 +36,7 @@ decodeHelper(dynamic key, dynamic value){
     return value;
   }
   catch(e){
-    Fluttertoast.showToast(msg: e.toString());
+    PopupService.show(e.toString());
     return "undefined";
   }
 }

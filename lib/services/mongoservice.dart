@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:mondroid/services/popupservice.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MongoService{
   static final MongoService _mongoService = MongoService._internal();
@@ -25,7 +25,7 @@ class MongoService{
       return true;
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       _lastConnectedUri = '';
       return false;
     }
@@ -38,7 +38,7 @@ class MongoService{
       }
     }
     catch(e){
-      Fluttertoast.showToast(msg: 'Reconnect Failed: ${e.toString()}');
+      PopupService.show("Reconnect Failed: $e");
     }
   }
 
@@ -50,7 +50,7 @@ class MongoService{
       return list;
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return Future<List<String>>.value(<String>[]);
     }
   }
@@ -74,7 +74,7 @@ class MongoService{
       }
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
     }
   }
 
@@ -84,7 +84,7 @@ class MongoService{
       return await _database!.dropCollection(name);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return false;
     }
   }
@@ -101,7 +101,7 @@ class MongoService{
       return await _database!.collection(collection).find(filter).skip(page).take(page_size).toList();
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return Future<List<Map<String,dynamic>>>.value(<Map<String,dynamic>>[]);
     }
   }
@@ -113,7 +113,7 @@ class MongoService{
       return result.isSuccess;
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return false;
     }
   }
@@ -125,7 +125,7 @@ class MongoService{
       return true;
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return false;
     }
   }
@@ -140,7 +140,7 @@ class MongoService{
       return true;
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
+      PopupService.show(e.toString());
       return false;
     }
   }

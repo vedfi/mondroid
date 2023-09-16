@@ -4,6 +4,7 @@ import 'package:mondroid/pages/collections.dart';
 import 'package:mondroid/pages/edit.dart';
 import 'package:mondroid/pages/home.dart';
 import 'package:mondroid/pages/records.dart';
+import 'package:mondroid/services/popupservice.dart';
 
 void main() {
   runApp(const MondroidApp());
@@ -32,6 +33,7 @@ class MondroidApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mondroid',
       initialRoute: '/',
+      scaffoldMessengerKey: PopupService.scaffoldMessengerKey,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
