@@ -6,11 +6,6 @@
 - The main goal of this project is providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
 - Mondroid is written in Flutter and utilizes [mongo_dart](https://github.com/mongo-dart/mongo_dart) driver.
 
-## Goals Of This Project
-
-- Providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
-- Supporting crud operations and basic querying.
-
 ## Features
 
 ### General
