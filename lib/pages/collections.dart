@@ -10,6 +10,7 @@ import '../widgets/loadable.dart';
 
 class Collections extends StatefulWidget {
   final String title;
+
   const Collections({Key? key, required this.title}) : super(key: key);
 
   @override

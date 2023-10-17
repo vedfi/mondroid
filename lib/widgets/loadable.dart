@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class Loadable extends StatelessWidget {
   final Widget _widget;
   final bool _isLoading;
+
   const Loadable(this._widget, this._isLoading, {Key? key}) : super(key: key);
 
   @override
@@ -27,6 +28,7 @@ class Loadable extends StatelessWidget {
 class LoadableFloatingActionButton extends StatelessWidget {
   final FloatingActionButton _widget;
   final bool _isLoading;
+
   const LoadableFloatingActionButton(this._widget, this._isLoading, {Key? key})
       : super(key: key);
 

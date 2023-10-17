@@ -3,9 +3,10 @@ class Connection {
   String uri;
 
   Connection(this.name, this.uri);
+
   Connection.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        uri = json['uri'];
+      : name = json["name"],
+        uri = json["uri"];
 
   Map<String, dynamic> toJson() => {
         'name': name,

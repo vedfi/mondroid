@@ -22,6 +22,7 @@ class Edit extends StatefulWidget {
   final String collectionName;
   final dynamic itemId;
   final dynamic item;
+
   const Edit({Key? key, required this.collectionName, this.itemId, this.item})
       : super(key: key);
 

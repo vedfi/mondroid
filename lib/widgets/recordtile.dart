@@ -9,6 +9,7 @@ class ExpandableColumn extends StatefulWidget {
   final ExpandableType expandableType;
   final Widget field;
   final EdgeInsets padding;
+
   const ExpandableColumn(
       this.field, this.expandableType, this.padding, this.values,
       {Key? key})

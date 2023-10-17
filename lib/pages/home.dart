@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:mondroid/models/connection.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/services/popupservice.dart';
+import 'package:mondroid/services/storageservice.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/connectiontile.dart';
 import 'package:mondroid/widgets/loadable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/selectable.dart';
@@ -207,20 +207,21 @@ class HomeState extends State<Home> {
   }
 
   Future<void> getSavedConnections() async {
-    var pref = await SharedPreferences.getInstance();
-    List<String> savedConnections =
-        pref.getStringList('connections') ?? <String>[];
+    String? data = await StorageService().read('connections');
+    if (data == null) {
+      return;
+    }
+    List<dynamic> savedConnections = jsonDecode(data);
     setState(() {
       connections = savedConnections
-          .map((e) => Selectable(Connection.fromJson(jsonDecode(e))))
-          .toList();
+          .map((e) => Selectable(Connection.fromJson(e)))
+          .toList(growable: true);
     });
   }
 
   Future<void> saveConnections() async {
-    var pref = await SharedPreferences.getInstance();
-    pref.setStringList('connections',
-        connections.map((e) => jsonEncode(e.item.toJson())).toList());
+    String json = jsonEncode(connections.map((e) => e.item).toList());
+    StorageService().write('connections', json);
   }
 
   @override
