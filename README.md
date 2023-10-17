@@ -1,9 +1,3 @@
-# VERY IMPORTANT ANNOUNCEMENT
-### It seems like malicious apps are accessing Mondroid's data storage and your credentials are in danger.
-### Make sure that you don't install an app you don't know if it's safe.
-### I recommend that you do not access your sensitive data through Mondroid until the development regarding data security is completed. 
-### You can follow the development process [here](/../../issues/27)
-
 [<img alt="mondroid-banner" src="https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg"/>]("https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg")
 
 <a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="75" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="250"/></a> &emsp; &emsp; <a href="https://www.buymeacoffee.com/vedfi" target="_blank"><img alt="Buy Me A Coffee" height="75" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="250"/></a>
