@@ -7,9 +7,11 @@ class MongoService {
   static final MongoService _mongoService = MongoService._internal();
   Db? _database;
   String _lastConnectedUri = '';
+
   factory MongoService() {
     return _mongoService;
   }
+
   MongoService._internal();
 
   Future<bool> connect(String uri) async {

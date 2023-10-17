@@ -5,9 +5,17 @@ import 'package:mondroid/pages/edit.dart';
 import 'package:mondroid/pages/home.dart';
 import 'package:mondroid/pages/records.dart';
 import 'package:mondroid/services/popupservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MondroidApp());
+  clearOldStorage();
+}
+
+Future<void> clearOldStorage() async {
+  // TODO: will be removed in next release.
+  var prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
 }
 
 ThemeData getLightTheme() {
@@ -27,6 +35,7 @@ ThemeData getDarkTheme() {
 
 class MondroidApp extends StatelessWidget {
   const MondroidApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
