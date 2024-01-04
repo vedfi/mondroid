@@ -1,15 +1,15 @@
 import 'package:decimal/decimal.dart';
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+import '../constants.dart';
 
 class DecimalJsonHelper extends AbstractJsonHelper {
   @override
   decode(value) {
     String str = value as String;
     if (str.startsWith('\$decimalInfinity')) {
-      return infinityValue;
+      return Constants.decimalInfinity;
     } else if (str.startsWith('\$decimalNegativeInfinity')) {
-      return -infinityValue;
+      return Constants.decimalNegativeInfinity;
     } else {
       return Decimal.fromJson(str.substring(9));
     }
@@ -18,9 +18,9 @@ class DecimalJsonHelper extends AbstractJsonHelper {
   @override
   encode(value) {
     Decimal num = value as Decimal;
-    if (num == infinityValue) {
+    if (num == Constants.decimalInfinity) {
       return '\$decimalInfinity';
-    } else if (num == -infinityValue) {
+    } else if (num == Constants.decimalNegativeInfinity) {
       return '\$decimalNegativeInfinity';
     }
     return '\$decimal:$num';
