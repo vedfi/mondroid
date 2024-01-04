@@ -72,10 +72,13 @@ class CollectionsState extends State<Collections> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(hintText: "Name"),
-                ),
+                SizedBox(
+                  width: 0,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(hintText: "Name"),
+                  ),
+                )
               ],
             ),
             actions: [

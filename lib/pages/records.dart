@@ -96,14 +96,17 @@ class RecordsState extends State<Records> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: _nameController,
-                  maxLines: 7,
-                  decoration: const InputDecoration(
-                      hintText: 'Basic usage: {"key":"value"}',
-                      helperText:
-                          'All query operators are supported.\nLeave blank if you want to fetch all records.'),
-                ),
+                SizedBox(
+                  width: 0,
+                  child: TextField(
+                    controller: _nameController,
+                    maxLines: 7,
+                    decoration: const InputDecoration(
+                        hintText: 'Basic usage: {"key":"value"}',
+                        helperText:
+                        'All query operators are supported.\nLeave blank if you want to fetch all records.'),
+                  ),
+                )
               ],
             ),
             actions: [
