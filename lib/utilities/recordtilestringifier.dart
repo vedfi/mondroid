@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+
 import 'constants.dart';
 
 class RecordTileStringifier {

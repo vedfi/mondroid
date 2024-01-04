@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:mondroid/utilities/jsonhelpers/abstractjsonhelper.dart';
+
 import '../constants.dart';
 
 class DecimalJsonHelper extends AbstractJsonHelper {
