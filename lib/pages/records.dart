@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/widgets/recordtile.dart';
@@ -35,7 +34,7 @@ class RecordsState extends State<Records> {
       if (_nameController.value.text.isEmpty) {
         return {};
       }
-      return jsonDecode(_nameController.value.text);
+      return JsonConverter.decode(_nameController.value.text);
     } catch (e) {
       PopupService.show("Invalid Query: $e");
       return {};
