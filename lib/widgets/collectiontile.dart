@@ -61,7 +61,8 @@ class CollectionTile extends StatelessWidget {
                   ? Theme.of(context).colorScheme.onError
                   : Theme.of(context).colorScheme.inverseSurface),
           const SizedBox(width: 5, height: 1),
-          Text(selectable.item.name)
+          Flexible(child: Text(selectable.item.name,
+              overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1))
         ],
       ),
       subtitle: Text(getDocumentText()),

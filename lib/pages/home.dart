@@ -108,21 +108,27 @@ class HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: _nameController,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: "Name",
-                    helperText: 'Will be used as title.',
+                SizedBox(
+                  width: 0,
+                  child: TextField(
+                    controller: _nameController,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      hintText: "Name",
+                      helperText: 'Will be used as title.',
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10, height: 10),
-                TextField(
-                  controller: _uriController,
-                  textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                      hintText: "Uri", helperText: 'Uri with database name.'),
-                ),
+                SizedBox(
+                  width: 0,
+                  child: TextField(
+                    controller: _uriController,
+                    textInputAction: TextInputAction.done,
+                    decoration: const InputDecoration(
+                        hintText: "Uri", helperText: 'Uri with database name.'),
+                  ),
+                )
               ],
             ),
             actions: [
