@@ -19,6 +19,7 @@
 
 ### Querying
 - Find queries are supported in json format. ([Mongodb Query Operators](https://www.mongodb.com/docs/manual/reference/operator/query/))
+- Sorting is also supported. ([Sorting Documents In Mongodb](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sort/#mongodb-pipeline-pipe.-sort))
 
 ### Documents
 - CRUD operations are supported.
@@ -40,9 +41,6 @@ The following operators were used to support those types.
 | Infinity (Double)   | $doubleInfinity          | "$doubleInfinity"                            |
 | -Infinity (Decimal) | $decimalNegativeInfinity | "$decimalNegativeInfinity"                   |
 | -Infinity (Double)  | $doubleNegativeInfinity  | "$doubleNegativeInfinity"                    |
-
-
-
 
 ## User Interface
 
