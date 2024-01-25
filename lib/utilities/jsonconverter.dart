@@ -9,6 +9,7 @@ import 'package:mondroid/utilities/jsonhelpers/rationaljsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/uuidjsonhelper.dart';
 
 import 'jsonhelpers/abstractjsonhelper.dart';
+import 'jsonhelpers/sortqueryjsonhelper.dart';
 
 encodeHelper(dynamic value) {
   try {
@@ -46,7 +47,8 @@ class JsonConverter {
     UUIDJsonHelper(),
     DecimalJsonHelper(),
     RationalJsonHelper(),
-    DoubleJsonHelper()
+    DoubleJsonHelper(),
+    SortQueryHelper(),
   ]);
 
   static String encode(dynamic object) {

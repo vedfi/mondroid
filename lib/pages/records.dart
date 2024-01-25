@@ -20,7 +20,8 @@ class Records extends StatefulWidget {
 }
 
 class RecordsState extends State<Records> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _filterQueryController = TextEditingController();
+  final TextEditingController _sortQueryController = TextEditingController();
   bool isLoading = true;
   static const _pageSize = 20;
   final PagingController<int, Selectable<Map<String, dynamic>>>
@@ -29,14 +30,26 @@ class RecordsState extends State<Records> {
   double offset = 0.0;
   bool refreshRequired = false;
 
-  Map<String, dynamic> filter() {
+  Map<String, dynamic>? filter() {
     try {
-      if (_nameController.value.text.isEmpty) {
-        return {};
+      if (_filterQueryController.value.text.isEmpty) {
+        return null;
       }
-      return JsonConverter.decode(_nameController.value.text);
+      return JsonConverter.decode(_filterQueryController.value.text);
     } catch (e) {
-      PopupService.show("Invalid Query: $e");
+      PopupService.show("Invalid Filter Query: $e");
+      return {};
+    }
+  }
+
+  Map<String, Object>? sort() {
+    try {
+      if (_sortQueryController.value.text.isEmpty) {
+        return null;
+      }
+      return Map<String,Object>.from(JsonConverter.decode(_sortQueryController.value.text) as Map);
+    } catch (e) {
+      PopupService.show("Invalid Sort Query: $e");
       return {};
     }
   }
@@ -44,7 +57,7 @@ class RecordsState extends State<Records> {
   Future<void> getRecords(int page) async {
     try {
       final newItems = (await MongoService()
-              .find(widget.collectionName, page, _pageSize, filter()))
+              .find(widget.collectionName, page, _pageSize, filter(), sort()))
           .map((e) => Selectable(e))
           .toList();
       final isLastPage = newItems.length < _pageSize;
@@ -86,6 +99,41 @@ class RecordsState extends State<Records> {
     return false;
   }
 
+  Future<void> sortDialog() async{
+    await showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Sort Query'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 0,
+                  child: TextField(
+                    controller: _sortQueryController,
+                    maxLines: 7,
+                    decoration: const InputDecoration(
+                        hintText: 'Usage: {"field":"\$asc" or "\$desc"}',
+                        helperText:
+                        'Leave blank if you don\'t want to sort records.'),
+                  ),
+                )
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _pagingController.refresh();
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Apply')),
+            ],
+          );
+        });
+  }
+
   Future<void> searchDialog() async {
     await showDialog(
         context: context,
@@ -99,7 +147,7 @@ class RecordsState extends State<Records> {
                 SizedBox(
                   width: 0,
                   child: TextField(
-                    controller: _nameController,
+                    controller: _filterQueryController,
                     maxLines: 7,
                     decoration: const InputDecoration(
                         hintText: 'Basic usage: {"key":"value"}',
@@ -197,6 +245,11 @@ class RecordsState extends State<Records> {
         appBar: AppBar(
           title: Text(widget.collectionName),
           actions: [
+            IconButton(
+              onPressed: sortDialog,
+              icon: const Icon(Icons.sort),
+              tooltip: 'Sort',
+            ),
             IconButton(
               onPressed: searchDialog,
               icon: const Icon(Icons.search),
