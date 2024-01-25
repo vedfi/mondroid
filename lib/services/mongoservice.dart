@@ -91,7 +91,7 @@ class MongoService {
   }
 
   Future<List<Map<String, dynamic>>> find(String collection, int page,
-      int pageSize, Map<String, dynamic> filter) async {
+      int pageSize, Map<String, dynamic>? filter, Map<String, Object>? sort) async {
     try {
       if (page < 0) {
         page = 0;
@@ -102,7 +102,7 @@ class MongoService {
       await reconnect();
       return await _database!
           .collection(collection)
-          .find(filter)
+          .modernFind(filter: filter, sort: sort)
           .skip(page)
           .take(pageSize)
           .toList();
