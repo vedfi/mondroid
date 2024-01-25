@@ -115,9 +115,9 @@ class RecordsState extends State<Records> {
                     controller: _sortQueryController,
                     maxLines: 7,
                     decoration: const InputDecoration(
-                        hintText: 'Usage: {"field":"\$asc" or "\$desc"}',
+                        hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
-                        'Leave blank if you don\'t want to sort records.'),
+                        'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
                   ),
                 )
               ],
@@ -139,7 +139,7 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: const Text('Find Query'),
+            title: const Text('Filter Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -150,7 +150,7 @@ class RecordsState extends State<Records> {
                     controller: _filterQueryController,
                     maxLines: 7,
                     decoration: const InputDecoration(
-                        hintText: 'Basic usage: {"key":"value"}',
+                        hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:
                         'All query operators are supported.\nLeave blank if you want to fetch all records.'),
                   ),
@@ -253,7 +253,7 @@ class RecordsState extends State<Records> {
             IconButton(
               onPressed: searchDialog,
               icon: const Icon(Icons.search),
-              tooltip: 'Find',
+              tooltip: 'Filter',
             )
           ],
         ),
