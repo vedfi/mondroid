@@ -12,6 +12,7 @@ void main() {
 
 ThemeData getLightTheme() {
   return ThemeData.from(
+      useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green).copyWith(
           onInverseSurface: const Color(0xfffcfdf6),
           background: const Color(0xfff0f1eb),
@@ -21,6 +22,7 @@ ThemeData getLightTheme() {
 
 ThemeData getDarkTheme() {
   return ThemeData.from(
+      useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green, brightness: Brightness.dark));
 }
