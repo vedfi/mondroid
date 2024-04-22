@@ -28,22 +28,25 @@
 - On editing page; documents are represented in json string format.
 
 ### Custom Json Encoding / Decoding
-Some data types are not supported by default json:convert library.
-The following operators were used to support those types.
+- Some data types are not supported by default json:convert library.
+- The following operators were used to support those types.
+- Please note that i don't recommend modifiying BsonBinary fields.
+- Keep in mind that only Generic:(0) and LegacyUUID:(3) binary subtypes are supported. [(Binary Subtypes)](https://www.mongodb.com/docs/manual/reference/bson-types/#binary-data)
+- Binary subtype 4 represents UUID and it is already available.
 
 | Type                | Operator                 | Usage                                        |
 |---------------------|--------------------------|----------------------------------------------|
 | ObjectId            | $oid                     | "$oid:5a97f9c91c807bb9c6eb5fb4"              |
 | DateTime            | $date                    | "$date:1998-11-02T01:30:00.000Z"             |
 | Uuid                | $uuid                    | "$uuid:ddca6dd7-9887-4f56-8dea-264cbe1c15b1" |
+| Long                | $long                    | "$long:300497"                               |
 | Decimal             | $decimal                 | "$decimal:1102.98"                           |
+| BsonBinary          | $binary                  | "$binary:3_ABCDEF" ("$binary: subType_value")|
 | NaN (Double)        | $doubleNaN               | "$doubleNaN"                                 |
 | Infinity (Decimal)  | $decimalInfinity         | "$decimalInfinity"                           |
 | Infinity (Double)   | $doubleInfinity          | "$doubleInfinity"                            |
 | -Infinity (Decimal) | $decimalNegativeInfinity | "$decimalNegativeInfinity"                   |
 | -Infinity (Double)  | $doubleNegativeInfinity  | "$doubleNegativeInfinity"                    |
-| Long                | $long                    | "$long:300497"                               |
-| BsonBinary          | $binary                  | "$binary:3_ABCDEF" ("$binary: subType_value")|
 
 ## User Interface
 
