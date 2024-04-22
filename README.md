@@ -36,12 +36,14 @@ The following operators were used to support those types.
 | ObjectId            | $oid                     | "$oid:5a97f9c91c807bb9c6eb5fb4"              |
 | DateTime            | $date                    | "$date:1998-11-02T01:30:00.000Z"             |
 | Uuid                | $uuid                    | "$uuid:ddca6dd7-9887-4f56-8dea-264cbe1c15b1" |
-| Decimal             | $decimal                 | "$decimal:2510.41"                           |
+| Decimal             | $decimal                 | "$decimal:1102.98"                           |
 | NaN (Double)        | $doubleNaN               | "$doubleNaN"                                 |
 | Infinity (Decimal)  | $decimalInfinity         | "$decimalInfinity"                           |
 | Infinity (Double)   | $doubleInfinity          | "$doubleInfinity"                            |
 | -Infinity (Decimal) | $decimalNegativeInfinity | "$decimalNegativeInfinity"                   |
 | -Infinity (Double)  | $doubleNegativeInfinity  | "$doubleNegativeInfinity"                    |
+| Long                | $long                    | "$long:300497"                               |
+| BsonBinary          | $binary                  | "$binary:3_ABCDEF" ("$binary: subType_value")|
 
 ## User Interface
 
