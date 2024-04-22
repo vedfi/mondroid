@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 import 'constants.dart';
 
@@ -10,6 +11,9 @@ class RecordTileStringifier {
       } else if (value == Constants.decimalNegativeInfinity) {
         return double.negativeInfinity.toString();
       }
+    }
+    if(value is LegacyUuid){
+      return value.bsonBinary.toString();
     }
     return value.toString();
   }

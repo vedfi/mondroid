@@ -1,43 +1,34 @@
 import 'dart:convert';
 
-import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/utilities/jsonhelpers/datetimejsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/decimaljsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/doublejsonhelper.dart';
+import 'package:mondroid/utilities/jsonhelpers/longjsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/objectidjsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/rationaljsonhelper.dart';
 import 'package:mondroid/utilities/jsonhelpers/uuidjsonhelper.dart';
 
 import 'jsonhelpers/abstractjsonhelper.dart';
+import 'jsonhelpers/bsonbinaryjsonhelper.dart';
 import 'jsonhelpers/sortqueryjsonhelper.dart';
 
 encodeHelper(dynamic value) {
-  try {
-    for (var helper in JsonConverter.helpers) {
-      if (helper.isEncodable(value)) {
-        return helper.encode(value);
-      }
+  for (var helper in JsonConverter.helpers) {
+    if (helper.isEncodable(value)) {
+      return helper.encode(value);
     }
-    return value;
-  } catch (e) {
-    PopupService.show(e.toString());
-    return "undefined";
   }
+  return value;
 }
 
 decodeHelper(dynamic key, dynamic value) {
-  try {
-    value = value is String ? value.trim() : value;
-    for (var helper in JsonConverter.helpers) {
-      if (helper.isDecodable(value)) {
-        return helper.decode(value);
-      }
+  value = value is String ? value.trim() : value;
+  for (var helper in JsonConverter.helpers) {
+    if (helper.isDecodable(value)) {
+      return helper.decode(value);
     }
-    return value;
-  } catch (e) {
-    PopupService.show(e.toString());
-    return "undefined";
   }
+  return value;
 }
 
 class JsonConverter {
@@ -48,6 +39,8 @@ class JsonConverter {
     DecimalJsonHelper(),
     RationalJsonHelper(),
     DoubleJsonHelper(),
+    LongJsonHelper(),
+    BsonBinaryJsonHelper(),
     SortQueryHelper(),
   ]);
 
