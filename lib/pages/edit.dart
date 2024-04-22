@@ -36,12 +36,20 @@ class EditState extends State<Edit> {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> encoder() async {
-    String encoded = widget.itemId == null
-        ? '{\n\n}'
-        : await compute(jsonEncode, widget.item);
-    setState(() {
-      _jsonController.text = encoded;
-    });
+    try{
+      String encoded = widget.itemId == null
+          ? '{\n\n}'
+          : await compute(jsonEncode, widget.item);
+      setState(() {
+        _jsonController.text = encoded;
+      });
+    }
+    catch(e){
+      setState(() {
+        _jsonController.text = '{\n\n}';
+        PopupService.show("Encode Error. $e");
+      });
+    }
   }
 
   Future<void> saveDialog() async {
