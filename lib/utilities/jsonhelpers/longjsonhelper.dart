@@ -1,4 +1,5 @@
 import 'package:fixnum/fixnum.dart';
+
 import 'abstractjsonhelper.dart';
 
 class LongJsonHelper extends AbstractJsonHelper {
