@@ -14,7 +14,9 @@ ThemeData getLightTheme() {
   return ThemeData.from(
       useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green).copyWith(
+          tertiary: const Color(0xff3b6939),
           onInverseSurface: const Color(0xfffcfdf6),
+          surface: const Color(0xfff0f1eb),
           background: const Color(0xfff0f1eb),
           onError: const Color(0xffba1a1a),
           onErrorContainer: const Color(0xffffdad6)));
@@ -24,7 +26,14 @@ ThemeData getDarkTheme() {
   return ThemeData.from(
       useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green, brightness: Brightness.dark));
+              seedColor: Colors.green, brightness: Brightness.dark)
+          .copyWith(
+              tertiary: Colors.grey[850]!,
+              surface: Colors.grey[900]!,
+              background: Colors.grey[900]!,
+              onInverseSurface: Colors.grey[850]!,
+              primary: const Color(0xff78dd77),
+              onErrorContainer: const Color(0xfffeb4ab)));
 }
 
 class MondroidApp extends StatelessWidget {
