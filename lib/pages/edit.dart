@@ -10,14 +10,6 @@ import 'package:mondroid/widgets/loadable.dart';
 
 import '../services/popupservice.dart';
 
-String jsonEncode(dynamic item) {
-  return JsonConverter.encode(item);
-}
-
-dynamic jsonDecode(String json) {
-  return JsonConverter.decode(json);
-}
-
 class Edit extends StatefulWidget {
   final String collectionName;
   final dynamic itemId;
@@ -39,7 +31,7 @@ class EditState extends State<Edit> {
     try{
       String encoded = widget.itemId == null
           ? '{\n\n}'
-          : await compute(jsonEncode, widget.item);
+          : await compute(JsonConverter.encode, widget.item);
       setState(() {
         _jsonController.text = encoded;
       });
@@ -72,7 +64,7 @@ class EditState extends State<Edit> {
     FocusManager.instance.primaryFocus?.unfocus();
     if (_jsonController.value.text.isNotEmpty) {
       try {
-        dynamic obj = await compute(jsonDecode, _jsonController.value.text);
+        dynamic obj = await compute(JsonConverter.decode, _jsonController.value.text);
         bool result = false;
         if (widget.itemId != null) {
           //update
@@ -126,9 +118,10 @@ class EditState extends State<Edit> {
     double kBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
           actions: [
             IconButton(
               onPressed: copy,

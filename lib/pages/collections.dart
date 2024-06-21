@@ -153,9 +153,10 @@ class CollectionsState extends State<Collections> {
         padding.top -
         kToolbarHeight; // Height (without status and toolbar)
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
         ),
         body: RefreshIndicator(
           onRefresh: getCollections,

@@ -40,6 +40,6 @@ class LoadableFloatingActionButton extends StatelessWidget {
             onPressed: null,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.background, size: 10));
+                color: Theme.of(context).colorScheme.surface, size: 10));
   }
 }
