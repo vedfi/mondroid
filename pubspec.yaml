@@ -36,12 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_secure_storage: ^9.0.0
   shared_preferences: ^2.0.13
-  mongo_dart: ^0.10.1
+  mongo_dart: ^0.10.3
   flutter_spinkit: ^5.1.0
-  fluttertoast: 8.0.9
-  infinite_scroll_pagination: 3.1.0
+  fluttertoast: ^8.2.6
+  infinite_scroll_pagination: ^4.0.0
   rational: ^2.2.0
-  decimal: ^2.3.2
+  decimal: ^2.3.3
   url_launcher: ^6.1.14
   uuid: ^4.2.2
   fixnum: ^1.1.0
@@ -55,7 +55,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.1
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
