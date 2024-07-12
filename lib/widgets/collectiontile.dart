@@ -9,12 +9,11 @@ class CollectionTile extends StatelessWidget {
   final Selectable<Collection> selectable;
 
   const CollectionTile(
-      {Key? key,
+      {super.key,
       required this.index,
       required this.selectable,
       required this.hasAnySelected,
-      required this.onClick})
-      : super(key: key);
+      required this.onClick});
 
   String getDocumentText() {
     switch (selectable.item.count) {

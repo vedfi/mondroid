@@ -17,7 +17,6 @@ ThemeData getLightTheme() {
           tertiary: const Color(0xff3b6939),
           onInverseSurface: const Color(0xfffcfdf6),
           surface: const Color(0xfff0f1eb),
-          background: const Color(0xfff0f1eb),
           onError: const Color(0xffba1a1a),
           onErrorContainer: const Color(0xffffdad6)));
 }
@@ -30,14 +29,13 @@ ThemeData getDarkTheme() {
           .copyWith(
               tertiary: Colors.grey[850]!,
               surface: Colors.grey[900]!,
-              background: Colors.grey[900]!,
               onInverseSurface: Colors.grey[850]!,
               primary: const Color(0xff78dd77),
               onErrorContainer: const Color(0xfffeb4ab)));
 }
 
 class MondroidApp extends StatelessWidget {
-  const MondroidApp({Key? key}) : super(key: key);
+  const MondroidApp({super.key});
 
   // This widget is the root of your application.
   @override

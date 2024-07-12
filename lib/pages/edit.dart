@@ -15,8 +15,7 @@ class Edit extends StatefulWidget {
   final dynamic itemId;
   final dynamic item;
 
-  const Edit({Key? key, required this.collectionName, this.itemId, this.item})
-      : super(key: key);
+  const Edit({super.key, required this.collectionName, this.itemId, this.item});
 
   @override
   State<StatefulWidget> createState() => EditState();

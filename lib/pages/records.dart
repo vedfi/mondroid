@@ -14,7 +14,7 @@ import '../services/popupservice.dart';
 class Records extends StatefulWidget {
   final String collectionName;
 
-  const Records({Key? key, required this.collectionName}) : super(key: key);
+  const Records({super.key, required this.collectionName});
 
   @override
   State<StatefulWidget> createState() => RecordsState();

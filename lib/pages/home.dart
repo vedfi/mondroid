@@ -16,7 +16,7 @@ import '../models/selectable.dart';
 class Home extends StatefulWidget {
   final String title;
 
-  const Home({Key? key, required this.title}) : super(key: key);
+  const Home({super.key, required this.title});
 
   @override
   State<Home> createState() => HomeState();
