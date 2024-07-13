@@ -87,6 +87,7 @@ class HomeState extends State<Home> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             contentPadding: const EdgeInsets.fromLTRB(24, 10, 24, 20),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
