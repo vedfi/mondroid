@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
@@ -13,7 +14,7 @@ import '../services/popupservice.dart';
 class Records extends StatefulWidget {
   final String collectionName;
 
-  const Records({Key? key, required this.collectionName}) : super(key: key);
+  const Records({super.key, required this.collectionName});
 
   @override
   State<StatefulWidget> createState() => RecordsState();
@@ -23,31 +24,33 @@ class RecordsState extends State<Records> {
   final TextEditingController _filterQueryController = TextEditingController();
   final TextEditingController _sortQueryController = TextEditingController();
   bool isLoading = true;
-  static const _pageSize = 20;
+  static const _pageSize = 10;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
   final ScrollController _scrollController = ScrollController();
   double offset = 0.0;
   bool refreshRequired = false;
 
-  Map<String, dynamic>? filter() {
+  Future<Map<String, dynamic>?> filter() async{
     try {
       if (_filterQueryController.value.text.isEmpty) {
         return null;
       }
-      return JsonConverter.decode(_filterQueryController.value.text);
+      dynamic data = await compute(JsonConverter.decode, _filterQueryController.value.text);
+      return Map<String,dynamic>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Filter Query: $e");
       return {};
     }
   }
 
-  Map<String, Object>? sort() {
+  Future<Map<String, Object>?> sort() async {
     try {
       if (_sortQueryController.value.text.isEmpty) {
         return null;
       }
-      return Map<String,Object>.from(JsonConverter.decode(_sortQueryController.value.text) as Map);
+      dynamic data = await compute(JsonConverter.decode, _sortQueryController.value.text);
+      return Map<String,Object>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Sort Query: $e");
       return {};
@@ -57,7 +60,7 @@ class RecordsState extends State<Records> {
   Future<void> getRecords(int page) async {
     try {
       final newItems = (await MongoService()
-              .find(widget.collectionName, page, _pageSize, filter(), sort()))
+              .find(widget.collectionName, page, _pageSize, await filter(), await sort()))
           .map((e) => Selectable(e))
           .toList();
       final isLastPage = newItems.length < _pageSize;
@@ -104,6 +107,7 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             title: const Text('Sort Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,6 +143,7 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             title: const Text('Filter Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -241,9 +246,10 @@ class RecordsState extends State<Records> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: Text(widget.collectionName),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
           actions: [
             IconButton(
               onPressed: sortDialog,

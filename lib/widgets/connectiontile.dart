@@ -10,8 +10,7 @@ class ConnectionTile extends StatelessWidget {
 
   const ConnectionTile(
       this.index, this.selectable, this.hasAnySelected, this.onClick,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

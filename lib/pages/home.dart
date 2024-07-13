@@ -16,7 +16,7 @@ import '../models/selectable.dart';
 class Home extends StatefulWidget {
   final String title;
 
-  const Home({Key? key, required this.title}) : super(key: key);
+  const Home({super.key, required this.title});
 
   @override
   State<Home> createState() => HomeState();
@@ -87,6 +87,7 @@ class HomeState extends State<Home> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             contentPadding: const EdgeInsets.fromLTRB(24, 10, 24, 20),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -283,8 +284,9 @@ class HomeState extends State<Home> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: connections.isEmpty
             ? const Center(child: Text('Add a new connection string.'))
             : CupertinoScrollbar(

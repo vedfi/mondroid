@@ -4,6 +4,7 @@ class ConfirmDialog {
   Widget build(BuildContext context, String title, String subtitle,
       String cancelText, String okText) {
     return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       title: Text(title),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

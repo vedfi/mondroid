@@ -12,8 +12,7 @@ class ExpandableColumn extends StatefulWidget {
 
   const ExpandableColumn(
       this.field, this.expandableType, this.padding, this.values,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   State<StatefulWidget> createState() => ExpandableColumnState();
@@ -68,8 +67,7 @@ class RecordTile extends StatelessWidget {
 
   const RecordTile(
       this.index, this.selectable, this.hasAnySelected, this.onClick,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   Widget generate(int level, String key, dynamic value) {
     var pad = EdgeInsets.only(left: level * 10);

@@ -5,7 +5,7 @@ class Loadable extends StatelessWidget {
   final Widget _widget;
   final bool _isLoading;
 
-  const Loadable(this._widget, this._isLoading, {Key? key}) : super(key: key);
+  const Loadable(this._widget, this._isLoading, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,7 @@ class LoadableFloatingActionButton extends StatelessWidget {
   final FloatingActionButton _widget;
   final bool _isLoading;
 
-  const LoadableFloatingActionButton(this._widget, this._isLoading, {Key? key})
-      : super(key: key);
+  const LoadableFloatingActionButton(this._widget, this._isLoading, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +39,6 @@ class LoadableFloatingActionButton extends StatelessWidget {
             onPressed: null,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.background, size: 10));
+                color: Theme.of(context).colorScheme.surface, size: 10));
   }
 }

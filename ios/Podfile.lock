@@ -11,7 +11,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - Toast (4.1.0)
+  - Toast (4.1.1)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -43,13 +43,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
-  fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
-  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.15.2
