@@ -107,6 +107,7 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             title: const Text('Sort Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -142,6 +143,7 @@ class RecordsState extends State<Records> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             title: const Text('Filter Query'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

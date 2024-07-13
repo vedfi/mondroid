@@ -67,6 +67,7 @@ class CollectionsState extends State<Collections> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             title: const Text('Create Collection'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
