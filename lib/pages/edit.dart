@@ -137,7 +137,7 @@ class EditState extends State<Edit> {
                   child: IconButton(
                     onPressed: hideKeyboard,
                     icon: const Icon(Icons.keyboard_hide_outlined),
-                    tooltip: 'Hide Keyboard',
+                    tooltip: isKeyboardVisible ? 'Hide Keyboard' : null,
                   ),
                 ),
                 IconButton(
