@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
@@ -27,15 +28,14 @@ class EditState extends State<Edit> {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> encoder() async {
-    try{
+    try {
       String encoded = widget.itemId == null
           ? '{\n\n}'
           : await compute(JsonConverter.encode, widget.item);
       setState(() {
         _jsonController.text = encoded;
       });
-    }
-    catch(e){
+    } catch (e) {
       setState(() {
         _jsonController.text = '{\n\n}';
         PopupService.show("Encode Error. $e");
@@ -63,7 +63,8 @@ class EditState extends State<Edit> {
     FocusManager.instance.primaryFocus?.unfocus();
     if (_jsonController.value.text.isNotEmpty) {
       try {
-        dynamic obj = await compute(JsonConverter.decode, _jsonController.value.text);
+        dynamic obj =
+            await compute(JsonConverter.decode, _jsonController.value.text);
         bool result = false;
         if (widget.itemId != null) {
           //update
@@ -99,6 +100,10 @@ class EditState extends State<Edit> {
     }
   }
 
+  void hideKeyboard() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -115,52 +120,65 @@ class EditState extends State<Edit> {
         padding.top -
         kToolbarHeight; // Height (without status and toolbar)
     double kBoardHeight = MediaQuery.of(context).viewInsets.bottom;
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          title: Text(widget.item == null ? 'New Document' : 'Modify Document'),
-          backgroundColor: Theme.of(context).colorScheme.tertiary,
-          actions: [
-            IconButton(
-              onPressed: copy,
-              icon: const Icon(Icons.copy),
-              tooltip: 'Copy',
-            )
-          ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(bottom: kBoardHeight),
-          child: SizedBox(
-            height: netHeight,
-            child: CupertinoScrollbar(
-              controller: _scrollController,
-              child: TextField(
-                expands: true,
-                minLines: null,
-                maxLines: null,
-                scrollController: _scrollController,
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                scrollPhysics: const AlwaysScrollableScrollPhysics(),
-                decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.surface,
-                    filled: true,
-                    border: null,
-                    enabledBorder: const UnderlineInputBorder(),
-                    focusedBorder: const UnderlineInputBorder(),
-                    contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8)),
-                controller: _jsonController,
+    return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+      return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          appBar: AppBar(
+              title: Text(
+                  widget.item == null ? 'New Document' : 'Modify Document'),
+              backgroundColor: Theme.of(context).colorScheme.tertiary,
+              actions: [
+                Visibility(
+                  maintainSize: false,
+                  maintainAnimation: false,
+                  maintainState: true,
+                  visible: isKeyboardVisible,
+                  child: IconButton(
+                    onPressed: hideKeyboard,
+                    icon: const Icon(Icons.keyboard_hide_outlined),
+                    tooltip: 'Hide Keyboard',
+                  ),
+                ),
+                IconButton(
+                  onPressed: copy,
+                  icon: const Icon(Icons.copy),
+                  tooltip: 'Copy',
+                )
+              ]),
+          body: Padding(
+            padding: EdgeInsets.only(bottom: kBoardHeight),
+            child: SizedBox(
+              height: netHeight,
+              child: CupertinoScrollbar(
+                controller: _scrollController,
+                child: TextField(
+                    expands: true,
+                    minLines: null,
+                    maxLines: null,
+                    scrollController: _scrollController,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    scrollPhysics: const AlwaysScrollableScrollPhysics(),
+                    decoration: InputDecoration(
+                        fillColor: Theme.of(context).colorScheme.surface,
+                        filled: true,
+                        border: null,
+                        enabledBorder: const UnderlineInputBorder(),
+                        focusedBorder: const UnderlineInputBorder(),
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(12, 8, 12, 8)),
+                    controller: _jsonController),
               ),
             ),
           ),
-        ),
-        floatingActionButton: LoadableFloatingActionButton(
-            FloatingActionButton(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                onPressed: saveDialog,
-                tooltip: 'Save document.',
-                child: const Icon(Icons.save)),
-            isLoading));
+          floatingActionButton: LoadableFloatingActionButton(
+              FloatingActionButton(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  onPressed: saveDialog,
+                  tooltip: 'Save document.',
+                  child: const Icon(Icons.save)),
+              isLoading));
+    });
   }
 }
