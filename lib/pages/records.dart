@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/services/fileservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
+import 'package:mondroid/widgets/filepermissiondialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/widgets/recordtile.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../services/popupservice.dart';
 
@@ -23,6 +28,8 @@ class Records extends StatefulWidget {
 class RecordsState extends State<Records> {
   final TextEditingController _filterQueryController = TextEditingController();
   final TextEditingController _sortQueryController = TextEditingController();
+  final TextEditingController _directoryController = TextEditingController();
+  final TextEditingController _filenameController = TextEditingController();
   bool isLoading = true;
   static const _pageSize = 10;
   final PagingController<int, Selectable<Map<String, dynamic>>>
@@ -243,6 +250,169 @@ class RecordsState extends State<Records> {
     super.dispose();
   }
 
+  Future<void> exportCollection() async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+              title: const Text('Export Collection'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          String? newPath =
+                              await FileService().getNewDirectoryPath();
+
+                          if (newPath != 'null') {
+                            setState(() {
+                              _directoryController.text = newPath;
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.folder_open),
+                      ),
+                      Flexible(
+                          child: InkWell(
+                        onTap: () async {
+                          String? newPath =
+                              await FileService().getNewDirectoryPath();
+
+                          if (newPath != 'null') {
+                            setState(() {
+                              _directoryController.text = newPath;
+                            });
+                          }
+                        },
+                        child: Text(
+                          '${_directoryController.text}/',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
+                      )),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: TextField(
+                      controller: _filenameController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter filename',
+                        helperText: 'Enter Filename without extension.',
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          bool success = await _exportData('csv');
+                          if (success && context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text('CSV'),
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () async {
+                          bool success = await _exportData('json');
+                          if (success && context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text('JSON'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<bool> _exportData(String format) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      List<Map<String, dynamic>> data = await MongoService()
+          .findAll(widget.collectionName, await filter(), await sort());
+
+      bool fileSaved = false;
+
+      if (format == 'csv') {
+        fileSaved = await FileService().saveAsCsv(
+            data, _directoryController.text, _filenameController.text);
+      } else if (format == 'json') {
+        fileSaved = await FileService().saveAsJson(
+            data, _directoryController.text, _filenameController.text);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(fileSaved
+                  ? 'Data exported successfully!'
+                  : 'Error exporting data')),
+        );
+      }
+
+      return fileSaved;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error exporting data: $e')),
+        );
+      }
+      return false;
+    }
+  }
+
+  Future<bool> _checkPermissions(BuildContext context) async {
+    final status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      final result = await Permission.storage.request();
+
+      if (result.isGranted) {
+        return true;
+      } else if (result.isDenied || result.isPermanentlyDenied) {
+        return false;
+      }
+    } else {
+      return true;
+    }
+
+    return status.isGranted;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -251,6 +421,41 @@ class RecordsState extends State<Records> {
           title: Text(widget.collectionName),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
           actions: [
+            IconButton(
+              onPressed: () async {
+                _directoryController.text =
+                    await FileService().getDiretoryPath();
+                _filenameController.text = widget.collectionName;
+
+                bool directoryExists =
+                    await Directory(_directoryController.text).exists();
+                if (!context.mounted) return;
+                bool hasFilePermission = await _checkPermissions(context);
+                if (!hasFilePermission) {
+                  if (!context.mounted) return;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PermissionDialog(
+                        message:
+                            'Storage permission is denied. Please enable it in app settings.',
+                        onOpenSettings: () {
+                          openAppSettings();
+                        },
+                      );
+                    },
+                  );
+                }
+                if (hasFilePermission && directoryExists) {
+                  exportCollection();
+                } else {
+                  _directoryController.text =
+                      await FileService().getDiretoryPath();
+                }
+              },
+              icon: const Icon(Icons.share),
+              tooltip: 'Export Collection',
+            ),
             IconButton(
               onPressed: sortDialog,
               icon: const Icon(Icons.sort),
