@@ -30,7 +30,9 @@ class RecordsState extends State<Records> {
   final TextEditingController _sortQueryController = TextEditingController();
   final TextEditingController _directoryController = TextEditingController();
   final TextEditingController _filenameController = TextEditingController();
+
   bool isLoading = true;
+  bool isSaving = false;
   static const _pageSize = 10;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
@@ -38,13 +40,14 @@ class RecordsState extends State<Records> {
   double offset = 0.0;
   bool refreshRequired = false;
 
-  Future<Map<String, dynamic>?> filter() async{
+  Future<Map<String, dynamic>?> filter() async {
     try {
       if (_filterQueryController.value.text.isEmpty) {
         return null;
       }
-      dynamic data = await compute(JsonConverter.decode, _filterQueryController.value.text);
-      return Map<String,dynamic>.from(data as Map);
+      dynamic data = await compute(
+          JsonConverter.decode, _filterQueryController.value.text);
+      return Map<String, dynamic>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Filter Query: $e");
       return {};
@@ -56,8 +59,9 @@ class RecordsState extends State<Records> {
       if (_sortQueryController.value.text.isEmpty) {
         return null;
       }
-      dynamic data = await compute(JsonConverter.decode, _sortQueryController.value.text);
-      return Map<String,Object>.from(data as Map);
+      dynamic data =
+          await compute(JsonConverter.decode, _sortQueryController.value.text);
+      return Map<String, Object>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Sort Query: $e");
       return {};
@@ -66,8 +70,8 @@ class RecordsState extends State<Records> {
 
   Future<void> getRecords(int page) async {
     try {
-      final newItems = (await MongoService()
-              .find(widget.collectionName, page, _pageSize, await filter(), await sort()))
+      final newItems = (await MongoService().find(widget.collectionName, page,
+              _pageSize, await filter(), await sort()))
           .map((e) => Selectable(e))
           .toList();
       final isLastPage = newItems.length < _pageSize;
@@ -109,7 +113,7 @@ class RecordsState extends State<Records> {
     return false;
   }
 
-  Future<void> sortDialog() async{
+  Future<void> sortDialog() async {
     await showDialog(
         context: context,
         builder: (ctx) {
@@ -128,7 +132,7 @@ class RecordsState extends State<Records> {
                     decoration: const InputDecoration(
                         hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
-                        'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
+                            'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
                   ),
                 )
               ],
@@ -164,7 +168,7 @@ class RecordsState extends State<Records> {
                     decoration: const InputDecoration(
                         hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:
-                        'All query operators are supported.\nLeave blank if you want to fetch all records.'),
+                            'All query operators are supported.\nLeave blank if you want to fetch all records.'),
                   ),
                 )
               ],
@@ -313,20 +317,20 @@ class RecordsState extends State<Records> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          bool success = await _exportData('csv');
-                          if (success && context.mounted) {
+                          if (context.mounted) {
                             Navigator.pop(context);
                           }
+                          await _exportData('csv');
                         },
                         child: const Text('CSV'),
                       ),
                       const SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () async {
-                          bool success = await _exportData('json');
-                          if (success && context.mounted) {
+                          if (context.mounted) {
                             Navigator.pop(context);
                           }
+                          await _exportData('json');
                         },
                         child: const Text('JSON'),
                       ),
@@ -356,8 +360,15 @@ class RecordsState extends State<Records> {
     try {
       setState(() {
         isLoading = true;
+        isSaving = true;
       });
 
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Fetching Data...')),
+        );
+      }
       List<Map<String, dynamic>> data = await MongoService()
           .findAll(widget.collectionName, await filter(), await sort());
 
@@ -373,9 +384,11 @@ class RecordsState extends State<Records> {
 
       setState(() {
         isLoading = false;
+        isSaving = false;
       });
 
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(fileSaved
@@ -387,6 +400,7 @@ class RecordsState extends State<Records> {
       return fileSaved;
     } catch (e) {
       if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error exporting data: $e')),
         );
@@ -423,12 +437,32 @@ class RecordsState extends State<Records> {
           actions: [
             IconButton(
               onPressed: () async {
+                if (isSaving) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content:
+                              Text('Exporting in progress. Please wait...')),
+                    );
+                  }
+
+                  return;
+                }
+
                 _directoryController.text =
                     await FileService().getDiretoryPath();
                 _filenameController.text = widget.collectionName;
 
                 bool directoryExists =
                     await Directory(_directoryController.text).exists();
+                if (!directoryExists) {
+                  _directoryController.text =
+                    await FileService().getNewDirectoryPath();
+                  directoryExists =
+                    await Directory(_directoryController.text).exists();
+                }
+
                 if (!context.mounted) return;
                 bool hasFilePermission = await _checkPermissions(context);
                 if (!hasFilePermission) {
@@ -438,7 +472,7 @@ class RecordsState extends State<Records> {
                     builder: (BuildContext context) {
                       return PermissionDialog(
                         message:
-                            'Storage permission is denied. Please enable it in app settings.',
+                            'Storage permission denied. Please enable it in app settings.',
                         onOpenSettings: () {
                           openAppSettings();
                         },
@@ -448,9 +482,10 @@ class RecordsState extends State<Records> {
                 }
                 if (hasFilePermission && directoryExists) {
                   exportCollection();
-                } else {
-                  _directoryController.text =
-                      await FileService().getDiretoryPath();
+                } else if (!directoryExists) {
+                  PopupService.show('Directory does not exist');
+                } else if (!hasFilePermission) {
+                  PopupService.show('Permission denied');
                 }
               },
               icon: const Icon(Icons.share),

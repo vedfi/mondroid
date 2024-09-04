@@ -5,9 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/services/storageservice.dart';
 
-
 class FileService {
-
   Future<String> getDiretoryPath() async {
     String? directory = await StorageService().read('directory');
     if (directory == null) {
@@ -40,7 +38,7 @@ class FileService {
 
       String csvData = const ListToCsvConverter().convert(rows);
 
-      return saveFile(csvData, directory, '$fileName.csv');
+      return saveFile(csvData, directory, fileName, 'csv');
     } catch (e) {
       PopupService.show('Error saving CSV file: $e');
     }
@@ -52,7 +50,7 @@ class FileService {
       String fileName) async {
     try {
       String jsonData = jsonEncode(data);
-      return saveFile(jsonData, directory, '$fileName.json');
+      return saveFile(jsonData, directory, fileName, 'json');
     } catch (e) {
       PopupService.show('Error saving JSON file: $e');
     }
@@ -60,11 +58,13 @@ class FileService {
   }
 }
 
-Future<bool> saveFile(String content, String directory, String fileName) async {
+Future<bool> saveFile(
+    String content, String directory, String fileName, String extension) async {
   try {
-    final uniqueFileName = await verifyUniqueFileName(directory, fileName);
+    final uniqueFileName =
+        await verifyUniqueFileName(directory, fileName, extension);
 
-    final file = File('$directory/$uniqueFileName');
+    final file = File('$directory/$uniqueFileName.$extension');
 
     await file.writeAsString(content);
     return true;
@@ -74,11 +74,12 @@ Future<bool> saveFile(String content, String directory, String fileName) async {
   }
 }
 
-Future<String> verifyUniqueFileName(String directory, String fileName) async {
+Future<String> verifyUniqueFileName(
+    String directory, String fileName, String extension) async {
   String uniqueFileName = fileName;
   int count = 1;
 
-  while (await File('$directory/$uniqueFileName').exists()) {
+  while (await File('$directory/$uniqueFileName.$extension').exists()) {
     uniqueFileName = '$fileName ($count)';
     count++;
   }
