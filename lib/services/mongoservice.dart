@@ -112,6 +112,19 @@ class MongoService {
     }
   }
 
+Future<List<Map<String, dynamic>>> findAll(String collection, Map<String, dynamic>? filter, Map<String, Object>? sort) async {
+  try {
+    await reconnect();
+    return await _database!
+        .collection(collection)
+        .modernFind(filter: filter, sort: sort)
+        .toList();
+  } catch (e) {
+    PopupService.show(e.toString());
+    return Future<List<Map<String, dynamic>>>.value(<Map<String, dynamic>>[]);
+  }
+}
+
   Future<bool> deleteRecord(String collection, dynamic id) async {
     try {
       await reconnect();
