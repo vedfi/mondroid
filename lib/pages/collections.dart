@@ -26,9 +26,11 @@ class CollectionsState extends State<Collections> {
     setState(() {
       isLoading = true;
     });
-    var names = await MongoService().getCollectionNames();
+    var collectionInfos = await MongoService().getCollectionInfos();
     setState(() {
-      collections = names.map((e) => Selectable(Collection(e))).toList();
+      collections = collectionInfos
+          .map((e) => Selectable(Collection.fromMongoCollection(e)))
+          .toList();
       isLoading = false;
     });
     getRecordCounts();

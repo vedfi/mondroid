@@ -55,13 +55,19 @@ class CollectionTile extends StatelessWidget {
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(Icons.folder,
+          Icon(
+              selectable.item.type == CollectionType.view
+                  ? Icons.visibility
+                  : Icons.folder,
               color: selectable.isSelected
                   ? Theme.of(context).colorScheme.onError
                   : Theme.of(context).colorScheme.inverseSurface),
           const SizedBox(width: 5, height: 1),
-          Flexible(child: Text(selectable.item.name,
-              overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1))
+          Flexible(
+              child: Text(selectable.item.name,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  maxLines: 1))
         ],
       ),
       subtitle: Text(getDocumentText()),
