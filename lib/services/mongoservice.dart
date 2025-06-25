@@ -3,6 +3,13 @@ import 'dart:async';
 import 'package:mondroid/services/popupservice.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
+class MongoCollection {
+  String name;
+  String type;
+
+  MongoCollection(this.name, this.type);
+}
+
 class MongoService {
   static final MongoService _mongoService = MongoService._internal();
   Db? _database;
@@ -44,18 +51,31 @@ class MongoService {
     }
   }
 
-  Future<List<String>> getCollectionNames() async {
+  Future<List<MongoCollection>> getCollectionInfos() async {
     try {
       await reconnect();
-      var list = (await _database!.getCollectionNames())
-          .where((element) => element != null)
-          .map((e) => e as String)
+      var collections = await _database!.getCollectionInfos();
+      var list = collections
+          .where((element) => element['name'] != null)
+          .where((element) => element['type'] != null)
           .toList();
-      list.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-      return list;
+      list.sort((a, b) {
+        var aType = a['type'];
+        var bType = b['type'];
+        if (aType != bType) {
+          if (aType == 'view') {
+            return -1;
+          }
+          if (bType == 'view') {
+            return 1;
+          }
+        }
+        return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+      });
+      return list.map((e) => MongoCollection(e['name'], e['type'])).toList();
     } catch (e) {
       PopupService.show(e.toString());
-      return Future<List<String>>.value(<String>[]);
+      return Future<List<MongoCollection>>.value(<MongoCollection>[]);
     }
   }
 
@@ -90,8 +110,12 @@ class MongoService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> find(String collection, int page,
-      int pageSize, Map<String, dynamic>? filter, Map<String, Object>? sort) async {
+  Future<List<Map<String, dynamic>>> find(
+      String collection,
+      int page,
+      int pageSize,
+      Map<String, dynamic>? filter,
+      Map<String, Object>? sort) async {
     try {
       if (page < 0) {
         page = 0;
