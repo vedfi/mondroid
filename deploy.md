@@ -17,24 +17,24 @@ You need a signing key to sign your application. This key is stored in a file ca
 From the root of the project, run the following command:
 
 ```bash
-keytool -genkey -v -keystore android/app/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+keytool -genkey -v -keystore android/keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias release
 ```
 
 - You will be prompted to create a password for the keystore. **Remember this password.**
 - It will also ask for your name, organization, etc. You can fill these out as you see fit.
-- This will create a file named `upload-keystore.jks` inside the `android/app/` directory.
+- This will create a file named `keystore.jks` inside the `android/` directory. **Important:** Never commit this file to Git
 
 ### 2. Create the Key Properties File
 
 Gradle needs to know the password and alias for your keystore. You provide this information in a `key.properties` file.
 
-Create a new file at `android/key.properties` and add the following content:
+Create a new file at `android/key.properties` and add the following content (do not commit this file to Git):
 
 ```properties
 storePassword=<YOUR_STORE_PASSWORD>
 keyPassword=<YOUR_KEY_PASSWORD>
 keyAlias=upload
-storeFile=/path/to/your/mondroid/project/android/app/upload-keystore.jks
+storeFile=/path/to/your/mondroid/project/android/app/keystore.jks
 ```
 
 - **Important:** Replace `<YOUR_STORE_PASSWORD>` and `<YOUR_KEY_PASSWORD>` with the password you created in Step 1.
@@ -56,7 +56,7 @@ If the build is successful, you will find the signed APK at `build/app/outputs/f
 
 To install the APK on a real device, you can use the Android Debug Bridge (`adb`).
 
-First, if you have a previous debug version of the app installed, you must uninstall it, as it was signed with a different key.
+First, if you have a previous version of the app installed that was signed with a different key, you must uninstall it.
 
 ```bash
 adb uninstall com.vedfi.mondroid

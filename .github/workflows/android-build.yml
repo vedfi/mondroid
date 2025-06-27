@@ -17,15 +17,15 @@ jobs:
         env:
           KEYSTORE_JKS_BASE64: ${{ secrets.KEYSTORE_JKS_BASE64 }}
         run: |
-          echo "KEYSTORE_JKS_PATH=${{ runner.temp }}/upload-keystore.jks" >> $GITHUB_ENV
-          echo $KEYSTORE_JKS_BASE64 | base64 --decode > ${{ runner.temp }}/upload-keystore.jks
+          echo "KEYSTORE_JKS_PATH=${{ runner.temp }}/keystore.jks" >> $GITHUB_ENV
+          echo $KEYSTORE_JKS_BASE64 | base64 --decode > ${{ runner.temp }}/keystore.jks
 
       - name: Create key.properties file
         run: |
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=upload" >> android/key.properties
-          echo "storeFile=${{ env.KEYSTORE_JKS_PATH }}" >> android/key.properties
+          echo "storeFile=${{ runner.temp }}/keystore.jks" >> android/key.properties
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mondroid.apk
-          path: build/app/outputs/flutter-apk/app-release.apk 
+          path: build/app/outputs/flutter-apk/app-release.apk
