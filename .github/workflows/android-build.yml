@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=upload" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=${{ runner.temp }}/keystore.jks" >> android/key.properties
 
       - name: Set up Flutter
@@ -39,11 +39,19 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
 
-      - name: Build release APK
-        run: flutter build apk --release
+      - name: Build release APK & AAB
+        run: |
+          flutter build apk --release
+          flutter build appbundle --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: mondroid.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mondroid.aab
+          path: build/app/outputs/bundle/release/app-release.aab
