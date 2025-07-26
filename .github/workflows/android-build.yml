@@ -35,15 +35,23 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      
+
       - name: Get Flutter dependencies
         run: flutter pub get
 
-      - name: Build release APK
-        run: flutter build apk --release
+      - name: Build release APK & AAB
+        run: |
+          flutter build apk --release
+          flutter build appbundle --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: mondroid.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mondroid.aab
+          path: build/app/outputs/bundle/release/app-release.aab
