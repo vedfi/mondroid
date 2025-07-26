@@ -13,10 +13,13 @@ class Collection {
   Collection(this.name, {this.type = CollectionType.collection});
 
   factory Collection.fromMongoCollection(MongoCollection collection) {
-    return Collection(collection.name, type: collection.type == 'view' ? CollectionType.view : CollectionType.collection);
+    return Collection(collection.name,
+        type: collection.type == 'view'
+            ? CollectionType.view
+            : CollectionType.collection);
   }
 
-  bool isReadonly(){
+  bool isReadonly() {
     return type == CollectionType.view;
   }
 }

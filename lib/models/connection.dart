@@ -15,7 +15,7 @@ class Connection {
 
   String getConnectionString() => uri;
 
-  String getMaskedConnectionString(){
+  String getMaskedConnectionString() {
     final pattern = RegExp(r"(mongodb(?:\+srv)?://[^:]+:)([^@]+)(@)");
     return uri.replaceAllMapped(pattern, (match) {
       return "${match.group(1)}*****${match.group(3)}";

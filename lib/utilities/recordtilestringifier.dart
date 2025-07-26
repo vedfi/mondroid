@@ -12,7 +12,7 @@ class RecordTileStringifier {
         return double.negativeInfinity.toString();
       }
     }
-    if(value is LegacyUuid){
+    if (value is LegacyUuid) {
       return value.bsonBinary.toString();
     }
     return value.toString();

@@ -29,7 +29,8 @@ class LoadableFloatingActionButton extends StatelessWidget {
   final FloatingActionButton _widget;
   final bool _isLoading;
 
-  const LoadableFloatingActionButton(this._widget, this._isLoading, {super.key});
+  const LoadableFloatingActionButton(this._widget, this._isLoading,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

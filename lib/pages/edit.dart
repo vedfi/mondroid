@@ -109,13 +109,11 @@ class EditState extends State<Edit> {
   @override
   void initState() {
     super.initState();
-    if(widget.collection.isReadonly()){
+    if (widget.collection.isReadonly()) {
       title = 'View Document';
-    }
-    else if(widget.item == null){
+    } else if (widget.item == null) {
       title = 'New Document';
-    }
-    else{
+    } else {
       title = 'Modify Document';
     }
     encoder();
@@ -182,13 +180,15 @@ class EditState extends State<Edit> {
               ),
             ),
           ),
-          floatingActionButton: widget.collection.isReadonly() ? null : LoadableFloatingActionButton(
-              FloatingActionButton(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  onPressed: saveDialog,
-                  tooltip: 'Save document.',
-                  child: const Icon(Icons.save)),
-              isLoading));
+          floatingActionButton: widget.collection.isReadonly()
+              ? null
+              : LoadableFloatingActionButton(
+                  FloatingActionButton(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      onPressed: saveDialog,
+                      tooltip: 'Save document.',
+                      child: const Icon(Icons.save)),
+                  isLoading));
     });
   }
 }
