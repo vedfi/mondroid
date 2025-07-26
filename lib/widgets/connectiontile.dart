@@ -43,12 +43,20 @@ class ConnectionTile extends StatelessWidget {
                     ? Theme.of(context).colorScheme.onError
                     : Theme.of(context).colorScheme.inverseSurface),
             const SizedBox(width: 5, height: 1),
-            Flexible(child: Text(selectable.item.name,
-                overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1))
+            Flexible(
+                child: Text(selectable.item.name,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    maxLines: 1))
           ],
         ),
-        subtitle: Text(selectable.item.getMaskedConnectionString().replaceAll("", "\u{200B}"),
-            overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1),
+        subtitle: Text(
+            selectable.item
+                .getMaskedConnectionString()
+                .replaceAll("", "\u{200B}"),
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            maxLines: 1),
         isThreeLine: false,
         trailing: selectable.isSelected
             ? const Icon(Icons.check_box)

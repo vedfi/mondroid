@@ -12,7 +12,8 @@ class BsonBinaryJsonHelper extends AbstractJsonHelper {
 
   @override
   encode(value) {
-    BsonBinary bin = value is LegacyUuid ? (value.bsonBinary) : value as BsonBinary;
+    BsonBinary bin =
+        value is LegacyUuid ? (value.bsonBinary) : value as BsonBinary;
     return '\$binary:${bin.subType}_${bin.hexString}';
   }
 

@@ -32,13 +32,14 @@ class RecordsState extends State<Records> {
   double offset = 0.0;
   bool refreshRequired = false;
 
-  Future<Map<String, dynamic>?> filter() async{
+  Future<Map<String, dynamic>?> filter() async {
     try {
       if (_filterQueryController.value.text.isEmpty) {
         return null;
       }
-      dynamic data = await compute(JsonConverter.decode, _filterQueryController.value.text);
-      return Map<String,dynamic>.from(data as Map);
+      dynamic data = await compute(
+          JsonConverter.decode, _filterQueryController.value.text);
+      return Map<String, dynamic>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Filter Query: $e");
       return {};
@@ -50,8 +51,9 @@ class RecordsState extends State<Records> {
       if (_sortQueryController.value.text.isEmpty) {
         return null;
       }
-      dynamic data = await compute(JsonConverter.decode, _sortQueryController.value.text);
-      return Map<String,Object>.from(data as Map);
+      dynamic data =
+          await compute(JsonConverter.decode, _sortQueryController.value.text);
+      return Map<String, Object>.from(data as Map);
     } catch (e) {
       PopupService.show("Invalid Sort Query: $e");
       return {};
@@ -60,8 +62,8 @@ class RecordsState extends State<Records> {
 
   Future<void> getRecords(int page) async {
     try {
-      final newItems = (await MongoService()
-              .find(widget.collection.name, page, _pageSize, await filter(), await sort()))
+      final newItems = (await MongoService().find(widget.collection.name, page,
+              _pageSize, await filter(), await sort()))
           .map((e) => Selectable(e))
           .toList();
       final isLastPage = newItems.length < _pageSize;
@@ -82,12 +84,12 @@ class RecordsState extends State<Records> {
       return;
     }
 
-    if(type == SelectType.navigate){
+    if (type == SelectType.navigate) {
       navigate(index);
       return;
     }
 
-    if(widget.collection.isReadonly()){
+    if (widget.collection.isReadonly()) {
       return;
     }
 
@@ -111,7 +113,7 @@ class RecordsState extends State<Records> {
     return false;
   }
 
-  Future<void> sortDialog() async{
+  Future<void> sortDialog() async {
     await showDialog(
         context: context,
         builder: (ctx) {
@@ -130,7 +132,7 @@ class RecordsState extends State<Records> {
                     decoration: const InputDecoration(
                         hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
-                        'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
+                            'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
                   ),
                 )
               ],
@@ -166,7 +168,7 @@ class RecordsState extends State<Records> {
                     decoration: const InputDecoration(
                         hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:
-                        'All query operators are supported.\nLeave blank if you want to fetch all records.'),
+                            'All query operators are supported.\nLeave blank if you want to fetch all records.'),
                   ),
                 )
               ],
@@ -297,20 +299,22 @@ class RecordsState extends State<Records> {
                       itemBuilder: (context, data, index) =>
                           RecordTile(index, data, hasAnySelected(), select)),
                 ))),
-        floatingActionButton: widget.collection.isReadonly() ? null : LoadableFloatingActionButton(
-            hasAnySelected()
-                ? FloatingActionButton(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.onErrorContainer,
-                    foregroundColor: Theme.of(context).colorScheme.onError,
-                    onPressed: deleteDialog,
-                    tooltip: 'Delete selected document(s).',
-                    child: const Icon(Icons.delete_forever))
-                : FloatingActionButton(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    onPressed: () => {navigate(-1)},
-                    tooltip: 'Insert a new document.',
-                    child: const Icon(Icons.add)),
-            isLoading));
+        floatingActionButton: widget.collection.isReadonly()
+            ? null
+            : LoadableFloatingActionButton(
+                hasAnySelected()
+                    ? FloatingActionButton(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onErrorContainer,
+                        foregroundColor: Theme.of(context).colorScheme.onError,
+                        onPressed: deleteDialog,
+                        tooltip: 'Delete selected document(s).',
+                        child: const Icon(Icons.delete_forever))
+                    : FloatingActionButton(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        onPressed: () => {navigate(-1)},
+                        tooltip: 'Insert a new document.',
+                        child: const Icon(Icons.add)),
+                isLoading));
   }
 }
