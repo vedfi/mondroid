@@ -47,7 +47,7 @@ class ConnectionTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1))
           ],
         ),
-        subtitle: Text(selectable.item.uri.replaceAll("", "\u{200B}"),
+        subtitle: Text(selectable.item.getMaskedConnectionString().replaceAll("", "\u{200B}"),
             overflow: TextOverflow.ellipsis, softWrap: false, maxLines: 1),
         isThreeLine: false,
         trailing: selectable.isSelected
