@@ -6,6 +6,8 @@ import 'package:mondroid/pages/home.dart';
 import 'package:mondroid/pages/records.dart';
 import 'package:mondroid/services/popupservice.dart';
 
+import 'models/collection.dart';
+
 void main() {
   runApp(const MondroidApp());
 }
@@ -59,9 +61,9 @@ class MondroidApp extends StatelessWidget {
             }
           case '/records':
             {
-              String arg = settings.arguments as String;
+              Collection arg = settings.arguments as Collection;
               return CupertinoPageRoute(
-                  builder: (_) => Records(collectionName: arg));
+                  builder: (_) => Records(collection: arg));
             }
           case '/edit':
             {
@@ -69,7 +71,7 @@ class MondroidApp extends StatelessWidget {
               dynamic id = args[1] == null ? null : args[1]['_id'];
               return CupertinoPageRoute(
                   builder: (_) =>
-                      Edit(collectionName: args[0], itemId: id, item: args[1]));
+                      Edit(collection: args[0], itemId: id, item: args[1]));
             }
           default:
             return null;
