@@ -55,7 +55,7 @@ class CollectionsState extends State<Collections> {
         });
       } else {
         Navigator.of(context)
-            .pushNamed('/records', arguments: collections[index].item.name);
+            .pushNamed('/records', arguments: collections[index].item);
       }
     } else {
       setState(() {

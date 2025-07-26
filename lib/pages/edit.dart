@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
@@ -12,11 +13,11 @@ import 'package:mondroid/widgets/loadable.dart';
 import '../services/popupservice.dart';
 
 class Edit extends StatefulWidget {
-  final String collectionName;
+  final Collection collection;
   final dynamic itemId;
   final dynamic item;
 
-  const Edit({super.key, required this.collectionName, this.itemId, this.item});
+  const Edit({super.key, required this.collection, this.itemId, this.item});
 
   @override
   State<StatefulWidget> createState() => EditState();
@@ -24,6 +25,7 @@ class Edit extends StatefulWidget {
 
 class EditState extends State<Edit> {
   bool isLoading = false;
+  String title = "";
   final TextEditingController _jsonController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -70,11 +72,11 @@ class EditState extends State<Edit> {
           //update
           obj.removeWhere((key, value) => key == '_id');
           result = await MongoService()
-              .updateRecord(widget.collectionName, widget.itemId, obj);
+              .updateRecord(widget.collection.name, widget.itemId, obj);
         } else {
           //insert
           result =
-              await MongoService().insertRecord(widget.collectionName, obj);
+              await MongoService().insertRecord(widget.collection.name, obj);
         }
         if (result) {
           navigator.pop(true);
@@ -107,6 +109,15 @@ class EditState extends State<Edit> {
   @override
   void initState() {
     super.initState();
+    if(widget.collection.isReadonly()){
+      title = 'View Document';
+    }
+    else if(widget.item == null){
+      title = 'New Document';
+    }
+    else{
+      title = 'Modify Document';
+    }
     encoder();
   }
 
@@ -125,8 +136,7 @@ class EditState extends State<Edit> {
           resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
-              title: Text(
-                  widget.item == null ? 'New Document' : 'Modify Document'),
+              title: Text(title),
               backgroundColor: Theme.of(context).colorScheme.tertiary,
               actions: [
                 Visibility(
@@ -172,7 +182,7 @@ class EditState extends State<Edit> {
               ),
             ),
           ),
-          floatingActionButton: LoadableFloatingActionButton(
+          floatingActionButton: widget.collection.isReadonly() ? null : LoadableFloatingActionButton(
               FloatingActionButton(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   onPressed: saveDialog,

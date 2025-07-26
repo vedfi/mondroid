@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
@@ -12,9 +13,9 @@ import 'package:mondroid/widgets/recordtile.dart';
 import '../services/popupservice.dart';
 
 class Records extends StatefulWidget {
-  final String collectionName;
+  final Collection collection;
 
-  const Records({super.key, required this.collectionName});
+  const Records({super.key, required this.collection});
 
   @override
   State<StatefulWidget> createState() => RecordsState();
@@ -60,7 +61,7 @@ class RecordsState extends State<Records> {
   Future<void> getRecords(int page) async {
     try {
       final newItems = (await MongoService()
-              .find(widget.collectionName, page, _pageSize, await filter(), await sort()))
+              .find(widget.collection.name, page, _pageSize, await filter(), await sort()))
           .map((e) => Selectable(e))
           .toList();
       final isLastPage = newItems.length < _pageSize;
@@ -80,14 +81,22 @@ class RecordsState extends State<Records> {
         _pagingController.itemList!.isEmpty) {
       return;
     }
+
+    if(type == SelectType.navigate){
+      navigate(index);
+      return;
+    }
+
+    if(widget.collection.isReadonly()){
+      return;
+    }
+
     if (type == SelectType.tap) {
       if (_pagingController.itemList!.any((element) => element.isSelected)) {
         setState(() {
           _pagingController.itemList!.elementAt(index).select();
         });
       }
-    } else if (type == SelectType.navigate) {
-      navigate(index);
     } else {
       setState(() {
         _pagingController.itemList!.elementAt(index).select();
@@ -192,7 +201,7 @@ class RecordsState extends State<Records> {
       Iterable<Future<bool>> futures = _pagingController.itemList!
           .where((element) => element.isSelected)
           .map((q) => MongoService()
-              .deleteRecord(widget.collectionName, q.item['_id']));
+              .deleteRecord(widget.collection.name, q.item['_id']));
       await Future.wait(futures);
       setState(() {
         isLoading = false;
@@ -210,7 +219,7 @@ class RecordsState extends State<Records> {
   Future<void> navigate(int index) async {
     dynamic shouldRefresh =
         await Navigator.of(context).pushNamed('/edit', arguments: [
-      widget.collectionName,
+      widget.collection,
       index == -1 ? null : _pagingController.itemList!.elementAt(index).item
     ]);
     refreshRequired = shouldRefresh is bool && shouldRefresh;
@@ -248,7 +257,7 @@ class RecordsState extends State<Records> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          title: Text(widget.collectionName),
+          title: Text(widget.collection.name),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
           actions: [
             IconButton(
@@ -288,7 +297,7 @@ class RecordsState extends State<Records> {
                       itemBuilder: (context, data, index) =>
                           RecordTile(index, data, hasAnySelected(), select)),
                 ))),
-        floatingActionButton: LoadableFloatingActionButton(
+        floatingActionButton: widget.collection.isReadonly() ? null : LoadableFloatingActionButton(
             hasAnySelected()
                 ? FloatingActionButton(
                     backgroundColor:
