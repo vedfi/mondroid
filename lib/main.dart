@@ -4,12 +4,16 @@ import 'package:mondroid/pages/collections.dart';
 import 'package:mondroid/pages/edit.dart';
 import 'package:mondroid/pages/home.dart';
 import 'package:mondroid/pages/records.dart';
+import 'package:mondroid/pages/settings.dart';
 import 'package:mondroid/services/popupservice.dart';
+import 'package:mondroid/services/settingsservice.dart';
 
 import 'models/collection.dart';
 
-void main() {
-  runApp(const MondroidApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SettingsService().load();
+  runApp(MondroidApp(settingsService: SettingsService()));
 }
 
 ThemeData getLightTheme() {
@@ -37,49 +41,59 @@ ThemeData getDarkTheme() {
 }
 
 class MondroidApp extends StatelessWidget {
-  const MondroidApp({super.key});
+  final SettingsService settingsService;
+
+  const MondroidApp({super.key, required this.settingsService});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mondroid',
-      initialRoute: '/',
-      scaffoldMessengerKey: PopupService.scaffoldMessengerKey,
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/':
-            {
-              return CupertinoPageRoute(
-                  builder: (_) => const Home(title: 'Mondroid'));
-            }
-          case '/collections':
-            {
-              String arg = settings.arguments as String;
-              return CupertinoPageRoute(
-                  builder: (_) => Collections(title: arg));
-            }
-          case '/records':
-            {
-              Collection arg = settings.arguments as Collection;
-              return CupertinoPageRoute(
-                  builder: (_) => Records(collection: arg));
-            }
-          case '/edit':
-            {
-              List<dynamic> args = settings.arguments as List<dynamic>;
-              dynamic id = args[1] == null ? null : args[1]['_id'];
-              return CupertinoPageRoute(
-                  builder: (_) =>
-                      Edit(collection: args[0], itemId: id, item: args[1]));
-            }
-          default:
-            return null;
-        }
-      },
-      theme: getLightTheme(),
-      darkTheme: getDarkTheme(),
-      themeMode: ThemeMode.system,
-    );
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: settingsService.themeMode,
+        builder: (context, themeMode, _) {
+          return MaterialApp(
+            title: 'Mondroid',
+            initialRoute: '/',
+            scaffoldMessengerKey: PopupService.scaffoldMessengerKey,
+            onGenerateRoute: (settings) {
+              switch (settings.name) {
+                case '/':
+                  {
+                    return CupertinoPageRoute(
+                        builder: (_) => const Home(title: 'Mondroid'));
+                  }
+                case '/settings':
+                  {
+                    return CupertinoPageRoute(builder: (_) => const Settings());
+                  }
+                case '/collections':
+                  {
+                    String arg = settings.arguments as String;
+                    return CupertinoPageRoute(
+                        builder: (_) => Collections(title: arg));
+                  }
+                case '/records':
+                  {
+                    Collection arg = settings.arguments as Collection;
+                    return CupertinoPageRoute(
+                        builder: (_) => Records(collection: arg));
+                  }
+                case '/edit':
+                  {
+                    List<dynamic> args = settings.arguments as List<dynamic>;
+                    dynamic id = args[1] == null ? null : args[1]['_id'];
+                    return CupertinoPageRoute(
+                        builder: (_) => Edit(
+                            collection: args[0], itemId: id, item: args[1]));
+                  }
+                default:
+                  return null;
+              }
+            },
+            theme: getLightTheme(),
+            darkTheme: getDarkTheme(),
+            themeMode: themeMode,
+          );
+        });
   }
 }

@@ -7,9 +7,10 @@ class ConnectionTile extends StatelessWidget {
   final int index;
   final bool hasAnySelected;
   final Selectable<Connection> selectable;
+  final bool maskPassword;
 
-  const ConnectionTile(
-      this.index, this.selectable, this.hasAnySelected, this.onClick,
+  const ConnectionTile(this.index, this.selectable, this.hasAnySelected,
+      this.onClick, this.maskPassword,
       {super.key});
 
   @override
@@ -51,9 +52,13 @@ class ConnectionTile extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-            selectable.item
-                .getMaskedConnectionString()
-                .replaceAll("", "\u{200B}"),
+            maskPassword
+                ? selectable.item
+                    .getMaskedConnectionString()
+                    .replaceAll("", "\u{200B}")
+                : selectable.item
+                    .getConnectionString()
+                    .replaceAll("", "\u{200B}"),
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             maxLines: 1),

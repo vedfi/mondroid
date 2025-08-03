@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
@@ -296,8 +297,12 @@ class RecordsState extends State<Records> {
                       noItemsFoundIndicatorBuilder: (context) => const Center(
                             child: Text('No records.'),
                           ),
-                      itemBuilder: (context, data, index) =>
-                          RecordTile(index, data, hasAnySelected(), select)),
+                      itemBuilder: (context, data, index) => RecordTile(
+                          index,
+                          data,
+                          hasAnySelected(),
+                          select,
+                          SettingsService().showOidTimestamp)),
                 ))),
         floatingActionButton: widget.collection.isReadonly()
             ? null

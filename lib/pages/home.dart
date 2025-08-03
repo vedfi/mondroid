@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mondroid/models/connection.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/services/popupservice.dart';
+import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/services/storageservice.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/connectiontile.dart';
@@ -24,6 +25,7 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   bool isLoading = false;
+  bool maskPassword = true;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
@@ -231,9 +233,17 @@ class HomeState extends State<Home> {
     StorageService().write('connections', json);
   }
 
+  Future<void> navigateSettings() async {
+    await Navigator.of(context).pushNamed('/settings');
+    setState(() {
+      maskPassword = SettingsService().maskPassword;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    maskPassword = SettingsService().maskPassword;
     getSavedConnections();
   }
 
@@ -285,6 +295,15 @@ class HomeState extends State<Home> {
         appBar: AppBar(
           title: Text(widget.title),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
+          actions: isLoading || connections.any((element) => element.isSelected)
+              ? []
+              : [
+                  IconButton(
+                    onPressed: navigateSettings,
+                    icon: const Icon(Icons.settings),
+                    tooltip: 'Settings',
+                  )
+                ],
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: connections.isEmpty
@@ -302,6 +321,7 @@ class HomeState extends State<Home> {
                           connections[index],
                           connections.any((q) => q.isSelected),
                           (i, t) => select(i, t),
+                          maskPassword,
                           key: UniqueKey(),
                         )),
               ),

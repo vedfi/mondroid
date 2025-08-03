@@ -1,0 +1,127 @@
+import 'package:flutter/material.dart';
+import 'package:mondroid/services/settingsservice.dart';
+
+class Settings extends StatefulWidget {
+  const Settings({super.key});
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  late SettingsService controller;
+  bool maskPassword = false;
+  bool showOidTimestamp = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SettingsService();
+    maskPassword = controller.maskPassword;
+    showOidTimestamp = controller.showOidTimestamp;
+  }
+
+  Future<void> _onOidTimestampChanged(bool? value) async {
+    if (value == null) return;
+    controller.updateTimestamp(value);
+    setState(() {
+      showOidTimestamp = value;
+    });
+  }
+
+  Future<void> _onMaskPasswordChanged(bool? value) async {
+    if (value == null) return;
+    controller.updateMaskPassword(value);
+    setState(() {
+      maskPassword = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Settings')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ValueListenableBuilder<ThemeMode>(
+          valueListenable: controller.themeMode,
+          builder: (context, currentTheme, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Theme',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                    width: double.maxFinite,
+                    child: SegmentedButton<ThemeMode>(
+                      segments: const [
+                        ButtonSegment(
+                            value: ThemeMode.light,
+                            label: Text('Light'),
+                            icon: Icon(Icons.light_mode)),
+                        ButtonSegment(
+                            value: ThemeMode.system,
+                            label: Text('System'),
+                            icon: Icon(Icons.settings)),
+                        ButtonSegment(
+                            value: ThemeMode.dark,
+                            label: Text('Dark'),
+                            icon: Icon(Icons.dark_mode)),
+                      ],
+                      selected: {currentTheme},
+                      onSelectionChanged: (newSelection) {
+                        final selected = newSelection.first;
+                        controller.updateTheme(selected);
+                      },
+                      showSelectedIcon: false,
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text('Advanced', style: TextStyle(fontSize: 18)),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: maskPassword,
+                        onChanged: _onMaskPasswordChanged,
+                        activeColor: Theme.of(context).colorScheme.primary),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Expanded(
+                      child: Text('Mask password in connection string'),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: showOidTimestamp,
+                        onChanged: _onOidTimestampChanged,
+                        activeColor: Theme.of(context).colorScheme.primary),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Expanded(
+                      child: Text('Show embedded timestamp of ObjectId'),
+                    )
+                  ],
+                )
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
