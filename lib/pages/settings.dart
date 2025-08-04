@@ -16,6 +16,7 @@ class _SettingsState extends State<Settings> {
   bool showOidTimestamp = false;
   bool smartQuotes = false;
   bool smartDashes = false;
+  int pageSize = 0;
 
   @override
   void initState() {
@@ -25,6 +26,7 @@ class _SettingsState extends State<Settings> {
     showOidTimestamp = controller.showOidTimestamp;
     smartQuotes = controller.smartQuotes;
     smartDashes = controller.smartDashes;
+    pageSize = controller.pageSize;
   }
 
   Future<void> _onSmartDashesChanged(bool? value) async {
@@ -56,6 +58,14 @@ class _SettingsState extends State<Settings> {
     controller.updateMaskPassword(value);
     setState(() {
       maskPassword = value;
+    });
+  }
+
+  Future<void> _onPageSizeChanged(int? value) async {
+    if (value == null) return;
+    controller.updatePageSize(value);
+    setState(() {
+      pageSize = value;
     });
   }
 
@@ -100,6 +110,44 @@ class _SettingsState extends State<Settings> {
                       onSelectionChanged: (newSelection) {
                         final selected = newSelection.first;
                         controller.updateTheme(selected);
+                      },
+                      showSelectedIcon: false,
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Page Size',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                    width: double.maxFinite,
+                    child: SegmentedButton<int>(
+                      segments: const [
+                        ButtonSegment(
+                            value: 5,
+                            label: Text('5'),
+                        ),
+                        ButtonSegment(
+                            value: 10,
+                            label: Text('10'),
+                           ),
+                        ButtonSegment(
+                            value: 20,
+                            label: Text('20'),
+                        ),
+                        ButtonSegment(
+                            value: 50,
+                            label: Text('50'),
+                        ),
+                      ],
+                      selected: {pageSize},
+                      onSelectionChanged: (newSelection) {
+                        final selected = newSelection.first;
+                        _onPageSizeChanged(selected);
                       },
                       showSelectedIcon: false,
                     )),

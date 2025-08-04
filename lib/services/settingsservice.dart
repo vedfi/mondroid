@@ -13,15 +13,16 @@ class SettingsService {
   static const String _themeKey = 'theme_mode';
   static const String _maskPasswordKey = 'mask_password';
   static const String _timestampKey = 'oid_timestamp';
-  static const String _smartQuotes = 'smart_quotes';
-  static const String _smartDashes = 'smart_dashes';
-
+  static const String _smartQuotesKey = 'smart_quotes';
+  static const String _smartDashesKey = 'smart_dashes';
+  static const String _pageSizeKey = 'page_size';
 
   final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
   bool showOidTimestamp = true;
   bool maskPassword = true;
   bool smartQuotes = true;
   bool smartDashes = true;
+  int pageSize = 10;
 
   Future<void> load() async {
     await loadTheme();
@@ -29,11 +30,39 @@ class SettingsService {
     await loadTimestamp();
     await loadSmartDashes();
     await loadSmartQuotes();
+    await loadPageSize();
+  }
+
+  Future<void> loadPageSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getString(_pageSizeKey);
+    switch (stored) {
+      case '5':
+        pageSize = 5;
+        break;
+      case '10':
+        pageSize = 10;
+        break;
+      case '20':
+        pageSize = 20;
+        break;
+      case '50':
+        pageSize = 50;
+        break;
+      default:
+        pageSize = 10;
+    }
+  }
+
+  Future<void> updatePageSize(int val) async {
+    pageSize = val;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_pageSizeKey, val.toString());
   }
 
   Future<void> loadSmartDashes() async {
     final prefs = await SharedPreferences.getInstance();
-    final stored = prefs.getString(_smartDashes);
+    final stored = prefs.getString(_smartDashesKey);
     switch (stored) {
       case 'true':
         smartDashes = true;
@@ -49,12 +78,12 @@ class SettingsService {
   Future<void> updateSmartDashes(bool val) async {
     smartDashes = val;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_smartDashes, val ? 'true' : 'false');
+    await prefs.setString(_smartDashesKey, val ? 'true' : 'false');
   }
 
   Future<void> loadSmartQuotes() async {
     final prefs = await SharedPreferences.getInstance();
-    final stored = prefs.getString(_smartQuotes);
+    final stored = prefs.getString(_smartQuotesKey);
     switch (stored) {
       case 'true':
         smartQuotes = true;
@@ -70,7 +99,7 @@ class SettingsService {
   Future<void> updateSmartQuotes(bool val) async {
     smartQuotes = val;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_smartQuotes, val ? 'true' : 'false');
+    await prefs.setString(_smartQuotesKey, val ? 'true' : 'false');
   }
 
   Future<void> loadMaskPassword() async {

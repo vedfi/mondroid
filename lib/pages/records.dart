@@ -26,7 +26,7 @@ class RecordsState extends State<Records> {
   final TextEditingController _filterQueryController = TextEditingController();
   final TextEditingController _sortQueryController = TextEditingController();
   bool isLoading = true;
-  static const _pageSize = 10;
+  final _pageSize = SettingsService().pageSize;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
   final ScrollController _scrollController = ScrollController();
@@ -289,7 +289,7 @@ class RecordsState extends State<Records> {
                   scrollController: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      const EdgeInsets.fromLTRB(15, 20, 15, 40),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
