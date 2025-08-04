@@ -130,6 +130,8 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _sortQueryController,
                     maxLines: 7,
+                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
@@ -166,6 +168,8 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _filterQueryController,
                     maxLines: 7,
+                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mondroid/services/settingsservice.dart';
 
@@ -12,6 +14,8 @@ class _SettingsState extends State<Settings> {
   late SettingsService controller;
   bool maskPassword = false;
   bool showOidTimestamp = false;
+  bool smartQuotes = false;
+  bool smartDashes = false;
 
   @override
   void initState() {
@@ -19,6 +23,24 @@ class _SettingsState extends State<Settings> {
     controller = SettingsService();
     maskPassword = controller.maskPassword;
     showOidTimestamp = controller.showOidTimestamp;
+    smartQuotes = controller.smartQuotes;
+    smartDashes = controller.smartDashes;
+  }
+
+  Future<void> _onSmartDashesChanged(bool? value) async {
+    if (value == null) return;
+    controller.updateSmartDashes(value);
+    setState(() {
+      smartDashes = value;
+    });
+  }
+
+  Future<void> _onSmartQuotesChanged(bool? value) async {
+    if (value == null) return;
+    controller.updateSmartQuotes(value);
+    setState(() {
+      smartQuotes = value;
+    });
   }
 
   Future<void> _onOidTimestampChanged(bool? value) async {
@@ -42,7 +64,8 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(
+            vertical: 20, horizontal: 15),
         child: ValueListenableBuilder<ThemeMode>(
           valueListenable: controller.themeMode,
           builder: (context, currentTheme, _) {
@@ -116,7 +139,40 @@ class _SettingsState extends State<Settings> {
                       child: Text('Show embedded timestamp of ObjectId'),
                     )
                   ],
-                )
+                ),
+                if(Platform.isIOS)...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: smartQuotes,
+                          onChanged: _onSmartQuotesChanged,
+                          activeColor: Theme.of(context).colorScheme.primary),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Expanded(
+                        child: Text('Disable smart quotes'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: smartDashes,
+                          onChanged: _onSmartDashesChanged,
+                          activeColor: Theme.of(context).colorScheme.primary),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Expanded(
+                        child: Text('Disable smart dashes'),
+                      )
+                    ],
+                  ),
+                ],
+
               ],
             );
           },

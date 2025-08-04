@@ -13,15 +13,64 @@ class SettingsService {
   static const String _themeKey = 'theme_mode';
   static const String _maskPasswordKey = 'mask_password';
   static const String _timestampKey = 'oid_timestamp';
+  static const String _smartQuotes = 'smart_quotes';
+  static const String _smartDashes = 'smart_dashes';
+
 
   final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
   bool showOidTimestamp = true;
   bool maskPassword = true;
+  bool smartQuotes = true;
+  bool smartDashes = true;
 
   Future<void> load() async {
     await loadTheme();
     await loadMaskPassword();
     await loadTimestamp();
+    await loadSmartDashes();
+    await loadSmartQuotes();
+  }
+
+  Future<void> loadSmartDashes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getString(_smartDashes);
+    switch (stored) {
+      case 'true':
+        smartDashes = true;
+        break;
+      case 'false':
+        smartDashes = false;
+        break;
+      default:
+        smartDashes = true;
+    }
+  }
+
+  Future<void> updateSmartDashes(bool val) async {
+    smartDashes = val;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_smartDashes, val ? 'true' : 'false');
+  }
+
+  Future<void> loadSmartQuotes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getString(_smartQuotes);
+    switch (stored) {
+      case 'true':
+        smartQuotes = true;
+        break;
+      case 'false':
+        smartQuotes = false;
+        break;
+      default:
+        smartQuotes = true;
+    }
+  }
+
+  Future<void> updateSmartQuotes(bool val) async {
+    smartQuotes = val;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_smartQuotes, val ? 'true' : 'false');
   }
 
   Future<void> loadMaskPassword() async {

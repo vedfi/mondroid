@@ -115,6 +115,8 @@ class HomeState extends State<Home> {
                   width: 0,
                   child: TextField(
                     controller: _nameController,
+                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       hintText: "Name",
@@ -127,6 +129,8 @@ class HomeState extends State<Home> {
                   width: 0,
                   child: TextField(
                     controller: _uriController,
+                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(
                         hintText: "Uri", helperText: 'Uri with database name.'),
