@@ -29,7 +29,7 @@ class HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
-  final Uri _url = Uri.parse('https://vedfi.com.tr/mondroid/troubleshoot');
+  final Uri _url = Uri.parse('https://vedfi.github.io/mondroid/troubleshoot');
 
   void reorder(int oldIndex, int newIndex) {
     setState(() {
