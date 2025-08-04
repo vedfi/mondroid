@@ -6,6 +6,7 @@ import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/widgets/collectiontile.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 
+import '../services/settingsservice.dart';
 import '../widgets/loadable.dart';
 
 class Collections extends StatefulWidget {
@@ -78,6 +79,12 @@ class CollectionsState extends State<Collections> {
                 SizedBox(
                   width: 0,
                   child: TextField(
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     controller: _nameController,
                     decoration: const InputDecoration(hintText: "Name"),
                   ),

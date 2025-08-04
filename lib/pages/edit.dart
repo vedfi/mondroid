@@ -6,6 +6,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
@@ -167,6 +168,12 @@ class EditState extends State<Edit> {
                     scrollController: _scrollController,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     scrollPhysics: const AlwaysScrollableScrollPhysics(),
                     decoration: InputDecoration(
                         fillColor: Theme.of(context).colorScheme.surface,

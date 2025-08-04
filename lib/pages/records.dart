@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
@@ -25,7 +26,7 @@ class RecordsState extends State<Records> {
   final TextEditingController _filterQueryController = TextEditingController();
   final TextEditingController _sortQueryController = TextEditingController();
   bool isLoading = true;
-  static const _pageSize = 10;
+  final _pageSize = SettingsService().pageSize;
   final PagingController<int, Selectable<Map<String, dynamic>>>
       _pagingController = PagingController(firstPageKey: 0);
   final ScrollController _scrollController = ScrollController();
@@ -129,6 +130,12 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _sortQueryController,
                     maxLines: 7,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
@@ -165,6 +172,12 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _filterQueryController,
                     maxLines: 7,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:
@@ -283,8 +296,7 @@ class RecordsState extends State<Records> {
                   pagingController: _pagingController,
                   scrollController: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 40),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
@@ -296,8 +308,12 @@ class RecordsState extends State<Records> {
                       noItemsFoundIndicatorBuilder: (context) => const Center(
                             child: Text('No records.'),
                           ),
-                      itemBuilder: (context, data, index) =>
-                          RecordTile(index, data, hasAnySelected(), select)),
+                      itemBuilder: (context, data, index) => RecordTile(
+                          index,
+                          data,
+                          hasAnySelected(),
+                          select,
+                          SettingsService().showOidTimestamp)),
                 ))),
         floatingActionButton: widget.collection.isReadonly()
             ? null

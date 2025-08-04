@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/utilities/recordtilestringifier.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 enum ExpandableType { array, obj }
 
@@ -64,9 +65,10 @@ class RecordTile extends StatelessWidget {
   final int index;
   final bool hasAnySelected;
   final Selectable<Map<String, dynamic>> selectable;
+  final bool showOidTimestamp;
 
-  const RecordTile(
-      this.index, this.selectable, this.hasAnySelected, this.onClick,
+  const RecordTile(this.index, this.selectable, this.hasAnySelected,
+      this.onClick, this.showOidTimestamp,
       {super.key});
 
   Widget generate(int level, String key, dynamic value) {
@@ -155,7 +157,19 @@ class RecordTile extends StatelessWidget {
                       ? Theme.of(context).colorScheme.onError
                       : Theme.of(context).colorScheme.inverseSurface),
               const SizedBox(width: 3, height: 1),
-              Text(selectable.item['_id'].toString()),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (showOidTimestamp) ...[
+                    Text(
+                        (selectable.item['_id'] as mongo.ObjectId)
+                            .dateTime
+                            .toIso8601String(),
+                        style: const TextStyle(fontSize: 11))
+                  ],
+                  Text(selectable.item['_id'].toString()),
+                ],
+              ),
               const Spacer(),
               selectable.isSelected
                   ? Icon(Icons.check_box,
