@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <script src="./script.js" defer></script>
+    <title>VEDFI</title>
+</head>
+
+<body>
+    <section>
+        <div class="container">
+            <div class="is-flex is-flex-direction-row is-align-items-center pt-5 pb-3 px-5">
+                <div class="round mr-3"
+                    style="width: 50px; height: 50px; background-position: center; background-image: url('../assets/mondroid.png'); background-size: contain; background-repeat: no-repeat;">
+                </div>
+                <div class="is-flex is-flex-direction-column is-align-items-start">
+                    <p style="font-size: 0.8em; color: #7a7a7a;">Mondroid</p>
+                    <p style="font-size: 1em; font-weight: bold;">Troubleshooting</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="tabs mb-0">
+            <ul>
+                <li id="atlas-tab" style="font-size: 1em;"><a class="px-5">Atlas</a></li>
+                <li id="local-tab" style="font-size: 1em;"><a class="px-5">Local</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="display: none;" id="atlas-content" class="container">
+        <div class="content">
+            <ul class="help">
+                <p>Atlas is a cloud database service provided by MongoDB. Example atlas connection string is given below:</p>
+                <p style="font-weight: 600;">mongodb+srv://username:password&#x200b@hostname/databaseName</p>
+                <p>Most of the time this connection string should be working with Mondroid. If you face issues with connections or database management then look for the below list.</p>
+
+                <li>Authentication Errors</li>
+                <p>Mostly occurs when your authentication database is different than the database that you provided in connection string.</p>
+                <p>Try adding authSource=admin parameter to your connection string like given below:</p>
+                <p style="font-weight: 600;">mongodb+srv://username:password&#x200b@hostname/databaseName?authSource=admin</p>
+                <p>Sometimes authentication method should be added to connection string like below. (SCRAM-SHA-1, SCRAM-SHA-256, MONGODB-CR)</p>
+                <p style="font-weight: 600;">mongodb+srv://username:password&#x200b@hostname/databaseName?authSource=admin&#x200b&authMechanism=SCRAM-SHA-1</p>
+
+                <p>Last but not least, make sure that your credential has readWrite permissions. Go to your atlas dashboard and open database access menu. Then edit your user permissions.</p>
+                <p style="font-weight: 600;">With using built-in roles:</p>
+                <img src="atlas-user1.png">
+                <br>
+                <p style="font-weight: 600;">With using specific privileges:</p>
+                <img src="atlas-user2.png">
+
+                <br>
+                <br>
+
+                <li>IO / Socket Errors</li>
+                <p>Usually occurs when your atlas ip whitelist not configured. Go to your atlas dashboard and open network access menu.</p>
+                <p style="font-weight: 600;">Add IP 0.0.0.0 to whitelist:</p>
+                <img src="atlas-ip.png">
+                <br>
+                <p>Also make sure that your Firewall or ISP not blocking your cloud database server address.</p>
+            </ul>
+        </div>
+    </div>
+
+    <div style="display: none;" id="local-content" class="container">
+        <div class="content">
+            <ul class="help">
+                <p>Local database instructions.</p>
+            </ul>
+        </div>
+    </div>
+
+</body>
+
+</html>
