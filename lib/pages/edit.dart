@@ -168,8 +168,12 @@ class EditState extends State<Edit> {
                     scrollController: _scrollController,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
-                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     scrollPhysics: const AlwaysScrollableScrollPhysics(),
                     decoration: InputDecoration(
                         fillColor: Theme.of(context).colorScheme.surface,

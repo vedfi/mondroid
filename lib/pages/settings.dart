@@ -74,8 +74,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 20, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         child: ValueListenableBuilder<ThemeMode>(
           valueListenable: controller.themeMode,
           builder: (context, currentTheme, _) {
@@ -128,20 +127,20 @@ class _SettingsState extends State<Settings> {
                     child: SegmentedButton<int>(
                       segments: const [
                         ButtonSegment(
-                            value: 5,
-                            label: Text('5'),
+                          value: 5,
+                          label: Text('5'),
                         ),
                         ButtonSegment(
-                            value: 10,
-                            label: Text('10'),
-                           ),
-                        ButtonSegment(
-                            value: 20,
-                            label: Text('20'),
+                          value: 10,
+                          label: Text('10'),
                         ),
                         ButtonSegment(
-                            value: 50,
-                            label: Text('50'),
+                          value: 20,
+                          label: Text('20'),
+                        ),
+                        ButtonSegment(
+                          value: 50,
+                          label: Text('50'),
                         ),
                       ],
                       selected: {pageSize},
@@ -188,7 +187,7 @@ class _SettingsState extends State<Settings> {
                     )
                   ],
                 ),
-                if(Platform.isIOS)...[
+                if (Platform.isIOS) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -220,7 +219,6 @@ class _SettingsState extends State<Settings> {
                     ],
                   ),
                 ],
-
               ],
             );
           },

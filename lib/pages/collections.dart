@@ -79,8 +79,12 @@ class CollectionsState extends State<Collections> {
                 SizedBox(
                   width: 0,
                   child: TextField(
-                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     controller: _nameController,
                     decoration: const InputDecoration(hintText: "Name"),
                   ),

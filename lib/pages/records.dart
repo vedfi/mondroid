@@ -130,8 +130,12 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _sortQueryController,
                     maxLines: 7,
-                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"field": "\$asc" or "\$desc"}',
                         helperText:
@@ -168,8 +172,12 @@ class RecordsState extends State<Records> {
                   child: TextField(
                     controller: _filterQueryController,
                     maxLines: 7,
-                    smartQuotesType: SettingsService().smartQuotes ? SmartQuotesType.disabled : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes ? SmartDashesType.disabled : SmartDashesType.enabled,
+                    smartQuotesType: SettingsService().smartQuotes
+                        ? SmartQuotesType.disabled
+                        : SmartQuotesType.enabled,
+                    smartDashesType: SettingsService().smartDashes
+                        ? SmartDashesType.disabled
+                        : SmartDashesType.enabled,
                     decoration: const InputDecoration(
                         hintText: '{"key": "value" or {"\$operator"}}',
                         helperText:
@@ -288,8 +296,7 @@ class RecordsState extends State<Records> {
                   pagingController: _pagingController,
                   scrollController: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding:
-                      const EdgeInsets.fromLTRB(15, 20, 15, 40),
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 40),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
