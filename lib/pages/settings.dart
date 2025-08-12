@@ -16,6 +16,7 @@ class _SettingsState extends State<Settings> {
   bool showOidTimestamp = false;
   bool smartQuotes = false;
   bool smartDashes = false;
+  bool systemCollections = false;
   int pageSize = 0;
 
   @override
@@ -27,6 +28,7 @@ class _SettingsState extends State<Settings> {
     smartQuotes = controller.smartQuotes;
     smartDashes = controller.smartDashes;
     pageSize = controller.pageSize;
+    systemCollections = controller.systemCollections;
   }
 
   Future<void> _onSmartDashesChanged(bool? value) async {
@@ -42,6 +44,14 @@ class _SettingsState extends State<Settings> {
     controller.updateSmartQuotes(value);
     setState(() {
       smartQuotes = value;
+    });
+  }
+
+  Future<void> _onSystemCollectionsChanged(bool? value) async {
+    if (value == null) return;
+    controller.updateSystemCollections(value);
+    setState(() {
+      systemCollections = value;
     });
   }
 
@@ -184,6 +194,21 @@ class _SettingsState extends State<Settings> {
                     ),
                     const Expanded(
                       child: Text('Show embedded timestamp of ObjectId'),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: systemCollections,
+                        onChanged: _onSystemCollectionsChanged,
+                        activeColor: Theme.of(context).colorScheme.primary),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Expanded(
+                      child: Text('Show system collections'),
                     )
                   ],
                 ),

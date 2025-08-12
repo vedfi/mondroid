@@ -16,12 +16,14 @@ class SettingsService {
   static const String _smartQuotesKey = 'smart_quotes';
   static const String _smartDashesKey = 'smart_dashes';
   static const String _pageSizeKey = 'page_size';
+  static const String _systemCollectionsKey = 'system_collections';
 
   final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
   bool showOidTimestamp = true;
   bool maskPassword = true;
   bool smartQuotes = true;
   bool smartDashes = true;
+  bool systemCollections = false;
   int pageSize = 10;
 
   Future<void> load() async {
@@ -31,6 +33,7 @@ class SettingsService {
     await loadSmartDashes();
     await loadSmartQuotes();
     await loadPageSize();
+    await loadSystemCollections();
   }
 
   Future<void> loadPageSize() async {
@@ -58,6 +61,27 @@ class SettingsService {
     pageSize = val;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_pageSizeKey, val.toString());
+  }
+
+  Future<void> loadSystemCollections() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getString(_systemCollectionsKey);
+    switch (stored) {
+      case 'true':
+        systemCollections = true;
+        break;
+      case 'false':
+        systemCollections = false;
+        break;
+      default:
+        systemCollections = false;
+    }
+  }
+
+  Future<void> updateSystemCollections(bool val) async {
+    systemCollections = val;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_systemCollectionsKey, val ? 'true' : 'false');
   }
 
   Future<void> loadSmartDashes() async {

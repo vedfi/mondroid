@@ -32,7 +32,7 @@ class EditState extends State<Edit> {
 
   Future<void> encoder() async {
     try {
-      String encoded = widget.itemId == null
+      String encoded = widget.itemId == null && !widget.collection.isReadonly()
           ? '{\n\n}'
           : await compute(JsonConverter.encode, widget.item);
       setState(() {
