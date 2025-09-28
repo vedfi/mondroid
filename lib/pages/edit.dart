@@ -10,6 +10,7 @@ import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/loadable.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../services/popupservice.dart';
 
@@ -32,9 +33,11 @@ class EditState extends State<Edit> {
 
   Future<void> encoder() async {
     try {
-      String encoded = widget.itemId == null && !widget.collection.isReadonly()
-          ? '{\n\n}'
-          : await compute(JsonConverter.encode, widget.item);
+      String encoded = await compute(
+          JsonConverter.encode,
+          widget.itemId == null && !widget.collection.isReadonly()
+              ? {"_id": mongo.ObjectId()}
+              : widget.item);
       setState(() {
         _jsonController.text = encoded;
       });
@@ -71,7 +74,6 @@ class EditState extends State<Edit> {
         bool result = false;
         if (widget.itemId != null) {
           //update
-          obj.removeWhere((key, value) => key == '_id');
           result = await MongoService()
               .updateRecord(widget.collection.name, widget.itemId, obj);
         } else {
