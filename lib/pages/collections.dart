@@ -29,7 +29,7 @@ class CollectionsState extends State<Collections> {
     });
     var collectionInfos = await MongoService().getCollectionInfos();
     setState(() {
-      collections = collectionInfos
+      collections = (SettingsService().systemCollections ? collectionInfos : collectionInfos.where((x) => !x.name.startsWith('system.')))
           .map((e) => Selectable(Collection.fromMongoCollection(e)))
           .toList();
       isLoading = false;

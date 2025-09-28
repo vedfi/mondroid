@@ -40,6 +40,17 @@ class CollectionTile extends StatelessWidget {
     }
   }
 
+  IconData getIconData(){
+    switch(selectable.item.type){
+      case CollectionType.view:
+        return Icons.visibility;
+      case CollectionType.time_series:
+        return Icons.timeline;
+      default:
+        return Icons.folder;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -56,9 +67,7 @@ class CollectionTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Icon(
-              selectable.item.type == CollectionType.view
-                  ? Icons.visibility
-                  : Icons.folder,
+              getIconData(),
               color: selectable.isSelected
                   ? Theme.of(context).colorScheme.onError
                   : Theme.of(context).colorScheme.inverseSurface),

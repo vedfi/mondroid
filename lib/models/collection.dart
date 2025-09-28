@@ -3,6 +3,7 @@ import 'package:mondroid/services/mongoservice.dart';
 enum CollectionType {
   collection,
   view,
+  time_series
 }
 
 class Collection {
@@ -13,10 +14,13 @@ class Collection {
   Collection(this.name, {this.type = CollectionType.collection});
 
   factory Collection.fromMongoCollection(MongoCollection collection) {
+    CollectionType collectionType = switch (collection.type) {
+      "view" => CollectionType.view,
+      "timeseries" => CollectionType.time_series,
+      _     => CollectionType.collection,
+    };
     return Collection(collection.name,
-        type: collection.type == 'view'
-            ? CollectionType.view
-            : CollectionType.collection);
+        type: collectionType);
   }
 
   bool isReadonly() {
