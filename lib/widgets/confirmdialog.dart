@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ConfirmDialog {
   Widget build(BuildContext context, String title, String subtitle,
       String cancelText, String okText) {
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       title: Text(title),
       content: Column(

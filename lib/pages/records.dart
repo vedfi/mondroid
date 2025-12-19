@@ -6,10 +6,14 @@ import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/services/settingsservice.dart';
+import 'package:mondroid/utilities/formsheet.dart';
 import 'package:mondroid/utilities/jsonconverter.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
+import 'package:mondroid/widgets/filterqueryform.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:mondroid/widgets/recordtile.dart';
+import 'package:mondroid/widgets/sortqueryform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../services/popupservice.dart';
 
@@ -32,10 +36,19 @@ class RecordsState extends State<Records> {
   final ScrollController _scrollController = ScrollController();
   double offset = 0.0;
   bool refreshRequired = false;
+  final Uri _filterUrl = Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=filter');
+  final Uri _sortUrl = Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=sort');
+
+
+  Future<void> openUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      PopupService.show('Could not launch $url');
+    }
+  }
 
   Future<Map<String, dynamic>?> filter() async {
     try {
-      if (_filterQueryController.value.text.isEmpty) {
+      if (_filterQueryController.value.text.isEmpty ) {
         return null;
       }
       dynamic data = await compute(
@@ -115,87 +128,33 @@ class RecordsState extends State<Records> {
   }
 
   Future<void> sortDialog() async {
-    await showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-            title: const Text('Sort Query'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 0,
-                  child: TextField(
-                    controller: _sortQueryController,
-                    maxLines: 7,
-                    smartQuotesType: SettingsService().smartQuotes
-                        ? SmartQuotesType.disabled
-                        : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes
-                        ? SmartDashesType.disabled
-                        : SmartDashesType.enabled,
-                    decoration: const InputDecoration(
-                        hintText: '{"field": "\$asc" or "\$desc"}',
-                        helperText:
-                            'Multiple sorting criteria supported.\nLeave blank if you dont want to use sorting.'),
-                  ),
-                )
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _pagingController.refresh();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Apply')),
-            ],
-          );
-        });
+    final form = SortQueryForm(
+      controller: _sortQueryController,
+      onApply: () {
+        if(_sortQueryController.value.text.trim().isEmpty){
+          _sortQueryController.clear();
+        }
+        _pagingController.refresh();
+        Navigator.pop(context);
+      },
+      onHelp: () => openUrl(_sortUrl),
+    );
+    await showFormSheet(context: context, child: form);
   }
 
   Future<void> searchDialog() async {
-    await showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-            title: const Text('Filter Query'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 0,
-                  child: TextField(
-                    controller: _filterQueryController,
-                    maxLines: 7,
-                    smartQuotesType: SettingsService().smartQuotes
-                        ? SmartQuotesType.disabled
-                        : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes
-                        ? SmartDashesType.disabled
-                        : SmartDashesType.enabled,
-                    decoration: const InputDecoration(
-                        hintText: '{"key": "value" or {"\$operator"}}',
-                        helperText:
-                            'All query operators are supported.\nLeave blank if you want to fetch all records.'),
-                  ),
-                )
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _pagingController.refresh();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Apply')),
-            ],
-          );
-        });
+    final form = FilterQueryForm(
+    controller: _filterQueryController,
+    onApply: () {
+      if(_filterQueryController.value.text.trim().isEmpty){
+        _filterQueryController.clear();
+      }
+    _pagingController.refresh();
+    Navigator.pop(context);
+    },
+      onHelp: () => openUrl(_filterUrl),
+    );
+    await showFormSheet(context: context, child: form);
   }
 
   Future<void> deleteDialog() async {
@@ -269,22 +228,35 @@ class RecordsState extends State<Records> {
 
   @override
   Widget build(BuildContext context) {
+    final hideActions = isLoading || hasAnySelected();
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: Text(widget.collection.name),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
-          actions: [
-            IconButton(
+          actions:  [
+          Visibility(
+            maintainSize: false,
+            maintainAnimation: false,
+            maintainState: true,
+            visible: !hideActions,
+            child: IconButton(
               onPressed: sortDialog,
               icon: const Icon(Icons.sort),
               tooltip: 'Sort',
             ),
-            IconButton(
-              onPressed: searchDialog,
-              icon: const Icon(Icons.search),
-              tooltip: 'Filter',
-            )
+          ),
+            Visibility(
+              maintainSize: false,
+              maintainAnimation: false,
+              maintainState: true,
+              visible: !hideActions,
+              child: IconButton(
+                onPressed: searchDialog,
+                icon: const Icon(Icons.search),
+                tooltip: 'Filter',
+              ),
+            ),
           ],
         ),
         body: RefreshIndicator(
@@ -315,6 +287,7 @@ class RecordsState extends State<Records> {
                           select,
                           SettingsService().showOidTimestamp)),
                 ))),
+        resizeToAvoidBottomInset: false,
         floatingActionButton: widget.collection.isReadonly()
             ? null
             : LoadableFloatingActionButton(
