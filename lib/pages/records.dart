@@ -37,9 +37,9 @@ class RecordsState extends State<Records> {
   double offset = 0.0;
   bool refreshRequired = false;
   final Uri _filterUrl =
-      Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=filter');
+      Uri.parse('https://vedfi.github.io/mondroid/help/queries/filter');
   final Uri _sortUrl =
-      Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=sort');
+      Uri.parse('https://vedfi.github.io/mondroid/help/queries/sort');
 
   Future<void> openUrl(Uri url) async {
     if (!await launchUrl(url)) {

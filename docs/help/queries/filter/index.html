@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="icon" href="../../assets/mondroid.png" type="image/png" />
+    <link rel="icon" href="../../../assets/mondroid.png" type="image/png" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +44,6 @@
       font-weight: bold !important;
     }
   </style>
-    <script src="script.js" defer></script>
     <title>Mondroid</title>
 </head>
 
@@ -57,32 +56,16 @@
                 </div>
                 <div class="is-flex is-flex-direction-column is-align-items-start">
                     <p style="font-size: 0.8em; color: #7a7a7a;">Mondroid</p>
-                    <p style="font-size: 1em; font-weight: bold;">Queries</p>
+                    <p style="font-size: 1em; font-weight: bold;">Filter Queries</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="container">
-        <div class="tabs mb-0">
-            <ul>
-                <li id="filter-tab" style="font-size: 1em;"><a class="px-5">Filter</a></li>
-                <li id="sort-tab" style="font-size: 1em;"><a class="px-5">Sort</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div style="display: none;" id="filter-content" class="container">
+    <div style="display: block;" id="filter-content" class="container">
         <div class="content">
             <ul class="help">
               <p>Filter query instructions.</p>
-        </div>
-    </div>
-
-    <div style="display: none;" id="sort-content" class="container">
-        <div class="content">
-            <ul class="help">
-                <p>Sort query instructions.</p>
             </ul>
         </div>
     </div>
