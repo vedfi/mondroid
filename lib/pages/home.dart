@@ -53,12 +53,13 @@ class HomeState extends State<Home> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().build(
+          return ConfirmDialog.create(
               context,
               'Delete Connection(s)',
               'This action cannot be undone. Are you sure you want to continue?',
               'Cancel',
-              'Delete');
+              'Delete',
+              true);
         });
     if (delete == true) {
       setState(() {
