@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 
 class ConfirmDialog {
-  Widget build(BuildContext context, String title, String subtitle,
-      String cancelText, String okText) {
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+  static Widget create(
+    BuildContext context,
+    String title,
+    String message,
+    String cancelText,
+    String okText,
+    bool isDestructive,
+  ) {
+    return AlertDialog.adaptive(
       title: Text(title),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [Text(subtitle)],
-      ),
+      content: Text(message),
       actions: [
         TextButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onSurface),
-            child: Text(okText)),
+          onPressed: () => Navigator.pop(context, false),
+          style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onSurface),
+          child: Text(cancelText),
+        ),
         TextButton(
-            style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.primary),
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-            child: Text(cancelText)),
+          onPressed: () => Navigator.pop(context, true),
+          style: TextButton.styleFrom(
+              foregroundColor: isDestructive
+                  ? Theme.of(context).colorScheme.error
+                  : Theme.of(context).colorScheme.primary),
+          child: Text(okText),
+        ),
       ],
     );
   }

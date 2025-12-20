@@ -53,8 +53,8 @@ class EditState extends State<Edit> {
     bool? ok = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().build(context, 'Save record',
-              'Are you sure you want to continue?', 'Cancel', 'Save');
+          return ConfirmDialog.create(context, 'Save record',
+              'Are you sure you want to continue?', 'Cancel', 'Save', false);
         });
     if (ok == true) {
       await save();

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="icon" href="../../../assets/mondroid.png" type="image/png" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        * {
+          font-family: 'Source Code Pro', sans-serif;
+          color: black !important;
+        }
+
+        .round {
+          border-radius: 10px;
+        }
+
+        img {
+          -webkit-user-drag: none;
+          -khtml-user-drag: none;
+          -moz-user-drag: none;
+          -o-user-drag: none;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        .content > ul {
+          margin: 1.5em !important;
+        }
+
+        .help {
+          font-size: 0.8em !important;
+        }
+
+        .help > li {
+          font-size: 1.2em !important;
+          font-weight: bold !important;
+        }
+    </style>
+    <title>Mondroid</title>
+</head>
+
+<body>
+<section>
+    <div class="container">
+        <div class="is-flex is-flex-direction-row is-align-items-center pt-5 pb-3 px-5">
+            <div class="round mr-3"
+                 style="width: 50px; height: 50px; background-position: center; background-image: url('../assets/mondroid.png'); background-size: contain; background-repeat: no-repeat;">
+            </div>
+            <div class="is-flex is-flex-direction-column is-align-items-start">
+                <p style="font-size: 0.8em; color: #7a7a7a;">Mondroid</p>
+                <p style="font-size: 1em; font-weight: bold;">Sort Queries</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div style="display: block;" id="sort-content" class="container">
+    <div class="content">
+        <ul class="help">
+            <p>Sort query instructions.</p>
+        </ul>
+    </div>
+</div>
+
+</body>
+
+</html>

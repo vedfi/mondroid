@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mondroid/models/collection.dart';
 import 'package:mondroid/models/selectable.dart';
 import 'package:mondroid/services/mongoservice.dart';
+import 'package:mondroid/utilities/formsheet.dart';
 import 'package:mondroid/widgets/collectiontile.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 
 import '../services/settingsservice.dart';
+import '../widgets/collectionform.dart';
 import '../widgets/loadable.dart';
 
 class Collections extends StatefulWidget {
@@ -29,7 +31,9 @@ class CollectionsState extends State<Collections> {
     });
     var collectionInfos = await MongoService().getCollectionInfos();
     setState(() {
-      collections = (SettingsService().systemCollections ? collectionInfos : collectionInfos.where((x) => !x.name.startsWith('system.')))
+      collections = (SettingsService().systemCollections
+              ? collectionInfos
+              : collectionInfos.where((x) => !x.name.startsWith('system.')))
           .map((e) => Selectable(Collection.fromMongoCollection(e)))
           .toList();
       isLoading = false;
@@ -66,41 +70,14 @@ class CollectionsState extends State<Collections> {
   }
 
   Future<void> addDialog() async {
-    await showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-            title: const Text('Create Collection'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 0,
-                  child: TextField(
-                    smartQuotesType: SettingsService().smartQuotes
-                        ? SmartQuotesType.disabled
-                        : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes
-                        ? SmartDashesType.disabled
-                        : SmartDashesType.enabled,
-                    controller: _nameController,
-                    decoration: const InputDecoration(hintText: "Name"),
-                  ),
-                )
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    create(_nameController.value.text);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Create')),
-            ],
-          );
-        });
+    final form = CollectionForm(
+      controller: _nameController,
+      onSubmit: () {
+        create(_nameController.text);
+        Navigator.pop(context);
+      },
+    );
+    await showFormSheet(context: context, child: form);
     _nameController.clear();
   }
 
@@ -119,12 +96,13 @@ class CollectionsState extends State<Collections> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().build(
+          return ConfirmDialog.create(
               context,
               'Delete Collection(s)',
               'This action cannot be undone. Are you sure you want to continue?',
               'Cancel',
-              'Delete');
+              'Delete',
+              true);
         });
     if (delete == true) {
       setState(() {
@@ -195,6 +173,7 @@ class CollectionsState extends State<Collections> {
                               collections.any((element) => element.isSelected),
                           onClick: select))),
         ),
+        resizeToAvoidBottomInset: false,
         floatingActionButton: LoadableFloatingActionButton(
             collections.any((element) => element.isSelected)
                 ? FloatingActionButton(

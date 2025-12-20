@@ -99,7 +99,7 @@ class _SettingsState extends State<Settings> {
                   height: 5,
                 ),
                 SizedBox(
-                    width: double.maxFinite,
+                    width: MediaQuery.of(context).size.width,
                     child: SegmentedButton<ThemeMode>(
                       segments: const [
                         ButtonSegment(
@@ -133,7 +133,7 @@ class _SettingsState extends State<Settings> {
                   height: 5,
                 ),
                 SizedBox(
-                    width: double.maxFinite,
+                    width: MediaQuery.of(context).size.width,
                     child: SegmentedButton<int>(
                       segments: const [
                         ButtonSegment(

@@ -17,7 +17,7 @@ void main() async {
 }
 
 ThemeData getLightTheme() {
-  return ThemeData.from(
+  final base = ThemeData.from(
       useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green).copyWith(
           tertiary: const Color(0xff3b6939),
@@ -25,10 +25,18 @@ ThemeData getLightTheme() {
           surface: const Color(0xfff0f1eb),
           onError: const Color(0xffba1a1a),
           onErrorContainer: const Color(0xffffdad6)));
+
+  return base.copyWith(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+  );
 }
 
 ThemeData getDarkTheme() {
-  return ThemeData.from(
+  final base = ThemeData.from(
       useMaterial3: false,
       colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.green, brightness: Brightness.dark)
@@ -38,6 +46,14 @@ ThemeData getDarkTheme() {
               onInverseSurface: Colors.grey[850]!,
               primary: const Color(0xff78dd77),
               onErrorContainer: const Color(0xfffeb4ab)));
+
+  return base.copyWith(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+    ),
+  );
 }
 
 class MondroidApp extends StatelessWidget {
@@ -54,6 +70,7 @@ class MondroidApp extends StatelessWidget {
           return MaterialApp(
             title: 'Mondroid',
             initialRoute: '/',
+            debugShowCheckedModeBanner: false,
             scaffoldMessengerKey: PopupService.scaffoldMessengerKey,
             onGenerateRoute: (settings) {
               switch (settings.name) {

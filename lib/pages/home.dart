@@ -7,12 +7,14 @@ import 'package:mondroid/services/mongoservice.dart';
 import 'package:mondroid/services/popupservice.dart';
 import 'package:mondroid/services/settingsservice.dart';
 import 'package:mondroid/services/storageservice.dart';
+import 'package:mondroid/utilities/formsheet.dart';
 import 'package:mondroid/widgets/confirmdialog.dart';
 import 'package:mondroid/widgets/connectiontile.dart';
 import 'package:mondroid/widgets/loadable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/selectable.dart';
+import '../widgets/connectionform.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -29,7 +31,8 @@ class HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
-  final Uri _url = Uri.parse('https://vedfi.github.io/mondroid/troubleshoot');
+  final Uri _url =
+      Uri.parse('https://vedfi.github.io/mondroid/help/connections');
 
   void reorder(int oldIndex, int newIndex) {
     setState(() {
@@ -50,12 +53,13 @@ class HomeState extends State<Home> {
     bool? delete = await showDialog(
         context: context,
         builder: (ctx) {
-          return ConfirmDialog().build(
+          return ConfirmDialog.create(
               context,
               'Delete Connection(s)',
               'This action cannot be undone. Are you sure you want to continue?',
               'Cancel',
-              'Delete');
+              'Delete',
+              true);
         });
     if (delete == true) {
       setState(() {
@@ -85,85 +89,23 @@ class HomeState extends State<Home> {
         }
       }
     }
-    await showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-            contentPadding: const EdgeInsets.fromLTRB(24, 10, 24, 20),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                isAddDialog
-                    ? const Text('Add Connection')
-                    : const Text('Edit Connection'),
-                IconButton(
-                    onPressed: openUrl,
-                    tooltip: 'Help',
-                    icon: const Icon(
-                      Icons.help_outline,
-                      size: 24,
-                    ))
-              ],
-            ),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 0,
-                  child: TextField(
-                    controller: _nameController,
-                    smartQuotesType: SettingsService().smartQuotes
-                        ? SmartQuotesType.disabled
-                        : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes
-                        ? SmartDashesType.disabled
-                        : SmartDashesType.enabled,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      hintText: "Name",
-                      helperText: 'Will be used as title.',
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10, height: 10),
-                SizedBox(
-                  width: 0,
-                  child: TextField(
-                    controller: _uriController,
-                    smartQuotesType: SettingsService().smartQuotes
-                        ? SmartQuotesType.disabled
-                        : SmartQuotesType.enabled,
-                    smartDashesType: SettingsService().smartDashes
-                        ? SmartDashesType.disabled
-                        : SmartDashesType.enabled,
-                    textInputAction: TextInputAction.done,
-                    decoration: const InputDecoration(
-                        hintText: "Uri", helperText: 'Uri with database name.'),
-                  ),
-                )
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    if (isAddDialog) {
-                      add(_nameController.value.text,
-                          _uriController.value.text);
-                    } else {
-                      update(index, _nameController.value.text,
-                          _uriController.value.text);
-                    }
-                    Navigator.pop(context);
-                    _uriController.clear();
-                    _nameController.clear();
-                  },
-                  child: isAddDialog ? const Text('Add') : const Text('Edit')),
-            ],
-          );
-        });
+    final form = ConnectionForm(
+      isAdd: isAddDialog,
+      nameController: _nameController,
+      uriController: _uriController,
+      onHelp: openUrl,
+      onSubmit: () {
+        if (isAddDialog) {
+          add(_nameController.text, _uriController.text);
+        } else {
+          update(index, _nameController.text, _uriController.text);
+        }
+        Navigator.pop(context);
+        _nameController.clear();
+        _uriController.clear();
+      },
+    );
+    await showFormSheet(context: context, child: form);
     if (index >= 0) {
       setState(() {
         connections[index].isSelected = false;
@@ -337,6 +279,7 @@ class HomeState extends State<Home> {
                           key: UniqueKey(),
                         )),
               ),
+        resizeToAvoidBottomInset: false,
         floatingActionButton: getActionButtons(context));
   }
 }

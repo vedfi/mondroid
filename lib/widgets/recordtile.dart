@@ -160,7 +160,8 @@ class RecordTile extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showOidTimestamp && selectable.item['_id'] is mongo.ObjectId) ...[
+                  if (showOidTimestamp &&
+                      selectable.item['_id'] is mongo.ObjectId) ...[
                     Text(
                         (selectable.item['_id'] as mongo.ObjectId)
                             .dateTime

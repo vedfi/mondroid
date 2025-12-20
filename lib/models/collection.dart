@@ -1,10 +1,6 @@
 import 'package:mondroid/services/mongoservice.dart';
 
-enum CollectionType {
-  collection,
-  view,
-  time_series
-}
+enum CollectionType { collection, view, time_series }
 
 class Collection {
   String name;
@@ -17,10 +13,9 @@ class Collection {
     CollectionType collectionType = switch (collection.type) {
       "view" => CollectionType.view,
       "timeseries" => CollectionType.time_series,
-      _     => CollectionType.collection,
+      _ => CollectionType.collection,
     };
-    return Collection(collection.name,
-        type: collectionType);
+    return Collection(collection.name, type: collectionType);
   }
 
   bool isReadonly() {
