@@ -70,6 +70,7 @@ class MondroidApp extends StatelessWidget {
           return MaterialApp(
             title: 'Mondroid',
             initialRoute: '/',
+            debugShowCheckedModeBanner: false,
             scaffoldMessengerKey: PopupService.scaffoldMessengerKey,
             onGenerateRoute: (settings) {
               switch (settings.name) {
