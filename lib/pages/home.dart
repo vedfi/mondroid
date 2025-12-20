@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,8 @@ class HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _uriController = TextEditingController();
   List<Selectable<Connection>> connections = <Selectable<Connection>>[];
-  final Uri _url = Uri.parse('https://vedfi.github.io/mondroid/help/connections');
+  final Uri _url =
+      Uri.parse('https://vedfi.github.io/mondroid/help/connections');
 
   void reorder(int oldIndex, int newIndex) {
     setState(() {

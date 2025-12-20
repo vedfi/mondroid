@@ -47,8 +47,7 @@ class SortQueryForm extends StatelessWidget {
               : SmartDashesType.enabled,
           decoration: const InputDecoration(
             hintText: '{"field": "\$asc" or "\$desc"}',
-            helperText:
-            'Multiple sorting criteria supported.\n'
+            helperText: 'Multiple sorting criteria supported.\n'
                 'Leave blank if you don\'t want to use sorting.',
           ),
           textInputAction: TextInputAction.newline,

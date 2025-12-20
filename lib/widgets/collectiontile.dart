@@ -40,8 +40,8 @@ class CollectionTile extends StatelessWidget {
     }
   }
 
-  IconData getIconData(){
-    switch(selectable.item.type){
+  IconData getIconData() {
+    switch (selectable.item.type) {
       case CollectionType.view:
         return Icons.visibility;
       case CollectionType.time_series:
@@ -66,8 +66,7 @@ class CollectionTile extends StatelessWidget {
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(
-              getIconData(),
+          Icon(getIconData(),
               color: selectable.isSelected
                   ? Theme.of(context).colorScheme.onError
                   : Theme.of(context).colorScheme.inverseSurface),

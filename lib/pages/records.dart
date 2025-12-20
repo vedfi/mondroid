@@ -36,9 +36,10 @@ class RecordsState extends State<Records> {
   final ScrollController _scrollController = ScrollController();
   double offset = 0.0;
   bool refreshRequired = false;
-  final Uri _filterUrl = Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=filter');
-  final Uri _sortUrl = Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=sort');
-
+  final Uri _filterUrl =
+      Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=filter');
+  final Uri _sortUrl =
+      Uri.parse('https://vedfi.github.io/mondroid/help/queries/?t=sort');
 
   Future<void> openUrl(Uri url) async {
     if (!await launchUrl(url)) {
@@ -48,7 +49,7 @@ class RecordsState extends State<Records> {
 
   Future<Map<String, dynamic>?> filter() async {
     try {
-      if (_filterQueryController.value.text.isEmpty ) {
+      if (_filterQueryController.value.text.isEmpty) {
         return null;
       }
       dynamic data = await compute(
@@ -131,7 +132,7 @@ class RecordsState extends State<Records> {
     final form = SortQueryForm(
       controller: _sortQueryController,
       onApply: () {
-        if(_sortQueryController.value.text.trim().isEmpty){
+        if (_sortQueryController.value.text.trim().isEmpty) {
           _sortQueryController.clear();
         }
         _pagingController.refresh();
@@ -144,14 +145,14 @@ class RecordsState extends State<Records> {
 
   Future<void> searchDialog() async {
     final form = FilterQueryForm(
-    controller: _filterQueryController,
-    onApply: () {
-      if(_filterQueryController.value.text.trim().isEmpty){
-        _filterQueryController.clear();
-      }
-    _pagingController.refresh();
-    Navigator.pop(context);
-    },
+      controller: _filterQueryController,
+      onApply: () {
+        if (_filterQueryController.value.text.trim().isEmpty) {
+          _filterQueryController.clear();
+        }
+        _pagingController.refresh();
+        Navigator.pop(context);
+      },
       onHelp: () => openUrl(_filterUrl),
     );
     await showFormSheet(context: context, child: form);
@@ -234,18 +235,18 @@ class RecordsState extends State<Records> {
         appBar: AppBar(
           title: Text(widget.collection.name),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
-          actions:  [
-          Visibility(
-            maintainSize: false,
-            maintainAnimation: false,
-            maintainState: true,
-            visible: !hideActions,
-            child: IconButton(
-              onPressed: sortDialog,
-              icon: const Icon(Icons.sort),
-              tooltip: 'Sort',
+          actions: [
+            Visibility(
+              maintainSize: false,
+              maintainAnimation: false,
+              maintainState: true,
+              visible: !hideActions,
+              child: IconButton(
+                onPressed: sortDialog,
+                icon: const Icon(Icons.sort),
+                tooltip: 'Sort',
+              ),
             ),
-          ),
             Visibility(
               maintainSize: false,
               maintainAnimation: false,

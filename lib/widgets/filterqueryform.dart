@@ -47,8 +47,7 @@ class FilterQueryForm extends StatelessWidget {
               : SmartDashesType.enabled,
           decoration: const InputDecoration(
             hintText: '{"key": "value" or {"\$operator"}}',
-            helperText:
-            'All query operators are supported.\n'
+            helperText: 'All query operators are supported.\n'
                 'Leave blank if you want to fetch all records.',
           ),
           textInputAction: TextInputAction.newline,

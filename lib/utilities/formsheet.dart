@@ -21,9 +21,7 @@ Future<T?> showFormSheet<T>({
           right: 20,
           bottom: MediaQuery.of(context).viewInsets.bottom + 24,
         ),
-        child: SingleChildScrollView(
-            child: child
-        ),
+        child: SingleChildScrollView(child: child),
       );
     },
   );

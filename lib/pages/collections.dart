@@ -31,7 +31,9 @@ class CollectionsState extends State<Collections> {
     });
     var collectionInfos = await MongoService().getCollectionInfos();
     setState(() {
-      collections = (SettingsService().systemCollections ? collectionInfos : collectionInfos.where((x) => !x.name.startsWith('system.')))
+      collections = (SettingsService().systemCollections
+              ? collectionInfos
+              : collectionInfos.where((x) => !x.name.startsWith('system.')))
           .map((e) => Selectable(Collection.fromMongoCollection(e)))
           .toList();
       isLoading = false;
@@ -68,7 +70,6 @@ class CollectionsState extends State<Collections> {
   }
 
   Future<void> addDialog() async {
-
     final form = CollectionForm(
       controller: _nameController,
       onSubmit: () {
