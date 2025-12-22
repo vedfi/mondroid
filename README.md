@@ -1,12 +1,29 @@
-[<img alt="mondroid-banner" src="https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg"/>]("https://user-images.githubusercontent.com/29797832/160253110-e3dcf46d-7c7e-4795-901a-c998f39d4cdd.jpg")    
-
-
-<a href="https://apps.apple.com/us/app/mondroid/id6478081276?itscg=30200&itsct=apps_box_badge&mttnsubad=6478081276" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1709251200" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;" /></a>
-<a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="83" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="276"/></a><!-- &emsp; &emsp; <a href="https://www.buymeacoffee.com/vedfi" target="_blank"><img alt="Buy Me A Coffee" height="75" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="250"/></a> -->
-
-## About This Project
-- The main goal of this project is providing a mongodb client for mobile devices. (Like official desktop client [Mongodb Compass](https://www.mongodb.com/products/compass))
-- Mondroid is written in Flutter and utilizes [mongo_dart](https://github.com/mongo-dart/mongo_dart) driver.
+<table>
+  <tr>
+    <td width="300">
+      <img width="300" height="300" alt="icon" src="https://github.com/user-attachments/assets/fced11df-8cbb-47d4-8bda-aa2c683c6679" />
+    </td>
+    <td>
+      <h1>Mondroid - MongoDB Client</h1>
+      <p>
+        The main goal of the project is to bring a familiar MongoDB experience to iOS and Android.
+      </p>
+      <p>
+        Inspired by the official desktop client:
+        <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a>
+      </p>
+      <p>
+        The app is built with Flutter and uses the
+        <a href="https://github.com/mongo-dart/mongo_dart">mongo_dart</a>
+        driver under the hood.
+      </p>
+      <p>
+        <a href="https://apps.apple.com/us/app/mondroid/id6478081276?itscg=30200&itsct=apps_box_badge&mttnsubad=6478081276" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1709251200" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;" /></a>
+<a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="83" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="276"/>
+      </p>
+    </td>
+  </tr>
+</table>
 
 ## Features
 
