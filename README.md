@@ -1,7 +1,7 @@
 <table>
   <tr>
-    <td width="300">
-      <img width="300" height="300" alt="icon" src="https://github.com/user-attachments/assets/fced11df-8cbb-47d4-8bda-aa2c683c6679" />
+    <td width="250">
+      <img width="250" height="250" alt="icon" src="https://github.com/user-attachments/assets/fced11df-8cbb-47d4-8bda-aa2c683c6679" />
     </td>
     <td>
       <h1>Mondroid - MongoDB Client</h1>
