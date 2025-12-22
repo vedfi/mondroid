@@ -20,7 +20,7 @@
 - Number of documents can be seen in each collection tile.
 
 ### Querying
-- Find queries are supported in json format. ([Mongodb Query Operators](https://www.mongodb.com/docs/manual/reference/operator/query/))
+- Find queries are supported in json format. ([Mongodb Query Operators](https://www.mongodb.com/docs/manual/reference/mql/query-predicates/#std-label-query-predicates-ref))
 - Sorting is also supported. ([Sorting Documents In Mongodb](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sort/#mongodb-pipeline-pipe.-sort))
 
 ### Documents
@@ -51,24 +51,15 @@
 
 ## User Interface
 
-<img src="https://github.com/vedfi/mondroid/assets/29797832/c8d834fa-2bf1-43a2-93bc-1cc519ecb7e6" width="225px">
-<img src="https://github.com/vedfi/mondroid/assets/29797832/96b45456-f9da-47f4-b4aa-39f0bc167a52" width="225px">
-<img src="https://github.com/vedfi/mondroid/assets/29797832/7d694b8b-3b88-4ce2-b5eb-e7ac2c12f611" width="225px">
-<br>
-<img src="https://github.com/vedfi/mondroid/assets/29797832/d0ee4cf7-8107-4dae-ac44-50be3974919b" width="225px">
-<img src="https://github.com/vedfi/mondroid/assets/29797832/40173e40-be4d-4cb0-9124-06a5dd12bf77" width="225px">
-<img src="https://github.com/vedfi/mondroid/assets/29797832/309e3f85-db48-4782-925e-9e2913cb6d1b" width="225px">
+### Android
+<img width="1200" height="1747" alt="github-android" src="https://github.com/user-attachments/assets/901e6daa-da1e-4d26-8922-0f1ae723972c" />
 
-<!---
-[<img alt="mondroid-ui-1" src="https://user-images.githubusercontent.com/29797832/160253540-c5acd9b4-cb72-4123-a10f-b72acf953ef3.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253540-c5acd9b4-cb72-4123-a10f-b72acf953ef3.jpg")
-[<img alt="mondroid-ui-2" src="https://user-images.githubusercontent.com/29797832/160253541-5028dc41-df8c-41f7-9806-99b597cf85d4.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253541-5028dc41-df8c-41f7-9806-99b597cf85d4.jpg")
-[<img alt="mondroid-ui-3" src="https://user-images.githubusercontent.com/29797832/160253542-d89d49b4-f80a-4f42-b2ac-065cd0635c46.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253542-d89d49b4-f80a-4f42-b2ac-065cd0635c46.jpg") -->
 
-<!--- [<img alt="mondroid-ui-4" src="https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253543-f9339cac-17ce-4f1e-a4c3-877dbb219203.jpg") -->
+### iOS
+<img width="1200" height="1710" alt="github-ios" src="https://github.com/user-attachments/assets/dc188e4b-911d-4c94-8fc8-7c0d66d1bffe" />
 
-<!--- [<img alt="mondroid-ui-5" src="https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253545-c18cf30e-6290-4a16-8705-11f00eef6c17.jpg")
-[<img alt="mondroid-ui-6" src="https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253546-9ebd8122-059d-4362-a97f-5b37a58d169d.jpg")
-[<img alt="mondroid-ui-7" src="https://user-images.githubusercontent.com/29797832/160253547-3e943891-8d97-4654-bafb-d09fca38be80.jpg" width="225px"/>]("https://user-images.githubusercontent.com/29797832/160253547-3e943891-8d97-4654-bafb-d09fca38be80.jpg") -->
 
 ## Side Notes
-I won't be able to develop full time; as this is a hobby project.
+- This is a hobby project, developed in my spare time.
+- If you experience connection or authentication issues, please visit the [Help Center](https://vedfi.github.io/mondroid/help/connections/)
+- If you enjoy using the app, consider leaving a rating on the App Store or Google Play.
