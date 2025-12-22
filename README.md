@@ -1,9 +1,9 @@
 <table>
   <tr>
-    <td width="250">
-      <img width="250" height="250" alt="icon" src="https://github.com/user-attachments/assets/fced11df-8cbb-47d4-8bda-aa2c683c6679" />
+    <td width="256" valign="center">
+      <img width="256" height="256" alt="icon" src="https://github.com/user-attachments/assets/fced11df-8cbb-47d4-8bda-aa2c683c6679" />
     </td>
-    <td>
+    <td valign="top">
       <h1>Mondroid - MongoDB Client</h1>
       <p>
         The main goal of the project is to bring a familiar MongoDB experience to iOS and Android.
@@ -17,8 +17,12 @@
         <a href="https://github.com/mongo-dart/mongo_dart">mongo_dart</a>
         driver under the hood.
       </p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan=2 align="right">
       <p>
-        <a href="https://apps.apple.com/us/app/mondroid/id6478081276?itscg=30200&itsct=apps_box_badge&mttnsubad=6478081276" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1709251200" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;" /></a>
+        <a href="https://apps.apple.com/us/app/mondroid/id6478081276?itscg=30200&itsct=apps_box_badge&mttnsubad=6478081276" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1709251200" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="83" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="276"/>
       </p>
     </td>
