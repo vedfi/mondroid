@@ -42,9 +42,12 @@ class CollectionsState extends State<Collections> {
   }
 
   Future<void> getRecordCounts() async {
-    Iterable<Future<int>> futures =
-        collections.map((q) => MongoService().getRecordCount(q.item.name));
-    List<int> counts = await Future.wait(futures);
+    List<int> counts = [];
+    for (int i = 0; i < collections.length; i++) {
+      String name = collections[i].item.name;
+      int c = await MongoService().getRecordCount(name);
+      counts.add(c);
+    }
     setState(() {
       for (int i = 0; i < counts.length; i++) {
         collections[i].item.count = counts[i];
