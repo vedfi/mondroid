@@ -23,7 +23,7 @@
     <td colspan=2 align="right">
       <p>
         <a href="https://apps.apple.com/us/app/mondroid/id6478081276?itscg=30200&itsct=apps_box_badge&mttnsubad=6478081276" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1709251200" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="83" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/360px-Google_Play_Store_badge_EN.svg.png?20220907104002" width="276"/>
+<a href='https://play.google.com/store/apps/details?id=com.vedfi.mondroid&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" height="83" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/1920px-Google_Play_Store_badge_EN.svg.png" width="276"/>
       </p>
     </td>
   </tr>
