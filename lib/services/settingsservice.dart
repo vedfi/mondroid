@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/paginationmode.dart';
+
 class SettingsService {
   static final SettingsService _settingsService = SettingsService._internal();
 
@@ -16,6 +18,7 @@ class SettingsService {
   static const String _smartQuotesKey = 'smart_quotes';
   static const String _smartDashesKey = 'smart_dashes';
   static const String _pageSizeKey = 'page_size';
+  static const String _paginationModeKey = 'pagination_mode';
   static const String _systemCollectionsKey = 'system_collections';
 
   final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
@@ -25,6 +28,7 @@ class SettingsService {
   bool smartDashes = true;
   bool systemCollections = false;
   int pageSize = 10;
+  PaginationMode paginationMode = PaginationMode.auto;
 
   Future<void> load() async {
     await loadTheme();
@@ -34,6 +38,7 @@ class SettingsService {
     await loadSmartQuotes();
     await loadPageSize();
     await loadSystemCollections();
+    await loadPaginationMode();
   }
 
   Future<void> loadPageSize() async {
@@ -166,6 +171,36 @@ class SettingsService {
     showOidTimestamp = val;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_timestampKey, val ? 'true' : 'false');
+  }
+
+  Future<void> loadPaginationMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getString(_paginationModeKey);
+    switch (stored) {
+      case 'infinite':
+        paginationMode = PaginationMode.infinite;
+        break;
+      case 'paged':
+        paginationMode = PaginationMode.paged;
+        break;
+      case 'auto':
+      default:
+        paginationMode = PaginationMode.auto;
+        break;
+    }
+  }
+
+  Future<void> updatePaginationMode(PaginationMode mode) async {
+    paginationMode = mode;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      _paginationModeKey,
+      mode == PaginationMode.infinite
+          ? 'infinite'
+          : mode == PaginationMode.paged
+              ? 'paged'
+              : 'auto',
+    );
   }
 
   Future<void> loadTheme() async {

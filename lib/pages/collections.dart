@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/collection.dart';
@@ -36,9 +38,11 @@ class CollectionsState extends State<Collections> {
               : collectionInfos.where((x) => !x.name.startsWith('system.')))
           .map((e) => Selectable(Collection.fromMongoCollection(e)))
           .toList();
+    });
+    await getRecordCounts();
+    setState(() {
       isLoading = false;
     });
-    getRecordCounts();
   }
 
   Future<void> getRecordCounts() async {
@@ -56,6 +60,9 @@ class CollectionsState extends State<Collections> {
   }
 
   void select(int index, SelectType type) {
+    if (isLoading) {
+      return;
+    }
     if (type == SelectType.tap) {
       if (collections.any((element) => element.isSelected)) {
         setState(() {
@@ -111,10 +118,12 @@ class CollectionsState extends State<Collections> {
       setState(() {
         isLoading = true;
       });
-      Iterable<Future<bool>> futures = collections
-          .where((element) => element.isSelected)
-          .map((q) => MongoService().deleteCollection(q.item.name));
-      await Future.wait(futures);
+      final selectedCollections =
+          collections.where((element) => element.isSelected).toList();
+      for (final collection in selectedCollections) {
+        final collectionName = collection.item.name;
+        await MongoService().deleteCollection(collectionName);
+      }
       setState(() {
         isLoading = false;
       });
@@ -164,8 +173,7 @@ class CollectionsState extends State<Collections> {
               : CupertinoScrollbar(
                   child: ListView.separated(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
+                      padding: EdgeInsets.fromLTRB(15, 20, 15, Platform.isAndroid ? 90 : 140),
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 10),
                       itemCount: collections.length,

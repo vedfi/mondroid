@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mondroid/services/settingsservice.dart';
 
+import '../models/paginationmode.dart';
+
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
@@ -18,6 +20,7 @@ class _SettingsState extends State<Settings> {
   bool smartDashes = false;
   bool systemCollections = false;
   int pageSize = 0;
+  PaginationMode paginationMode = PaginationMode.auto;
 
   @override
   void initState() {
@@ -29,6 +32,7 @@ class _SettingsState extends State<Settings> {
     smartDashes = controller.smartDashes;
     pageSize = controller.pageSize;
     systemCollections = controller.systemCollections;
+    paginationMode = controller.paginationMode;
   }
 
   Future<void> _onSmartDashesChanged(bool? value) async {
@@ -79,6 +83,14 @@ class _SettingsState extends State<Settings> {
     });
   }
 
+  Future<void> _onPaginationModeChanged(PaginationMode? value) async {
+    if (value == null) return;
+    controller.updatePaginationMode(value);
+    setState(() {
+      paginationMode = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +131,40 @@ class _SettingsState extends State<Settings> {
                       onSelectionChanged: (newSelection) {
                         final selected = newSelection.first;
                         controller.updateTheme(selected);
+                      },
+                      showSelectedIcon: false,
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Pagination',
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: SegmentedButton<PaginationMode>(
+                      segments: const [
+                        ButtonSegment(
+                            value: PaginationMode.infinite,
+                            label: Text('Infinite'),
+                            icon: Icon(Icons.all_inclusive)),
+                        ButtonSegment(
+                            value: PaginationMode.auto,
+                            label: Text('Auto'),
+                            icon: Icon(Icons.sync_alt)),
+                        ButtonSegment(
+                            value: PaginationMode.paged,
+                            label: Text('Paged'),
+                            icon: Icon(Icons.library_books)),
+                      ],
+                      selected: {paginationMode},
+                      onSelectionChanged: (newSelection) {
+                        final selected = newSelection.first;
+                        _onPaginationModeChanged(selected);
                       },
                       showSelectedIcon: false,
                     )),

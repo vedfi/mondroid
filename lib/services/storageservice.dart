@@ -5,7 +5,7 @@ class StorageService {
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage(
       iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
-      aOptions: AndroidOptions(encryptedSharedPreferences: true));
+      aOptions: AndroidOptions());
 
   factory StorageService() {
     return _storageService;
