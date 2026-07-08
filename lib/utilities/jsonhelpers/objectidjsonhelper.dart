@@ -9,7 +9,7 @@ class ObjectIdJsonHelper extends AbstractJsonHelper {
 
   @override
   encode(value) {
-    return '\$oid:${(value as ObjectId).$oid}';
+    return '\$oid:${(value as ObjectId).oid}';
   }
 
   @override

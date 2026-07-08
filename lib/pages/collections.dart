@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mondroid/models/collection.dart';
@@ -171,7 +173,7 @@ class CollectionsState extends State<Collections> {
               : CupertinoScrollbar(
                   child: ListView.separated(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(15, 20, 15, 140),
+                      padding: EdgeInsets.fromLTRB(15, 20, 15, Platform.isAndroid ? 90 : 140),
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 10),
                       itemCount: collections.length,

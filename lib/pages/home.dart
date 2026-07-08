@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -266,7 +267,7 @@ class HomeState extends State<Home> {
                 child: ReorderableListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
                     buildDefaultDragHandles: false,
-                    padding: EdgeInsets.fromLTRB(15, 20, 15, 140),
+                    padding: EdgeInsets.fromLTRB(15, 20, 15, Platform.isAndroid ? 90 : 140),
                     onReorderItem: (oldIndex, newIndex) {
                       reorder(oldIndex, newIndex);
                     },

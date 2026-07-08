@@ -12,7 +12,7 @@ import 'jsonhelpers/abstractjsonhelper.dart';
 import 'jsonhelpers/bsonbinaryjsonhelper.dart';
 import 'jsonhelpers/sortqueryjsonhelper.dart';
 
-encodeHelper(dynamic value) {
+dynamic encodeHelper(dynamic value) {
   for (var helper in JsonConverter.helpers) {
     if (helper.isEncodable(value)) {
       return helper.encode(value);
@@ -21,7 +21,7 @@ encodeHelper(dynamic value) {
   return value;
 }
 
-decodeHelper(dynamic key, dynamic value) {
+dynamic decodeHelper(dynamic key, dynamic value) {
   value = value is String ? value.trim() : value;
   for (var helper in JsonConverter.helpers) {
     if (helper.isDecodable(value)) {

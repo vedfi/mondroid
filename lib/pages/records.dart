@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +159,9 @@ class RecordsState extends State<Records> {
 
   void select(int index, SelectType type) {
     if (_pagingController.itemList == null ||
-        _pagingController.itemList!.isEmpty) return;
+        _pagingController.itemList!.isEmpty) {
+      return;
+    }
     if (type == SelectType.navigate) {
       navigate(index);
       return;
@@ -184,8 +188,9 @@ class RecordsState extends State<Records> {
     final form = SortQueryForm(
       controller: _sortQueryController,
       onApply: () {
-        if (_sortQueryController.value.text.trim().isEmpty)
+        if (_sortQueryController.value.text.trim().isEmpty) {
           _sortQueryController.clear();
+        }
         if (_useInfiniteScroll) {
           _pagingController.refresh();
         } else {
@@ -202,8 +207,9 @@ class RecordsState extends State<Records> {
     final form = FilterQueryForm(
       controller: _filterQueryController,
       onApply: () {
-        if (_filterQueryController.value.text.trim().isEmpty)
+        if (_filterQueryController.value.text.trim().isEmpty) {
           _filterQueryController.clear();
+        }
         setState(() {
           _needsCount = true;
         });
@@ -240,7 +246,7 @@ class RecordsState extends State<Records> {
           .where((element) => element.isSelected)
           .map((q) => q.item['_id'])
           .toList();
-      bool isDeleted = await MongoService()
+      await MongoService()
           .deleteRecords(widget.collection.name, selectedIds);
       if (_useInfiniteScroll) {
         _pagingController.refresh();
@@ -361,7 +367,7 @@ class RecordsState extends State<Records> {
                   scrollController: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(
-                      15, 20, 15, hasBottomNavigationBar ? 90 : 140),
+                      15, 20, 15, Platform.isAndroid || hasBottomNavigationBar ? 90 : 140),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   builderDelegate: PagedChildBuilderDelegate<
@@ -394,7 +400,7 @@ class RecordsState extends State<Records> {
                         top: BorderSide(
                             color: Theme.of(context)
                                 .dividerColor
-                                .withOpacity(0.1))),
+                                .withValues(alpha: 0.1))),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
