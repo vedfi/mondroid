@@ -136,11 +136,38 @@ class MongoService {
     }
   }
 
+  Future<int> count(String collection, Map<String, dynamic>? filter) async {
+    try {
+      await reconnect();
+      return await _database!
+          .collection(collection)
+          .modernFind(filter: filter)
+          .length;
+    } catch (e) {
+      PopupService.show(e.toString());
+      return Future<int>.value(0);
+    }
+  }
+
   Future<bool> deleteRecord(String collection, dynamic id) async {
     try {
       await reconnect();
       var result =
           await _database!.collection(collection).deleteOne({'_id': id});
+      return result.isSuccess;
+    } catch (e) {
+      PopupService.show(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteRecords(String collection, List<dynamic> ids) async {
+    if (ids.isEmpty) return false;
+    try {
+      await reconnect();
+      var result = await _database!.collection(collection).deleteMany({
+        '_id': {'\$in': ids}
+      });
       return result.isSuccess;
     } catch (e) {
       PopupService.show(e.toString());

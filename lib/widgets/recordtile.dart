@@ -131,12 +131,11 @@ class RecordTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: selectable.isSelected
-              ? Theme.of(context).colorScheme.onErrorContainer
-              : Theme.of(context).colorScheme.onInverseSurface,
-          borderRadius: const BorderRadius.all(Radius.circular(15))),
+    return Material(
+      color: selectable.isSelected
+          ? Theme.of(context).colorScheme.onErrorContainer
+          : Theme.of(context).colorScheme.onInverseSurface,
+      borderRadius: const BorderRadius.all(Radius.circular(15)),
       child: ListTile(
         selected: selectable.isSelected,
         contentPadding:
