@@ -79,6 +79,11 @@
                 <p style="font-weight: 600;">mongodb+srv://username:password&#x200b@hostname/databaseName</p>
                 <p>Most of the time this connection string should be working with Mondroid. If you face issues with connections or database management then look for the below list.</p>
 
+                <li>MongoDB Atlas Free Tier Limitations</li>
+                <p>MongoDB Atlas Free Tier (M0) limits concurrent requests and connections, which may cause a "ConnectionException: connection closed: The socket connection has been reset by peer." exception to be thrown.</p>
+                <p>To resolve this issue, you can add the safeAtlas=true parameter to your connection string as shown below:</p>
+                <p style="font-weight: 600;">mongodb+srv://username:password&#x200b@hostname/databaseName?safeAtlas=true</p>
+
                 <li>Authentication Errors</li>
                 <p>Mostly occurs when your authentication database is different than the database that you provided in connection string.</p>
                 <p>Try adding authSource=admin parameter to your connection string like given below:</p>
